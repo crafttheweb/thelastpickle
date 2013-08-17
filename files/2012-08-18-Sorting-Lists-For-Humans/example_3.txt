@@ -1,0 +1,31 @@
+# initalise the view the unsorted lists
+# items are added in a random order
+
+In [58]: unsorted_lists.initialise()
+
+In [66]: unsorted_lists.show()
+Out[66]: 
+[((1345636863775259, 1345636863775259), (2, u'Bananas')),
+ ((1345636863777841, 1345636863777841), (1, u'Apples')),
+ ((1345636863778929, 1345636863778929), (3, u'Cherries')),
+ ((1345636863779938, 1345636863779938), (5, u'Elderberry')),
+ ((1345636863781883, 1345636863781883), (4, u'Dragon Fruit'))]
+
+# view the data using cassandra-cli
+# Items are "sorted" by their ID. 
+
+[default@dev] list unsorted;
+Using default limit of 100
+Using default column limit of 100
+-------------------
+RowKey: fruits
+=> (column=1:label, value=Apples, timestamp=1345636863777851)
+=> (column=1:order, value=1345636863777841,1345636863777841, timestamp=1345636863777851)
+=> (column=2:label, value=Bananas, timestamp=1345636863775268)
+=> (column=2:order, value=1345636863775259,1345636863775259, timestamp=1345636863775268)
+=> (column=3:label, value=Cherries, timestamp=1345636863778935)
+=> (column=3:order, value=1345636863778929,1345636863778929, timestamp=1345636863778935)
+=> (column=4:label, value=Dragon Fruit, timestamp=1345636863781889)
+=> (column=4:order, value=1345636863781883,1345636863781883, timestamp=1345636863781889)
+=> (column=5:label, value=Elderberry, timestamp=1345636863779946)
+=> (column=5:order, value=1345636863779938,1345636863779938, timestamp=1345636863779946)

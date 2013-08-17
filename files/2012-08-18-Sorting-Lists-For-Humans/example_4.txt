@@ -1,0 +1,32 @@
+# Move item 4 to be before item 2
+# The (sort, seq) the last time item 2 was read is used
+
+In [69]: unsorted_lists.move("fruits", 4, (1345636863775259, 1345636863775259))
+
+In [70]: unsorted_lists.show()
+Out[70]: 
+[((1345636863775258, 1345637757316232), (4, u'Dragon Fruit')),
+ ((1345636863775259, 1345636863775259), (2, u'Bananas')),
+ ((1345636863777841, 1345636863777841), (1, u'Apples')),
+ ((1345636863778929, 1345636863778929), (3, u'Cherries')),
+ ((1345636863779938, 1345636863779938), (5, u'Elderberry'))]
+
+# view the data using cassandra-cli
+# Items are "sorted" by their ID. 
+
+[default@dev] list unsorted;
+Using default limit of 100
+Using default column limit of 100
+-------------------
+RowKey: fruits
+=> (column=1:label, value=Apples, timestamp=1345636863777851)
+=> (column=1:order, value=1345636863777841,1345636863777841, timestamp=1345636863777851)
+=> (column=2:label, value=Bananas, timestamp=1345636863775268)
+=> (column=2:order, value=1345636863775259,1345636863775259, timestamp=1345636863775268)
+=> (column=3:label, value=Cherries, timestamp=1345636863778935)
+=> (column=3:order, value=1345636863778929,1345636863778929, timestamp=1345636863778935)
+=> (column=4:label, value=Dragon Fruit, timestamp=1345636863781889)
+=> (column=4:order, value=1345636863775258,1345637757316232, timestamp=1345637757316248)
+=> (column=5:label, value=Elderberry, timestamp=1345636863779946)
+=> (column=5:order, value=1345636863779938,1345636863779938, timestamp=1345636863779946)
+

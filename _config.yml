@@ -1,0 +1,10 @@
+# safe: false
+# auto: true
+# server: true
+pygments: true
+
+# now the default permalink
+# permalink: /:year/:month/:day/:title
+
+# category_dir: topics
+# category_title_prefix: All about&nbsp;

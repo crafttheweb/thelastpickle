@@ -1,0 +1,16 @@
+use dev;
+
+/* List items without natural order. 
+row_key: list name
+column_name: (item_id:propert_name) e.g. (1:title)
+column_value: property value e.g. Apple
+*/
+CREATE COLUMN FAMILY 
+    Unsorted
+WITH 
+    key_validation_class = UTF8Type
+AND 
+    comparator = 'CompositeType(IntegerType, UTF8Type)'
+AND 
+    default_validation_class = UTF8Type
+;

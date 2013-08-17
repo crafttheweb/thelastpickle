@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta name="description" content="introduction to cassandra Aaron Morton @aaronmorton www.thelastpickle.com   Licensed under a Creative Commons Attribution-NonCommercial 3.0 New Zealand License This is an introduction, not a reference. Technical details have been simplified or omitted. Cassandra is a distributed, fault tolerant, scalable, column oriented data store. The data model and on disk storage are inspired by Google Big Table. The distributed cluster is inspired by Amazon Dynamo. First, a word about the column oriented data model. It’s different to a relational database like MySql.  For now let’s say rows have a key and each row can have different columns. Let’s store the ‘foo’ key in our system. ‘foo’ Done. But we want to be able to read it back if that one machine fails. Let’s distribute the value to 3 of the 5 nodes we have. This is the Replication Factor, called RF or N. We need to know which nodes the key was written to. So we know where to read it from later. Each node has an Initial Token that identifies the upper value of the key range it is responsible for. #1 &lt;= ‘E’ #2 &lt;= ‘J’  #5 &lt;= ‘Z’ #4 &lt;= ‘T’ #3 &lt;= ‘O’      A Gossip protocol is used to allow each node to know about all other nodes in the cluster. Including their initial token.  		  A client can connect to any node in the cluster and ask it to store the ‘foo’ key. The Coordinator node for the client will know which node is responsible for the ‘foo’ key. Our client connects to node 5 which knows that node 2 is responsible for the key range that contains ‘foo’. #1 &lt;= ‘E’ #2 &lt;= ‘J’ #5 &lt;= ‘Z’ #4 &lt;= ‘T’ #3 &lt;= ‘O’ client   If we have lots of keys between ‘F’ and ‘J’, node 2 may get overloaded.  A Partitioner is used to transform the key.  Transforming the keys can result in two lexically close keys (e.g. ‘foo’ and ‘foo2’) are stored on different nodes. Transformed keys are also used as the Initial Tokens for nodes. The Random Partitioner applies a MD5 transform to the key. The range of possible keys is transformed to a 128 bit integer. There is also a Byte Order Partitioner which orders keys according to their byte values.   Start with the Random Partitioner. In this example all our keys are transformed to an integer between 0 and 9, and our ‘foo’ key transforms to 3. Our client connects to node 5, which transforms the key and determines node 2 is responsible for that range of keys. #1 &lt;= 2 #2 &lt;= 4 #5 &lt;= 0 #4 &lt;= 8 #3 &lt;= 6 client   But where are the 3 replicas? A Replica Placement Strategy determines which nodes should contain replicas.  The Simple Strategy orders the nodes by their initial token and places the replicas clockwise around the ring of nodes.  The Network Topology Strategy can place the replicas in different Data Centres and on different Racks.   Start with the Simple Strategy. Using the Replica Placement Strategy our coordinator will send the ‘foo’ key to 3 nodes in parallel.  #1 #2 ‘foo’ #5 #4 ‘foo’ #3 ‘foo’ client     When the 3 nodes tell the coordinator they have completed, it will tell the client the write has completed. What about fault tolerance? What if node 4 is down? #1  #2 ‘foo’ #5  #4  #3 ‘foo’ client       The Consistency Level (CL) supplied by the client specifies how many nodes must agree for an operation to be successful.  For Reads this is number is known as R.For Writes it is known as W. The common Consistency Levels are One, Quorum and All.Quorum is (N/2) +1. If the operation succeeds it means that the required Consistency Level has been achieved. No matter what the Consistency Level, the cluster will work to Eventually make the on disk data for all replicas Consistent. To get consistent behaviour for all operations ensure thatR + W &gt; N Using Quorum CL for Writes and Reads will give consistent operations. Using All CL for Writes and One for Reads will give consistent operations. Using One CL for Writes and All for Reads will give consistent operations. If we use Quorum CL for our write, the coordinator will wait for 2 nodes to complete.  #1  #2 ‘foo’ #5  #4  #3 ‘foo’ client      If a node is offline the coordinator will include a Hinted Handoff when it sends the write to one of the online nodes. The Hinted Handoff tells a node that it should forward the write to the offline node if it comes back online. In our example node 5 gave node 2 a Hinted Handoff for node 4.  #1  #2 ‘foo’ #5  #4 ‘foo’ #3 ‘foo’ client  What if the ‘foo’ key is read before the Hinted Handoff is delivered?  Or if node 4 died during the write and the Hinted Handoff was not sent? #1  #2 ‘foo’ #5  #4 ‘’ #3 ‘foo’ client     If using Quorum CL, the coordinator asks all replicas to perform the read and waits for the Quorum of replicas to return. If the results received do not match a Read Repair process is performed before returning to the client. Read Repair uses the time stamp provided by the client during a write to determine the latest value.  The current value is pushed to out of date nodes and consistency is achieved before the coordinator returns to the client. At lower Consistency Levels Read Repair happens in the background and can be assigned a probability of running. Hinted Handoff and Read Repair are optimisations for achieving on disk consistency.  The Anti Entrophy Service (AES) is the main feature for achieving consistency. AES is normally run as a regular weekly maintenance. Or after node downtime. AES detects differences by generating hash trees (known as Merkle Trees) that describe a node’s content.  Ranges of out of sync data are then exchanged between the nodes.  How does it scale out? Nodes can be added to a cluster while it is online. Known as Bootstrapping.  Adding nodes increases the disk and memory available to the cluster, and decreases the load per node. Adding nodes increases the disk and memory available to the cluster, and decreases the load per node. Apache Cassandrahttp://cassandra.apache.org/Google Big Tablehttp://labs.google.com/papers/bigtable.htmlAmazon Dynamohttp://www.allthingsdistributed.com/2007/10/amazons_dynamo.html Aaron Morton @aaronmorton www.thelastpickle.com   Licensed under a Creative Commons Attribution-NonCommercial 3.0 New Zealand License"/>
+    <title></title>
+    <script type="text/javascript" language="javascript">
+//      <![CDATA[
+            var images = new Array (75);
+            images[0] = "introduction-to-cassandra_files/introduction-to-cassandra.001.jpg";
+            images[1] = "introduction-to-cassandra_files/introduction-to-cassandra.002.jpg";
+            images[2] = "introduction-to-cassandra_files/introduction-to-cassandra.003.jpg";
+            images[3] = "introduction-to-cassandra_files/introduction-to-cassandra.004.jpg";
+            images[4] = "introduction-to-cassandra_files/introduction-to-cassandra.005.jpg";
+            images[5] = "introduction-to-cassandra_files/introduction-to-cassandra.006.jpg";
+            images[6] = "introduction-to-cassandra_files/introduction-to-cassandra.007.jpg";
+            images[7] = "introduction-to-cassandra_files/introduction-to-cassandra.008.jpg";
+            images[8] = "introduction-to-cassandra_files/introduction-to-cassandra.009.jpg";
+            images[9] = "introduction-to-cassandra_files/introduction-to-cassandra.010.jpg";
+            images[10] = "introduction-to-cassandra_files/introduction-to-cassandra.011.jpg";
+            images[11] = "introduction-to-cassandra_files/introduction-to-cassandra.012.jpg";
+            images[12] = "introduction-to-cassandra_files/introduction-to-cassandra.013.jpg";
+            images[13] = "introduction-to-cassandra_files/introduction-to-cassandra.014.jpg";
+            images[14] = "introduction-to-cassandra_files/introduction-to-cassandra.015.jpg";
+            images[15] = "introduction-to-cassandra_files/introduction-to-cassandra.016.jpg";
+            images[16] = "introduction-to-cassandra_files/introduction-to-cassandra.017.jpg";
+            images[17] = "introduction-to-cassandra_files/introduction-to-cassandra.018.jpg";
+            images[18] = "introduction-to-cassandra_files/introduction-to-cassandra.019.jpg";
+            images[19] = "introduction-to-cassandra_files/introduction-to-cassandra.020.jpg";
+            images[20] = "introduction-to-cassandra_files/introduction-to-cassandra.021.jpg";
+            images[21] = "introduction-to-cassandra_files/introduction-to-cassandra.022.jpg";
+            images[22] = "introduction-to-cassandra_files/introduction-to-cassandra.023.jpg";
+            images[23] = "introduction-to-cassandra_files/introduction-to-cassandra.024.jpg";
+            images[24] = "introduction-to-cassandra_files/introduction-to-cassandra.025.jpg";
+            images[25] = "introduction-to-cassandra_files/introduction-to-cassandra.026.jpg";
+            images[26] = "introduction-to-cassandra_files/introduction-to-cassandra.027.jpg";
+            images[27] = "introduction-to-cassandra_files/introduction-to-cassandra.028.jpg";
+            images[28] = "introduction-to-cassandra_files/introduction-to-cassandra.029.jpg";
+            images[29] = "introduction-to-cassandra_files/introduction-to-cassandra.030.jpg";
+            images[30] = "introduction-to-cassandra_files/introduction-to-cassandra.031.jpg";
+            images[31] = "introduction-to-cassandra_files/introduction-to-cassandra.032.jpg";
+            images[32] = "introduction-to-cassandra_files/introduction-to-cassandra.033.jpg";
+            images[33] = "introduction-to-cassandra_files/introduction-to-cassandra.034.jpg";
+            images[34] = "introduction-to-cassandra_files/introduction-to-cassandra.035.jpg";
+            images[35] = "introduction-to-cassandra_files/introduction-to-cassandra.036.jpg";
+            images[36] = "introduction-to-cassandra_files/introduction-to-cassandra.037.jpg";
+            images[37] = "introduction-to-cassandra_files/introduction-to-cassandra.038.jpg";
+            images[38] = "introduction-to-cassandra_files/introduction-to-cassandra.039.jpg";
+            images[39] = "introduction-to-cassandra_files/introduction-to-cassandra.040.jpg";
+            images[40] = "introduction-to-cassandra_files/introduction-to-cassandra.041.jpg";
+            images[41] = "introduction-to-cassandra_files/introduction-to-cassandra.042.jpg";
+            images[42] = "introduction-to-cassandra_files/introduction-to-cassandra.043.jpg";
+            images[43] = "introduction-to-cassandra_files/introduction-to-cassandra.044.jpg";
+            images[44] = "introduction-to-cassandra_files/introduction-to-cassandra.045.jpg";
+            images[45] = "introduction-to-cassandra_files/introduction-to-cassandra.046.jpg";
+            images[46] = "introduction-to-cassandra_files/introduction-to-cassandra.047.jpg";
+            images[47] = "introduction-to-cassandra_files/introduction-to-cassandra.048.jpg";
+            images[48] = "introduction-to-cassandra_files/introduction-to-cassandra.049.jpg";
+            images[49] = "introduction-to-cassandra_files/introduction-to-cassandra.050.jpg";
+            images[50] = "introduction-to-cassandra_files/introduction-to-cassandra.051.jpg";
+            images[51] = "introduction-to-cassandra_files/introduction-to-cassandra.052.jpg";
+            images[52] = "introduction-to-cassandra_files/introduction-to-cassandra.053.jpg";
+            images[53] = "introduction-to-cassandra_files/introduction-to-cassandra.054.jpg";
+            images[54] = "introduction-to-cassandra_files/introduction-to-cassandra.055.jpg";
+            images[55] = "introduction-to-cassandra_files/introduction-to-cassandra.056.jpg";
+            images[56] = "introduction-to-cassandra_files/introduction-to-cassandra.057.jpg";
+            images[57] = "introduction-to-cassandra_files/introduction-to-cassandra.058.jpg";
+            images[58] = "introduction-to-cassandra_files/introduction-to-cassandra.059.jpg";
+            images[59] = "introduction-to-cassandra_files/introduction-to-cassandra.060.jpg";
+            images[60] = "introduction-to-cassandra_files/introduction-to-cassandra.061.jpg";
+            images[61] = "introduction-to-cassandra_files/introduction-to-cassandra.062.jpg";
+            images[62] = "introduction-to-cassandra_files/introduction-to-cassandra.063.jpg";
+            images[63] = "introduction-to-cassandra_files/introduction-to-cassandra.064.jpg";
+            images[64] = "introduction-to-cassandra_files/introduction-to-cassandra.065.jpg";
+            images[65] = "introduction-to-cassandra_files/introduction-to-cassandra.066.jpg";
+            images[66] = "introduction-to-cassandra_files/introduction-to-cassandra.067.jpg";
+            images[67] = "introduction-to-cassandra_files/introduction-to-cassandra.068.jpg";
+            images[68] = "introduction-to-cassandra_files/introduction-to-cassandra.069.jpg";
+            images[69] = "introduction-to-cassandra_files/introduction-to-cassandra.070.jpg";
+            images[70] = "introduction-to-cassandra_files/introduction-to-cassandra.071.jpg";
+            images[71] = "introduction-to-cassandra_files/introduction-to-cassandra.072.jpg";
+            images[72] = "introduction-to-cassandra_files/introduction-to-cassandra.073.jpg";
+            images[73] = "introduction-to-cassandra_files/introduction-to-cassandra.074.jpg";
+            images[74] = "introduction-to-cassandra_files/introduction-to-cassandra.075.jpg";
+            var index = 0;
+            function WindowLoaded(evt)
+            {
+                document.body.onselectstart = function () { return false; };
+            }
+            function Step(i)
+            {
+                GoTo(index + i)
+            }
+            function GoTo(newIndex)
+            {
+                if(newIndex >= 0 && newIndex < images.length)
+                {
+                    index = newIndex;
+                    document.Slideshow.src = images[index];
+                }
+            }
+//      ]]>
+    </script>
+</head>
+<body bgcolor="black" onload='WindowLoaded(event);'>
+    <p align="center">
+        <br/>
+        <br/>
+        <img name="Slideshow" alt="" src="introduction-to-cassandra_files/introduction-to-cassandra.001.jpg" onclick="Step(1)"/>
+        <br/>
+        <br/>
+        <input type="image" src="introduction-to-cassandra_files/home.png" onclick="GoTo(0)"/>
+        &nbsp;&nbsp;&nbsp;
+        <input type="image" src="introduction-to-cassandra_files/prev.png" onclick="Step(-1)"/>
+        <input type="image" src="introduction-to-cassandra_files/next.png" onclick="Step(1)"/>
+    </p>
+</body>
+</html>
