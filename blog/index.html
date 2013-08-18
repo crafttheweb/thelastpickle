@@ -1,5 +1,5 @@
 ---
-comment: Front Matter to trigger Jekyll processing
+comment: Index for blog posts
 section: blog
 title: The Last Pickle
 ---
@@ -40,14 +40,13 @@ title: The Last Pickle
               <footer class="blog-footer row-fluid">
                 <div class="span4 blog-tags">
                   <i class="icon-tags"></i>
-                  <!-- <a href="#">fugiat, nulla, pariatur</a> -->
                   {% for tag in post.tags %}
                     {{ tag }}
                   {% endfor %}
                 </div>
                 <div class="span4 blog-more">
                   <i class="icon-link"></i>
-                  <a href="post.html">read more</a>
+                  <a href="{{ post.url }}">read more</a>
                 </div>
               </footer>
             </article>
