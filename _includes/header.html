@@ -16,11 +16,12 @@
             </h1>
             <div class="nav-collapse collapse">
               <ul class="nav pull-right">
-                <li class=""><a href="services.html">Services</a></li>
+                <li class="{% if page.section == 'services' %} active {% endif %}"><a href="services.html">Services</a></li>
                 <li class="{% if page.section == 'about' %} active {% endif %}"><a href="about.html">About</a></li>
-                <li class=""><a href="blog.html">Blog</a></li>
-                <li class=""><a href="careers.html">Careers</a></li>
-                <li class=""><a href="contact.html">Contact</a></li>
+                <li class="{% if page.section == 'blog' %} active {% endif %}"><a href="blog/index.html">Blog</a></li>
+                <li class="{% if page.section == 'speaking' %} active {% endif %}"><a href="">Speaking</a></li>
+                <li class="{% if page.section == 'careers' %} active {% endif %}"><a href="careers.html">Careers</a></li>
+                <li class="{% if page.section == 'contact' %} active {% endif %}"><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>

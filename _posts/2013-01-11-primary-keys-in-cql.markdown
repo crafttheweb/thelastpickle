@@ -2,6 +2,8 @@
 layout: post
 title: "PRIMARY KEY's in CQL"
 category: Cassandra
+tags: cassandra
+author: Aaron Morton
 ---
 
 The final version of [CQL 3](https://github.com/apache/cassandra/blob/cassandra-1.2/doc/cql3/CQL.textile "Cassandra Query Language (CQL) v3.0.0") that ships with Cassandra v1.2 adds some new features to the `PRIMARY KEY` clause. It overloads the concept in ways that differ from the standard [SQL](http://en.wikipedia.org/wiki/Primary_key) definition, and in some places shares ideas with [Hive](http://hive.apache.org/docs/r0.9.0/language_manual/data-manipulation-statements.html). But from a Cassandra point of view it allows for the same flexibility as the Thrift API.
