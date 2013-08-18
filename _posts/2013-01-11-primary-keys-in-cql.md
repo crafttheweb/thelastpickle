@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "PRIMARY KEY's in CQL"
+category: blog
 tags: cassandra
 author: Aaron Morton
 ---
