@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Token Range Ownership"
-category: Cassandra
+title: Token Range Ownership
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 Recently, like 2 hours ago, I was planning some work to rebalance a Cassandra cluster and I wanted to see how the steps involved would effect the range ownership of the nodes. So I replicated the logic from [RandomPartitioner.describeOwnership()](https://github.com/apache/cassandra/blob/cassandra-0.8.6/src/java/org/apache/cassandra/dht/RandomPartitioner.java#L152) in a handy python script.

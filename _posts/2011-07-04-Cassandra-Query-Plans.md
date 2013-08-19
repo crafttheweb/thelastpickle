@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Cassandra Query Plans"
-category: Cassandra
+title: Cassandra Query Plans
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 I've had a few conversations about query performance on wide rows recently, so it seemed about time to dig into how the different slice queries work.

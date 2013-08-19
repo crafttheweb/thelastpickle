@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Row Level Isolation and Consensus"
-category: Cassandra
+title: Row Level Isolation and Consensus
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 Row Level [Isolation](https://issues.apache.org/jira/browse/CASSANDRA-2893) in Cassandra 1.1 is the most important new feature in Cassandra so far. There have been a lot of great improvements since version 0.5, but row level isolation adds an entirely new feature. One that opens the door to new use cases.

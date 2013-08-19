@@ -1,9 +1,12 @@
 ---
 layout: post
-title: "ZooKeeper Reading 12-01-2012"
-category: ZooKeeper
+title: ZooKeeper Reading 12-01-2012
+category: blog
+tags: zookeeper
+author: Aaron Morton
 ---
 
+Some recent Zoo Keeper reading.
 
 ## [Overview](http://zookeeper.apache.org/doc/current/zookeeperOver.html)
 

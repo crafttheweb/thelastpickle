@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "How are Memtables measured?"
-category: Cassandra
+title: How are Memtables measured?
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 **Updated:** I've added information on the new `memtable_total_space_in_mb` setting in version 0.8 and improved the information about `memtable_throughput`. Thanks for the feedback.

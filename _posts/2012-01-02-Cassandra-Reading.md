@@ -1,8 +1,12 @@
 ---
 layout: post
-title: "Cassandra Reading 02-01-2012"
-category: Cassandra
+title: Cassandra Reading 02-01-2012
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
+
+Recent Cassandra reading. 
 
 ## [CQL: SQL In Cassandra](http://www.slideshare.net/jericevans/cql-sql-in-cassandra)
 

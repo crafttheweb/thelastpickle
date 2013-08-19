@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Recent Cassandra AWS Reading"
-category: Cassandra
+title: Recent Cassandra AWS Reading
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 There's been a few good AWS discussions recently on the Cassandra User List, and some interesting blog posts.

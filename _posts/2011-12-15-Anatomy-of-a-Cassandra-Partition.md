@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Anatomy of a Cassandra Partition"
-category: Cassandra
+title: Anatomy of a Cassandra Partition
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 Recently I was working on a Cassandra cluster and experienced a strange situation that resulted in a partition of sorts between the nodes. Whether you actually call it a partition or not is a matter for discussion (see [" You Can’t Sacrifice Partition Tolerance - Updated October 22, 2010"](http://codahale.com/you-cant-sacrifice-partition-tolerance/)]. But weird stuff happened, Cassandra remained available, and it was fixed with zero site down time. It was also a good example of how and why Cassandra is a Highly Available data store, and fun to fix. So here are all the nerdy details...

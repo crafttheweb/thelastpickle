@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Sorting Lists For Humans"
-category: Cassandra
+title: Sorting Lists For Humans
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 I like humans. Many of my friends a humans; my wife is a human. And I admire their ability to arbitrarily order items in a list. Applying a manual order to a list of items has been discussed a few times on the Cassandra user list. And I've been thinking about it recently.

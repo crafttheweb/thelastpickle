@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Down For Me?"
-category: Cassandra
+title: Down For Me?
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 For a read or write request to *start* in Cassandra at least as many nodes must be seen as `UP` by the coordinator node as the request has specified via the ConsistencyLevel. Otherwise the client will get an `UnavailableException` and the cluster will appear down for that request. That may not necessarily mean it is down for all keys or all requests.

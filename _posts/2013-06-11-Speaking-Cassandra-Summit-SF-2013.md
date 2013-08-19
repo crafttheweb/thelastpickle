@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Cassandra Summit SF 2013 - Slide and Video
+title: Cassandra Summit SF 2013 - Slides and Video
 author: Aaron Morton
 category: speaking
 tags: cassandra

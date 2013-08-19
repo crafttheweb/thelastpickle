@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Reversed Comparators"
-category: Cassandra
+title: Reversed Comparators
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 Cassandra 0.8.1 [added](https://issues.apache.org/jira/browse/CASSANDRA-2355) support for Composite Types and Reversed Types, through a handy little type composition language. Hopefully I'll get to show some of the things you can do with Composite Types later, for now the best resource I know is Ed Anuff's presentation on [Cassandra Indexing Techniques](http://www.slideshare.net/edanuff/indexing-in-cassandra) at Cassandra SF 2011. 

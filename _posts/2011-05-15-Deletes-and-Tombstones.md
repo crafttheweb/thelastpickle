@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "Deletes and Tombstones"
-category: Cassandra
+title: Deletes and Tombstones
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 Deletes in Cassandra rely on Tombstones to support the Eventual Consistency model. Tombstones are markers that can exist at different levels of the data model and let the cluster know that a delete was recored on a replica, and when it happened. Tombstones then play a role in keeping deleted data hidden and help with freeing space used by deleted columns on disk.

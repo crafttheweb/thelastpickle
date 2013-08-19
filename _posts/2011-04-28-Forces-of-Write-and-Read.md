@@ -1,7 +1,9 @@
 ---
 layout: post
-title: "The forces of Write and Read"
-category: Cassandra
+title: The forces of Write and Read
+category: blog
+tags: cassandra
+author: Aaron Morton
 ---
 
 Requests that write and read data in Cassandra, like any data base, have competing characteristics that need to be balanced. This post compares the approach taken by Cassandra to traditional Relation Database Systems.
