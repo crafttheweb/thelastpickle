@@ -11,59 +11,20 @@ title: The Last Pickle - Speaking
 <!-- Main Content -->
 <div id="content" role="main">
 
+  <section class="section alt" id="promo">
+    <div class="container">
+      <div class="hero-unit">
+        <h1>New Title here.</h1>
+        <p>Something like: We are always looking to talk, get in touch.</p>
+      </div>
+    </div>
+  </section>
+  
   <section class="section">
     <div class="container">
       <div class="row-fluid">
         <div class="span9">
-
-        {% for post in site.categories.speaking %}
-          
-          <article class="blog-post">
-            <header class="blog-header">
-              <h2>
-                {{ post.title }}
-                <small>
-                  by
-                  {{ post.author }},
-                  {{ post.date | date_to_long_string }}.
-                </small>
-              </h2>
-            </header>
-            {{ post.excerpt }}
-              <footer class="blog-footer row-fluid">
-                <div class="span4 blog-tags">
-                  <i class="icon-tags"></i>
-                  {% for tag in post.tags %}
-                    {{ tag }}
-                  {% endfor %}
-                </div>
-                <div class="span4 blog-more">
-                  <i class="icon-link"></i>
-                  <a href="{{ post.url }}">read more</a>
-                </div>
-              </footer>
-            </article>
-          {% endfor %}
-        
-          <ul class="pager">
-            {% if paginator.previous_page %}
-              <li class="previous">
-                
-                <a href="{% if paginator.previous_page ==1 %}/blog/index.html{% else %}/blog/page{{ paginator.previous_page }} {% endif %}">
-                  <i class="icon-chevron-left"></i>
-                  Newer
-                </a>
-              </li>
-            {% endif %}
-            {% if paginator.next_page %}
-              <li class="next">
-                <a href="/blog/page{{ paginator.next_page }}">
-                  Older
-                  <i class="icon-chevron-right"></i>
-                </a>
-              </li>
-            {% endif %}
-          </ul>
+          {% include speaking-list.html category="speaking" %}
         </div>
       </div>
     </div>

@@ -1,0 +1,41 @@
+---
+comment: Layout for a normal page
+---
+
+{% include pre.html %}
+
+<!-- Page Header -->
+{% include header.html %}
+
+<!-- Main Content -->
+<div id="content" role="main">
+  <section class="section alt" id="promo">
+    <div class="container">
+      <div class="hero-unit">
+        <h1>{{ page.title }}</h1>
+      </div>
+    </div>
+  </section>
+  
+<!-- Main Content -->
+<section class="section">
+  <div class="container">
+    <div class="row-fluid">
+      <div class="span9">
+        <article class="blog-post">
+          
+          {{ content }}
+          
+        </article>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</div>
+<!-- Page Footer -->
+{% include footer.html %}
+    
+{% include post.html %}

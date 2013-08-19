@@ -9,8 +9,6 @@ section: blog
 {% include header.html %}
 <!-- Main Content -->
 <div id="content" role="main">
-
-
 <!-- Main Content -->
 <section class="section">
   <div class="container">
@@ -18,14 +16,14 @@ section: blog
       <div class="span9">
         <article class="blog-post">
           <header class="blog-header">
-            <h2>
+            <h1>
               {{ page.title }}
               <small>
                 by
                 {{ page.author }},
                 {{ page.date | date_to_long_string }}.
               </small>
-            </h2>
+            </h1>
           </header>
           {{ content }}
           <footer class="blog-footer row-fluid">
