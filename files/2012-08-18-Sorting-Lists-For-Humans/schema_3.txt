@@ -1,0 +1,24 @@
+use dev;
+
+/* 
+*/
+CREATE COLUMN FAMILY 
+    LedgerSorted
+WITH 
+    key_validation_class = UTF8Type
+AND 
+    comparator = 'CompositeType(IntegerType, IntegerType, UTF8Type)'
+AND 
+    default_validation_class = UTF8Type
+;
+
+
+CREATE COLUMN FAMILY 
+    LedgerActions
+WITH 
+    key_validation_class = UTF8Type
+AND 
+    comparator = IntegerType
+AND 
+    default_validation_class = UTF8Type
+;

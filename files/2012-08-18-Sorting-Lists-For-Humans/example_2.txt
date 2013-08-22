@@ -1,0 +1,16 @@
+# Move the last item to before the second
+
+In [6]: lists.move("fruits", (1345288330031380, 1345288330031380, 5), "Elderberry", (1345288330027208, 1345288330027208, 2))
+
+# view the data using cassandra-cli
+
+[default@dev] list Sorted;
+Using default limit of 100
+Using default column limit of 100
+-------------------
+RowKey: fruits
+=> (column=1345288330000178:1345288330000178:1, value=Apples, timestamp=1345288330000185)
+=> (column=1345288330027207:1345374579299616:5, value=Elderberry, timestamp=1345374579301366)
+=> (column=1345288330027208:1345288330027208:2, value=Bananas, timestamp=1345288330027216)
+=> (column=1345288330028597:1345288330028597:3, value=Cherries, timestamp=1345288330028602)
+=> (column=1345288330029939:1345288330029939:4, value=Dragon Fruit, timestamp=1345288330029945)

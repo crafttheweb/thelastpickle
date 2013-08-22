@@ -1,0 +1,15 @@
+create keyspace dev;
+
+use dev;
+
+/* List items where column name represents the sort order..
+*/
+CREATE COLUMN FAMILY 
+    Sorted
+WITH 
+    key_validation_class = UTF8Type
+AND 
+    comparator = 'CompositeType(IntegerType, IntegerType, IntegerType)'
+AND 
+    default_validation_class = UTF8Type
+;

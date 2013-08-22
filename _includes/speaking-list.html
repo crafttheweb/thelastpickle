@@ -1,0 +1,31 @@
+<!-- Render a list of posts for the speaking page.-->
+<!-- Call this using the form: include speaking-list posts=$posts -->
+
+{% for post in site.categories[include.category] %}
+  
+  <article class="blog-post">
+    <header class="blog-header">
+      <h2>
+        {{ post.title }}
+        <small>
+          by
+          {{ post.author }},
+          {{ post.date | date_to_long_string }}.
+        </small>
+      </h2>
+    </header>
+    {{ post.excerpt }}
+    <footer class="blog-footer row-fluid">
+      <div class="span4 blog-tags">
+        <i class="icon-tags"></i>
+        {% for tag in post.tags %}
+          {{ tag }}
+        {% endfor %}
+      </div>
+      <div class="span4 blog-more">
+        <i class="icon-link"></i>
+        <a href="{{ post.url }}">read more</a>
+      </div>
+    </footer>
+  </article>
+{% endfor %}
