@@ -1,4 +1,5 @@
-new-site
-========
+# The Last Pickle Website
 
-Future new GH project for thelastpickle.github.io as the old one has old GH issues that cannot be removed  
+**Note:** Changes to the `master` branch in this repo are automatically reflected on the live site. 
+
+See the Wiki for workflow and other information.  
