@@ -3,7 +3,7 @@ layout: post
 title: CQL3 to Astyanax Compatibility
 author: Nate McCall
 category: blog
-tags: CQL3, astyanax, thrift
+tags: CQL3, astyanax, thrift, cassandra
 ---
 
 A lot of folks have been having [issues](http://mail-archives.apache.org/mod_mbox/cassandra-user/201308.mbox/%3CCAAtvD4Un26yBd8rAMqctjRN4YKtCuxEekhq8WOqj7XVMcjEU3Q%40mail.gmail.com%3E) [lately](http://mail-archives.apache.org/mod_mbox/cassandra-user/201309.mbox/%3C541C7781A689464891C05251C07E8CCF3D9D10AA9C@farseer.lithium.local%3E) with the performance of insert-heavy workloads via CQL. Though batch statements are available in the new 2.0 release, we'll describe here a method to make interoperability between Thrift and CQL3 schema more accessible. 
