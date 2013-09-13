@@ -142,15 +142,10 @@ ColumnFamily definition (a little difficult to read, but the typing is left in f
 
 Description from Paul: 
 
-`SubscriptionIndexCompositeKey is a class that contains the fields from the row key (e.g.,
-subscription_type, subscription_target_id), and SubscribingEntityCompositeColumn contains
-the fields from the composite column (as it would look if you view your data using Cassandra-cli),
-so: entityType, entityId, columnName. The columnName field is the tricky part as it defines
-what to interpret the column value as (i.e., if it is a value for the creationtimestamp the
-column might be "someEntityType:4:creationtimestamp"`
-
-`The actual mutation looks something like this:`
-
+> SubscriptionIndexCompositeKey is a class that contains the fields from the row key (e.g., subscription_type, subscription_target_id), and SubscribingEntityCompositeColumn contains the fields from the composite column (as it would look if you view your data using Cassandra-cli), so: entityType, entityId, columnName. The columnName field is the tricky part as it defines what to interpret the column value as (i.e., if it is a value for the creationtimestamp the column might be "someEntityType:4:creationtimestamp" 
+>
+> The actual mutation looks something like this:
+>
 	final MutationBatch mutation = getKeyspace().prepareMutationBatch();
 	final ColumnListMutation<SubscribingEntityCompositeColumn> row = 	mutation.withRow(COMPOSITE_ROW_COLUMN,
 		new SubscriptionIndexCompositeKey(targetEntityType.getName(), targetEntityId));
