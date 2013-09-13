@@ -65,21 +65,21 @@ And the annotated classes representing the row key and the column:
 	 * Note the null value name for the index marker row
 	 */
     static TimeSeriesColumn indexRow(long offset) {
-        TimeSeriesRow ts = new TimeSeriesRow();
+        TimeSeriesColumn ts = new TimeSeriesColumn();
         ts.offset = offet;
         ts.valueName = null;  
         return ts;
     }
 
     static TimeSeriesColumn scoreColumn(long offset) {
-        TimeSeriesRow ts = new TimeSeriesRow();
+        TimeSeriesColumn ts = new TimeSeriesColumn();
         ts.offset = offset;
         ts.valueName = "score";
         return ts;
     }
     
     static TimeSeriesColumn tempColumn(long offset) {
-        TimeSeriesRow ts = new TimeSeriesRow();
+        TimeSeriesColumn ts = new TimeSeriesColumn();
         ts.offset = offset;
         ts.valueName = "temperature";
         return ts;
