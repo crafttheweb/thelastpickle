@@ -3,7 +3,7 @@ layout: post
 title: CQL3 to Astyanax Compatibility
 author: Nate McCall
 category: blog
-tags: CQL3, astyanax, thrift
+tags: CQL3, astyanax, thrift, cassandra
 ---
 
 A lot of folks have been having [issues](http://mail-archives.apache.org/mod_mbox/cassandra-user/201308.mbox/%3CCAAtvD4Un26yBd8rAMqctjRN4YKtCuxEekhq8WOqj7XVMcjEU3Q%40mail.gmail.com%3E) [lately](http://mail-archives.apache.org/mod_mbox/cassandra-user/201309.mbox/%3C541C7781A689464891C05251C07E8CCF3D9D10AA9C@farseer.lithium.local%3E) with the performance of insert-heavy workloads via CQL. Though batch statements are available in the new 2.0 release, we'll describe here a method to make interoperability between Thrift and CQL3 schema more accessible. 
@@ -23,7 +23,7 @@ Given the following table definition
   		PRIMARY KEY ((id, start), offset)
 	);
 
-We setup the serializers fro the row key and time series column respectively:
+We setup the serializers for the row key and time series column respectively:
 
 	private final AnnotatedCompositeSerializer rowKeySerializer
           = new AnnotatedCompositeSerializer(TsRowKey.class);
@@ -113,4 +113,54 @@ The Astyanax wiki:
 
 
 And [this post](http://mail-archives.apache.org/mod_mbox/cassandra-user/201309.mbox/%3C541C7781A689464891C05251C07E8CCF3D9D29D57B%40farseer.lithium.local%3E) from a recent mail list thread about insert performance of CQL3.
+
+### (Edit)
+After a brief off list chat with [Paul Cichonski](https://github.com/paulcichonski), author of the reply above, I'm including the code example here for completeness because it's a good complement to the timeseries one we have already.
+
+The CQL table definition:
+
+	CREATE TABLE standard_subscription_index
+	(
+ 		subscription_type text,
+		subscription_target_id text,
+		entitytype text,
+		entityid int,
+		creationtimestamp timestamp,
+		indexed_tenant_id uuid,
+		deleted boolean,
+    	PRIMARY KEY ((subscription_type, subscription_target_id), entitytype, entityid)
+	)
+
+ColumnFamily definition (a little difficult to read, but the typing is left in for completeness):
+
+	private static final ColumnFamily<SubscriptionIndexCompositeKey, SubscribingEntityCompositeColumn>
+	COMPOSITE_ROW_COLUMN 
+		= new ColumnFamily<SubscriptionIndexCompositeKey, 	SubscribingEntityCompositeColumn>(
+	SUBSCRIPTION_CF_NAME, 
+	new AnnotatedCompositeSerializer<SubscriptionIndexCompositeKey>(SubscriptionIndexCompositeKey.class),
+	new AnnotatedCompositeSerializer<SubscribingEntityCompositeColumn>(SubscribingEntityCompositeColumn.class));
+
+Description from Paul: 
+
+> SubscriptionIndexCompositeKey is a class that contains the fields from the row key (e.g., subscription_type, subscription_target_id), and SubscribingEntityCompositeColumn contains the fields from the composite column (as it would look if you view your data using Cassandra-cli), so: entityType, entityId, columnName. The columnName field is the tricky part as it defines what to interpret the column value as (i.e., if it is a value for the creationtimestamp the column might be "someEntityType:4:creationtimestamp" 
+>
+> The actual mutation looks something like this:
+>
+	final MutationBatch mutation = getKeyspace().prepareMutationBatch();
+	final ColumnListMutation<SubscribingEntityCompositeColumn> row = 	mutation.withRow(COMPOSITE_ROW_COLUMN,
+		new SubscriptionIndexCompositeKey(targetEntityType.getName(), targetEntityId));
+
+	for (Subscription sub : subs) {
+		row.putColumn(new SubscribingEntityCompositeColumn(sub.getEntityType().getName(), sub.getEntityId(),
+				"creationtimestamp"), sub.getCreationTimestamp());
+	row.putColumn(new SubscribingEntityCompositeColumn(sub.getEntityType().getName(), sub.getEntityId(),
+				"deleted"), sub.isDeleted());
+	row.putColumn(new SubscribingEntityCompositeColumn(sub.getEntityType().getName(), sub.getEntityId(),
+				"indexed_tenant_id"), tenantId);
+	}
+	
+Hopefully between the two examples (thanks again to Paul for the completeness), and the Astyanax documentation [on composite annoations](https://github.com/Netflix/astyanax/wiki/Composite-columns), you should have some good examples to start playing around with compatibility. 
+
+This issue has been compelling enough, that I think we'll soon have a post going into the details of insert performance and see if we can't narrow down what the issues are on the way.
+
 
