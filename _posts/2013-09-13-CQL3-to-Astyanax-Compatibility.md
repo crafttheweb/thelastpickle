@@ -23,7 +23,7 @@ Given the following table definition
   		PRIMARY KEY ((id, start), offset)
 	);
 
-We setup the serializers fro the row key and time series column respectively:
+We setup the serializers for the row key and time series column respectively:
 
 	private final AnnotatedCompositeSerializer rowKeySerializer
           = new AnnotatedCompositeSerializer(TsRowKey.class);
