@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CQL3 to Asytanax Compatibility
+title: CQL3 to Astyanax Compatibility
 author: Nate McCall
 category: blog
 tags: CQL3, astyanax, thrift
