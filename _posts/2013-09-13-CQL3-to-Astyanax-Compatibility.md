@@ -5,10 +5,13 @@ author: Nate McCall
 category: blog
 tags: CQL3, astyanax, thrift, cassandra
 ---
+### Overview
+A lot of folks have been having [issues](http://mail-archives.apache.org/mod_mbox/cassandra-user/201308.mbox/%3CCAAtvD4Un26yBd8rAMqctjRN4YKtCuxEekhq8WOqj7XVMcjEU3Q%40mail.gmail.com%3E) [lately](http://mail-archives.apache.org/mod_mbox/cassandra-user/201309.mbox/%3C541C7781A689464891C05251C07E8CCF3D9D10AA9C@farseer.lithium.local%3E) with the performance of insert-heavy workloads via CQL. Though batch statements are available in the new 2.0 release, the general consensus in the community has been that switching back to the Thrift API is the most immediate and well understand path for alleviating mutation performance issues with CQL. 
 
-A lot of folks have been having [issues](http://mail-archives.apache.org/mod_mbox/cassandra-user/201308.mbox/%3CCAAtvD4Un26yBd8rAMqctjRN4YKtCuxEekhq8WOqj7XVMcjEU3Q%40mail.gmail.com%3E) [lately](http://mail-archives.apache.org/mod_mbox/cassandra-user/201309.mbox/%3C541C7781A689464891C05251C07E8CCF3D9D10AA9C@farseer.lithium.local%3E) with the performance of insert-heavy workloads via CQL. Though batch statements are available in the new 2.0 release, we'll describe here a method to make interoperability between Thrift and CQL3 schema more accessible. 
+Unfortunately, maintaining compatibility with CQL3 and Thrift schemas, though possible, is not a trivial effort. We'll describe here a method to make this interoperability more accessible. 
 
-There are a few resources floating around the internet already on how to do this in a general case (see the resources section below). However, this particular case is based on a common problem of wide row insertions for time series data. Specifically, when you define an index column along with the primary key definition, things get slightly more complicated. 
+### Compatibility Example
+There are a few resources floating around the internet already on how to do this in a general case (see the resources section below). However, this particular example is based on a common problem of wide row insertions for time series data. Specifically, when you define an index column along with the primary key definition, things get slightly more complicated when converting to Thrift for mutations. 
 
 The rest of this article assumes you already have some knowledge of Astyanax and CQL3. 
 
@@ -42,7 +45,7 @@ We use this mutation code:
 	TsRowKey rowKey = new TsRowKey(id, start);
 	ColumnListMutation clm = mutation.withRow(columnFamily, rowKey);
 
-	// the 'indexRow' is the tricky part
+	// the 'indexRow' is the tricky part: note the empty ByteBuffer value
 	clm.putColumn(indexRow(currTimeOffset), ByteBufferUtil.EMPTY_BYTE_BUFFER, null)
 	.putColumn(scoreColumn(currTimeOffset), score, null)
 	.putColumn(tempColumn(currTimeOffset), temperature, null);
@@ -100,7 +103,7 @@ With this insertion, thrift will see the following composites:
 	=> (name=1000:score, value=40586ecf14f52e23, timestamp=1378321501291000)
 	=> (name=1000:temperature, value=40586ecf14f52e23, timestamp=1378321501291000)
 
-The first line being our index marker column from the indexRow method mentioned. Brian's post below has some more details on what's going on in the general case. 
+The first line being our index marker column from the indexRow method mentioned. Brian's post below has some more details on what's going on with the composites as seen by Thrift. 
     
 ### Additional Resources
 A pair of posts from Brian O'Neil:
@@ -115,7 +118,7 @@ The Astyanax wiki:
 And [this post](http://mail-archives.apache.org/mod_mbox/cassandra-user/201309.mbox/%3C541C7781A689464891C05251C07E8CCF3D9D29D57B%40farseer.lithium.local%3E) from a recent mail list thread about insert performance of CQL3.
 
 ### (Edit)
-After a brief off list chat with [Paul Cichonski](https://github.com/paulcichonski), author of the reply above, I'm including the code example here for completeness because it's a good complement to the timeseries one we have already.
+After a brief off list chat with [Paul Cichonski](https://github.com/paulcichonski), author of the reply above, I'm including the code example here because it's a good complement to the time series one we have already.
 
 The CQL table definition:
 
@@ -131,7 +134,7 @@ The CQL table definition:
     	PRIMARY KEY ((subscription_type, subscription_target_id), entitytype, entityid)
 	)
 
-ColumnFamily definition (a little difficult to read, but the typing is left in for completeness):
+Astyanax ColumnFamily object definition (a little difficult to read, but the typing is left in for completeness):
 
 	private static final ColumnFamily<SubscriptionIndexCompositeKey, SubscribingEntityCompositeColumn>
 	COMPOSITE_ROW_COLUMN 
@@ -145,7 +148,7 @@ Description from Paul:
 > SubscriptionIndexCompositeKey is a class that contains the fields from the row key (e.g., subscription_type, subscription_target_id), and SubscribingEntityCompositeColumn contains the fields from the composite column (as it would look if you view your data using Cassandra-cli), so: entityType, entityId, columnName. The columnName field is the tricky part as it defines what to interpret the column value as (i.e., if it is a value for the creationtimestamp the column might be "someEntityType:4:creationtimestamp" 
 >
 > The actual mutation looks something like this:
->
+
 	final MutationBatch mutation = getKeyspace().prepareMutationBatch();
 	final ColumnListMutation<SubscribingEntityCompositeColumn> row = 	mutation.withRow(COMPOSITE_ROW_COLUMN,
 		new SubscriptionIndexCompositeKey(targetEntityType.getName(), targetEntityId));
@@ -159,8 +162,6 @@ Description from Paul:
 				"indexed_tenant_id"), tenantId);
 	}
 	
-Hopefully between the two examples (thanks again to Paul for the completeness), and the Astyanax documentation [on composite annoations](https://github.com/Netflix/astyanax/wiki/Composite-columns), you should have some good examples to start playing around with compatibility. 
-
-This issue has been compelling enough, that I think we'll soon have a post going into the details of insert performance and see if we can't narrow down what the issues are on the way.
+Hopefully between the two examples (thanks again to Paul for the completeness), and the Astyanax documentation [on composite annotations](https://github.com/Netflix/astyanax/wiki/Composite-columns), you should have a good starting point to convert your CQL3 insertions to Thrift mutations. 
 
 
