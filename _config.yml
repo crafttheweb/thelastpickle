@@ -10,7 +10,7 @@ pygments: true
 # category_title_prefix: All about&nbsp;
 
 # Number of posts per page
-paginate: 5
+paginate: 15
 paginate_path: "blog/page:num"
 
 # permalink: /blog/:year/:month/:day/:title.html
