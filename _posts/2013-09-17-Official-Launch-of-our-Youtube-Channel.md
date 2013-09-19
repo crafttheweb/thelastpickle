@@ -5,7 +5,9 @@ author: Nate McCall
 category: blog
 tags: cassandra, video, community
 ---
-Community engagement and participation is [pretty import](http://thelastpickle.com/about.html) to us here at TLP. Thus, we are heavily involved in participating in and organizing [local](http://www.meetup.com/Austin-Cassandra-Users/) [meetup](http://www.meetup.com/Data-Driven-Wellington/) [groups](http://www.meetup.com/Austin-Hadoop-Users-Group-AHUG/). To further this endeavor, we recently went out and bought some video cameras (consumer grade, nothing fancy) in an effort to get further reach for, what we think anyway, is valuable content.
+Community engagement, participation and education is [pretty import](http://thelastpickle.com/about.html) to us here at TLP. As part of that, we are involved in organizing and finding speakers for relevant [local](http://www.meetup.com/Austin-Cassandra-Users/) [meetup](http://www.meetup.com/Data-Driven-Wellington/) [groups](http://www.meetup.com/Austin-Hadoop-Users-Group-AHUG/). 
+
+We are glad to do this (we wouldn't unless we found it inherently interesting), but it's unfortunately been useful to date only if you live in Austin, TX or Wellington, NZ. Given that, we recently went out and bought some video cameras (consumer grade, nothing fancy) in an effort to get further reach for, what we think anyway, is valuable content.
 
 Therefore, without further ado, we present our very own Youtube channel: [http://www.youtube.com/TheLastPickleMedia](http://www.youtube.com/TheLastPickleMedia). 
 
