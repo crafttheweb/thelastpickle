@@ -169,17 +169,26 @@ To get the layout I selected the top tile in the example dashboard and split it 
 * Top Left
   * Type: Gauge
   * Title: 1m Rate
-  * Query: `(service = " org.apache.cassandra.metrics ClientRequest Write Latency")`
+  * Query:
+  
+      (service = " org.apache.cassandra.metrics ClientRequest Write Latency")
+  
 * Top Right
   * Type: Gauge
   * Title: 95% Latency (us)
-  * Query: `(service = " org.apache.cassandra.metrics ClientRequest Write Latency .95")`
+  * Query:
+  
+      (service = " org.apache.cassandra.metrics ClientRequest Write Latency .95")
+      
 * Bottom
   * Type: Flot
   * Title: Request Latency
   * Graph Type: Bar
   * Stack Mode: Normal
-  * Query: `(service = " org.apache.cassandra.metrics ColumnFamily Keyspace1.Standard1 WriteLatency .95") or (service = " org.apache.cassandra.metrics ClientRequest Write Latency .95")`
+  * Query: 
+
+    (service = " org.apache.cassandra.metrics ColumnFamily Keyspace1.Standard1 WriteLatency .95") or 
+    (service = " org.apache.cassandra.metrics ClientRequest Write Latency .95")
 
 You can see a video of the dashboard updating in response to `cassandra-stress` [here](/files/2013-11-22-4-hours-with-riemann/riemann-example.mov)
 
