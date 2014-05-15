@@ -6,17 +6,15 @@ category: blog
 tags: cassandra, monitoring, ssh, jmx
 ---
 
-Large-scale applications require way to examine at the internals while running. John comes with Java management extensions, a set of tools to monitor and adjust system objects.
+Large-scale applications require a way to examine system internals while its running. Java comes with Java Management Extensions, which are a set of tools to monitor and adjust system objects.
 
-The represented by a managed being objects (MBean) implemented in the application.
-
-Cassandra uses JMX extensively: tools such as nodetool and OpsCenter monitor cluster health through MBeans.
+In the code, JMX is represented by managed bean objects (MBean) that provide access to certain methods and settings. Cassandra uses JMX extensively: tools such as nodetool and OpsCenter monitor cluster health through MBeans.
 
 ### JMX
 
 // inter arrival times?
 
-Objects in the code implement an MBean interface, providing JMX access to the exposed methods. The `FailureDetectorMBean` exposes read access to endpoint state, endpoint count, inter arrival times, and read/write access to the phi convict threshold (a measure of health for the node).
+We can find examples by looking through the source for MBean implementations. `FailureDetectorMBean.java`, for example, exposes read access to endpoint state, endpoint count, inter arrival times, and read/write access to the phi convict threshold (a measure of health for the node).
 
 FailureDetectorMBean.java
 ```java
@@ -48,9 +46,9 @@ public interface FailureDetectorMBean
 
 ### Connecting via JConsole
 
-Individual notes can be accessed and manipulated via JMX tools such as JConsole and jmxterm.
+Individual nodes can be accessed and manipulated via JMX tools such as [JConsole](http://docs.oracle.com/javase/6/docs/technotes/guides/management/jconsole.html) and [jmxterm](http://wiki.cyclopsgroup.org/jmxterm).
 
-Connecting to the local notice simple. Start JConsole on your machine, and make sure port 7199 is accessible.
+Connecting to the local node is simple. Start JConsole on your machine, and make sure port 7199 is accessible.
 
 The screen will automatically populate with a list of all running Java programs.
 
@@ -73,7 +71,7 @@ Fortunately, we can set up a [SOCKS proxy connection](http://en.wikipedia.org/wi
 
 The SOCKS proxy transmits TCP connections through the proxy server. This means that any request -- HTTP or otherwise -- is viewed as originating from the proxy server. It's an effective way of bypassing the firewalls in place on a computer, as well as masking the origin of a request.
 
-SSH options:
+We will use the `-D` flag to route all remote traffice through a specified port.
 ```
 -D [bind_address:]port
              Specifies a local ``dynamic'' application-level port forwarding.  This works by allocating a socket to listen to port on the local side, optionally bound to the specified bind_address.  Whenever a connection is made to this port, the connection is forwarded over the secure channel, and the application
@@ -83,10 +81,6 @@ SSH options:
 ```
 
 Setting up the proxy server is simple with using the `-D` flag and a unique port. Add `-v` for verbosity, and `-N` to set up an interruptable connection to the server.
-
-```
-ssh -vND <port> remote_server
-```
 
 ```
 $ ssh -vND 9999 vpn
