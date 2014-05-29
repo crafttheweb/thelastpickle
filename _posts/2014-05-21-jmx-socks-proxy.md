@@ -3,7 +3,7 @@ layout: post
 title: JMX Management over SOCKS Proxy
 author: Patricia Gorla
 category: blog
-tags: cassandra, monitoring, ssh, jmx
+tags: cassandra, monitoring, ssh, jmx,
 ---
 
 Connecting to Cassandra through firewalls can be tricky. JMX connects you through one port (7199, by default), and then opens up a dynamic port with the application. This makes remote JMX connections difficult to set up securely.
