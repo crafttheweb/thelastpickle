@@ -6,24 +6,18 @@ category: blog
 tags: cassandra, speaking, conferences
 ---
 
-Short intro paragraph:
+Recently, we got invited to speak at [StampedeCon](http://stampedecon.com/), a "Big Data conference series" hosted at Washington University in St. Louis. It had been a while since I presented, but I was really looking forward to this as it brought me back to one of the things I like to do most which is evangelize Cassandra to new users.
 
-- been a while since I presented
-- how we got invited
-- brought me back to one of the things I like to do most which is evangelize to new users
+StampedeCon itself was an interesting mix of folks:
 
-## StampedeCon
+- Academia and research (particularly folks in epidemiology)
+- Big industry (and the systems integrators that love them)
+- Some local startups (of which St. Louis had a surprising amount)
 
-- Quick overview: WUSTL.edu were super gracious and have some good programs
-- Good crowd, combination of backgrounds, lots of folks from the various departments in the university
-- Well thought out schedule that including two days of pre-conference hands-on workshops, lots opportunities for networking
+The schedule was well thought out with two days of hands-on tutorials before hand followed by two days of presentations. There were good opportunities for networking sprinkled throughout.
 
-## Presentation: Cassandra in the Real World
+Given the mix of the crowd and the number of folks new to Big Data, I went high-level and focused my presentation on three real-world use cases of Cassandra and a distilled list of best practices from such.
 
-- Three case studies of common sectors where we see lots of adoption
-- Summary of best practices
+The presentation is online here. It's a quick read through and, even if you've been working with Cassandra for a while, may contain some things you don't know.
 
-## Summary
-
-- Will definitely go back
-- Liked it so much, I offered to help find speakers next year
+As always, we are open to comments and suggestions on anything we publish, so let us know what you think.
