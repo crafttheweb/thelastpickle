@@ -2,7 +2,7 @@
 layout: post
 title: Hello St. Louis
 author: Nate McCall
-category: blog
+category: speaking
 tags: cassandra, speaking, conferences
 ---
 
