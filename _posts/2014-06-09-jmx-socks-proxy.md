@@ -29,7 +29,7 @@ We can set up a connection with:
 
 Now we need to set our system to connect via the proxy. On OS X, open up 'System Preferences > Network > Advanced > Proxies', and enable the SOCKS proxy on localhost:9999.
 
-![Setting up the SOCKS proxy](/files/2014-05-21-jmx-socks-proxy/setup_proxy.png)
+![Setting up the SOCKS proxy](/files/2014-06-09-jmx-socks-proxy/setup_proxy.png)
 
 **Security**: Now you are connected to the remote server, and all network traffic will be routed through the proxy. Make sure to turn off any other applications — your browser, background apps — that use the network.
 
@@ -43,7 +43,7 @@ The screen will automatically populate with a list of running Java programs.
 
 Click through to the CassandraDaemon view. The first five tabs — Overview, Memory, Threads, Classes, VM Summary — show Java runtime statistics, while the last tab, MBeans, give access into the running application.
 
-![Setting up the SOCKS proxy](/files/2014-05-21-jmx-socks-proxy/jconsole.png)
+![Setting up the SOCKS proxy](/files/2014-06-09-jmx-socks-proxy/jconsole.png)
 
 The **Memory** tab gives a purview into the health of the JVM. You can review the different memory pool generations, and heap and non-heap usage.
 
