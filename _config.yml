@@ -1,7 +1,7 @@
 # safe: false
 # auto: true
 # server: true
-pygments: true
+highlighter: pygments
 
 # now the default permalink
 # permalink: /:year/:month/:day/:title
