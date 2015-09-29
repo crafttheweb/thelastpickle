@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Hardening Cassandra Step by Step - Part 1: Inter-Node Encryption (And a Gentle Intro to Certificates)
+title: Hardening Cassandra Step by Step - Part 1 Inter-Node Encryption (And a Gentle Intro to Certificates)
 author: Nate McCall
 category: blog
 tags: cassandra, security, configuration, SSL, encryption
