@@ -18,7 +18,7 @@ This is the first of a five part tutorial covering the following aspects of secu
 - Authentication and Authorization
 - Management and Tooling
 
-Being further down the stack, most developers are not exposed to encryption in their day to day work. Therefre For this first post, we are focusing on Inter-node encryption. It is going to be a bit longer than the others as this post walks through the steps to *correctly* create SSL certificates. We'll put that knowledge to immediate use by configuring inter-node encryption on a local CCM cluster. Hopefully this tutorial will give you enough information to make the correct choices.
+Being further down the stack, most developers are not exposed to encryption in their day to day work. Therefor this first post will focus on Inter-node encryption. It is going to be a bit longer than the others as this post walks through the steps to *correctly* create SSL certificates. We'll put that knowledge to immediate use by configuring inter-node encryption on a local CCM cluster. Hopefully this tutorial will give you enough information to make the correct choices.
 
 The [current documentation](http://docs.datastax.com/en/cassandra/2.1/cassandra/security/secureSSLCertificates_t.html) describes a  basic approach that is useful for development and experimentation. However, were these steps used in building a production deployment, they would create a substantial maintenance burden and be quite difficult to automate. These concerns would be amplified by the need to scale out.  Most importantly, if followed directly, you will have secured traffic, but have done nothing to thwart a bad actor with network access from attacking your cluster directly.
 
