@@ -222,8 +222,7 @@ In the above snippet, we have specified [256bit AES](https://en.wikipedia.org/wi
 
 Those files usually get installed into `${java.home}/jre/lib/security/`. The internet has copious amounts of information for specific systems if that is not were your installation has placed them.
 
-Some additional info on why you need to do this can be found here:
-http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html#importlimits
+Some additional info on why you need to do this can be found [here](http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html#importlimits)
 
 You can skip the policy file installation by choosing a weaker strength cipher:
 
