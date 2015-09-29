@@ -11,7 +11,8 @@ This is a tutorial extracted from part of a presentation I gave at Cassandra Sum
 
 ## Overview
 This is the first of a five part tutorial covering the following aspects of securing Apache Cassandra (including some handy features of DataStax Enterprise where relevant). As with the presentation mentioned above, we will break this down into the following:
-- **Inter-node Communication**
+
+- **Inter-node Communication**
 - Encryption at Rest
 - Client-Server Communication
 - Authentication and Authorization
