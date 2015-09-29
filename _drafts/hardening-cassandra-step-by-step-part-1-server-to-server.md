@@ -218,7 +218,7 @@ With the files in place, let's modify the configuration to enable server to serv
       cipher_suites: [TLS_RSA_WITH_AES_256_CBC_SHA]
       require_client_auth: true
 
-In the above snippet, we have specified (256bit AES)[https://en.wikipedia.org/wiki/Advanced_Encryption_Standard]. This is a fairly cypher and is therefore subject to US export control (I'm not providing a link here because this whole idea of cryptographic export controls is outmoded at best - look it up if you want </rant>). To use this, we need to install the strong encryption policy files into our JDK. Follow the download titled "Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files for JDK/JRE 8" from Oracle's [Java download page](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
+In the above snippet, we have specified [256bit AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard). This is a fairly cypher and is therefore subject to US export control (I'm not providing a link here because this whole idea of cryptographic export controls is outmoded at best - look it up if you want </rant>). To use this, we need to install the strong encryption policy files into our JDK. Follow the download titled "Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files for JDK/JRE 8" from Oracle's [Java download page](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
 
 Those files usually get installed into `${java.home}/jre/lib/security/`. The internet has copious amounts of information for specific systems if that is not were your installation has placed them.
 
