@@ -235,7 +235,7 @@ With the policy jars in place (or with the 128-bit AES cipher specified), let's 
     ccm node1 stop
     ccm node1 start
 
-If everything is working correctly, you should see log output (available in ~/.ccm/sslverify/[server]/logs/system.log) containing:
+If everything is working correctly, you should see log output (available in `~/.ccm/sslverify/[server]/logs/system.log`) containing:
 
 
     Starting Encrypted Messaging Service on SSL port 7001
