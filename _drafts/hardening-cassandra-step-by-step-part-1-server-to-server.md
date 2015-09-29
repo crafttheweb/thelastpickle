@@ -37,23 +37,21 @@ We'll start by using `ccm` to create a three node cluster which we'll use to wal
 
 Provided you have `ccm` setup and configured correctly, the following commands will create and start an Apache Cassandra cluster named `sslverify` using Apache Cassandra version `2.1.9`:
 
-```
-ccm create -n 3 -v 2.1.9 sslverify
-ccm start
-```
+    ccm create -n 3 -v 2.1.9 sslverify
+    ccm start
+
 Configuration and data for each of the three nodes in the cluster will be placed in sub directories under `~/.ccm/sslverify/` following the convention of a normal Cassandra distribution from there on.
 
 You can verify the cluster's status from both the `ccm` and Cassandra perspectives with:
-```
-ccm status
-ccm node1 nodetool status
-```
+
+
+    ccm status
+    ccm node1 nodetool status
 
 Note: to use a Cassandra command directly, move into the directory for a node and execute the command as you would on any local installation. For example, the following commands would have the same effect as the `ccm` wrapped version above:
-```
-cd ~/.ccm/sslverify/node1
-./bin/nodetool status
-```
+
+    cd ~/.ccm/sslverify/node1
+    ./bin/nodetool status
 
 With our cluster in place, it's time to move on to certificate management.
 
