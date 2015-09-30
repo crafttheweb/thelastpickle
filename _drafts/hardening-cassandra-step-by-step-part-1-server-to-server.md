@@ -7,7 +7,7 @@ tags: cassandra, security, configuration, SSL, encryption
 ---
 
 ## TL;DR:
-This is a tutorial extracted from part of a presentation I gave at Cassandra Summit 2015 titled [Hardening Cassandra for Compliance (or Paranoia)](http://cassandrasummit-datastax.com/agenda/hardening-apache-cassandra-for-compliance-or-paranoia/). The [slides](http://www.slideshare.net/zznate/hardening-cassandra-for-compliance-or-paranoia) are available and the "SSL Certificates: a brief interlude" section is probably the most expedient route if you are impatient. We build on that process here by actually installing everything on a local three node cluster. I'll provide a link to the video of the presentation as soon as it is posted. 
+This is a tutorial extracted from part of a presentation I gave at Cassandra Summit 2015 titled [Hardening Cassandra for Compliance (or Paranoia)](http://cassandrasummit-datastax.com/agenda/hardening-apache-cassandra-for-compliance-or-paranoia/). The [slides](http://www.slideshare.net/zznate/hardening-cassandra-for-compliance-or-paranoia) are available and the "SSL Certificates: a brief interlude" section is probably the most expedient route if you are impatient. We build on that process here by actually installing everything on a local three node cluster. I'll provide a link to the video of the presentation as soon as it is posted.
 
 ## Overview
 This is the first of a five part tutorial covering the following aspects of securing Apache Cassandra (including some handy features of DataStax Enterprise where relevant). As with the presentation mentioned above, we will break this down into the following:
@@ -55,7 +55,7 @@ Note: to use a Cassandra command directly, move into the directory for a node an
 
 With our cluster in place, it's time to move on to certificate management.
 
-### BYO Certificate Authority
+## BYO Certificate Authority
 When dealing with even a small cluster, creating our own Certificate Authority (CA) becomes essential to minimizing trust chain complexity. This allows us to create a Root Certificate that can be used to sign all of our server-specific certificates. Once signed, this creates a trust chain that will make managing the certificates significantly easier. We'll go into further detail on this below.
 
 We will be using OpenSSL for create the Certificate Authority (CA) and sign certificate requests with such. The `openssl` tool should be available on most UNIX-derived systems. For this tutorial, I was using `OpenSSL 1.0.1j 15 Oct 2014` on OS X `10.10.5`.
@@ -127,7 +127,7 @@ As with the CA we created earlier on, we should verify that the key store is acc
 
     keytool -list -v -keystore node1-server-keystore.jks -storepass awesomekeypass
 
-#### Some Things to Note
+### Some Things to Note
 The `-genkeypair` sub-command can also take a `-startdate` option which is handy when you know you are making a configuration change at some point in the future. If used, the `-validity` is then calculated as being from that point in time onwards.
 
 There is currently a limitation in Cassandra which forces us to use the same password for the key store as for the key. In all fairness, `javax.security` is a very obtuse API with which to work. Specifically, loading individual certificates with different passwords from a key store is shockingly cumbersome, particularly if one or more of those entries is based on a trust chain.
@@ -166,7 +166,7 @@ This OpenSSL incantation is quite a bit different than our the one for creating 
 - `-CAcreateserial` Create a serialnumber for this CSR (see the doc `openssl x509` documentation above, it's complicated)
 - `-passin` The keypassword source. The arguments to `passin` have their own [formatting instructions](https://www.openssl.org/docs/manmaster/apps/openssl.html) with which you should become familiar
 
-## Add the CA to the Key Store
+### Add the CA to the Key Store
 With the certificates now signed, we will need to re-import them back into each node's key store via the `-import` sub-command of `keytool`. However, before we can do that, we have to add the certificate from our CA to each key store. This step is required for the trust chain to function correctly.
 
     keytool -keystore node1-server-keystore.jks -alias CARoot -import -file ca-cert -noprompt -keypass awesomekeypass -storepass awesomekeypass
@@ -188,7 +188,7 @@ All we need to do is create trust store by importing CA root certificate's publi
 
 Now this is where it all comes together. Since all of our instance-specific keys have now been signed by the CA, we can share this trust store instance across the cluster as it effectively just says "I'm going to trust all connections whose client certificates were signed by this CA." This is the same way that an authority like Verisign works when you get a commercial certificate for your web server. We are in this case just acting as our own authority (which is the safest approach when creating public key infrastructure for your internal services).
 
-## Configuring the Cluster
+### Configuring the Cluster
 So now that we have all of our files created, let's place them where they go so CCM can find them. First, we'll move the key stores:
 
     cp node1-server-keystore.jks ~/.ccm/sslverify/node1/conf/server-keystore.jks
@@ -224,7 +224,7 @@ Those files usually get installed into `${java.home}/jre/lib/security/`. The int
 
 Some additional info on why you need to do this can be found [here](http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html#importlimits)
 
-You can skip the policy file installation by choosing a weaker strength cipher:
+Alternatively, you can skip the policy file installation by choosing a weaker strength cipher:
 
     cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA]
 
@@ -235,8 +235,7 @@ With the policy jars in place (or with the 128-bit AES cipher specified), let's 
     ccm node1 stop
     ccm node1 start
 
-If everything is working correctly, you should see log output (available in `~/.ccm/sslverify/[server]/logs/system.log`) containing:
-
+If everything is working correctly, you should see log output (available in `~/.ccm/sslverify/node1/logs/system.log`) containing:
 
     Starting Encrypted Messaging Service on SSL port 7001
 
@@ -253,7 +252,6 @@ The output of `ccm node1 nodetool status` should look like:
 
 What we are seeing here is that `node1` has toggled over to using SSL and can no longer communicate with the other two cluster members. It therefore assumes they are down. Executing `nodetool status` against one of the other nodes will indeed show the opposite picture.
 
-
 Let's move on with the rest of the cluster. Repeating the process above with `node2`, the output from `ccm node1 nodetool status` should now show:
 
     Datacenter: datacenter1
@@ -267,7 +265,19 @@ Let's move on with the rest of the cluster. Repeating the process above with `no
 
 And the same again with `node3` should show all nodes as up.
 
-## One Last Thing
-Whatever you have used for various expiration date parameters throughout this tutorial, make sure they sync it up with each other sensibly. Most importantly, put those dates on a calendar *now* with a healthy number of reminders leading up to expiration, inviting everyone even remotely involved with your team. I once saw an expired certificates cause havoc across an otherwise robust architecture because the dates were set and promptly forgotten about.
+### Debugging
+There are a few things that can go wrong when setting up SSL. If you have exceptions, or it's just not working as intended (there are several cases when setting up SSL where Cassandra will happily start even though no connections could be negotiated) you can enable debug logging on the SSL handshake via adding the following option to `~/.ccm/sslverify/$NODE/conf/cassandra-env.sh`:
 
-And just with any failure scenario, make sure you test your certificate updating process. This is not something you want to experiment with at the 11th hour.
+    -Djavax.net.debug=ssl
+
+This will print **everything** about the connection setup to STDOUT including how and why an SSL handshake failed. See [this page](http://docs.oracle.com/javase/7/docs/technotes/guides/security/jsse/ReadDebug.html) for details on how to interpret what you are seeing. 
+
+## One Last Thing
+Whatever you have used for various expiration date parameters throughout this tutorial, make sure they sync it up with each other sensibly. Most importantly, put those dates on a calendar **now** with a healthy number of reminders leading up to expiration, inviting everyone even remotely involved with your team. I once saw an expired certificates cause havoc across an otherwise robust architecture because the expiration dates were set and promptly forgotten about.
+
+And just as with any failure scenario, make sure you test your certificate updating process. This is not something with which you want to experiment at the 11th hour.
+
+## Up Next
+We'll continue this series soon with a post on options available for setting up Encryption at Rest. It will be higher-level than this post, as we will focus more on the options available for and known to work with Cassandra. Keep checking back for updates!
+
+As always, please let us know if there are any errors factual or command-wise in the steps above.
