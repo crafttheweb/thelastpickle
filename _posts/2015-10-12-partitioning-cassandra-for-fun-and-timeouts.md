@@ -6,7 +6,7 @@ category: blog
 tags: cassandra
 ---
 
-Timeout errors in Apache Cassandra occur when less than `Consistency Level` number of replicas return to the coordinator. It's the distributed systems way of shrugging and saying "ooo not in the colour mate". From the Coordinator's perspective the request may have been lost, the replica may have failed while doing the work, or the response may have been lost. Recently we wanted to test how write timeouts were handled as part of back porting [CASSANDRA-8819](https://issues.apache.org/jira/browse/CASSANDRA-8819) for a client. To do so we created a network partition that dropped response messages from a node. 
+Timeout errors in Apache Cassandra occur when less than `Consistency Level` number of replicas return to the coordinator. It's the distributed systems way of shrugging and saying "not my problem mate". From the Coordinator's perspective the request may have been lost, the replica may have failed while doing the work, or the response may have been lost. Recently we wanted to test how write timeouts were handled as part of back porting [CASSANDRA-8819](https://issues.apache.org/jira/browse/CASSANDRA-8819) for a client. To do so we created a network partition that dropped response messages from a node. 
 
 ## The Cluster
 
