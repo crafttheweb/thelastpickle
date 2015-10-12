@@ -6,7 +6,7 @@ category: blog
 tags: cassandra
 ---
 
-Timeout errors in Apache Cassandra occur when less than `Consistency Level` number of replicas return to the coordinator. It's the distributed systems way of shrugging and saying "ooo not in the colour mate". From the Coordinators perspective the request may have been lost, the replica may have failed while doing the work, or the response may have been lost. Recently we wanted to test how write timeouts were handled as part of back porting [CASSANDRA-8819](https://issues.apache.org/jira/browse/CASSANDRA-8819) for a client. To do so we created a network partition that dropped response messages from a node. 
+Timeout errors in Apache Cassandra occur when less than `Consistency Level` number of replicas return to the coordinator. It's the distributed systems way of shrugging and saying "ooo not in the colour mate". From the Coordinator's perspective the request may have been lost, the replica may have failed while doing the work, or the response may have been lost. Recently we wanted to test how write timeouts were handled as part of back porting [CASSANDRA-8819](https://issues.apache.org/jira/browse/CASSANDRA-8819) for a client. To do so we created a network partition that dropped response messages from a node. 
 
 ## The Cluster
 
@@ -15,7 +15,7 @@ We used [CCM](https://github.com/pcmanus/ccm) to create a local cluster and [ipt
     ccm create -n 3 -v 2.1.8 timeout
     ccm start
 
-We will be using `node2` for all the operations (no time to explain now) so let's check that the cluster looks normal from it's perspective:
+We will be using `node2` for all the operations (no time to explain now) so let's check that the cluster looks normal from its perspective:
 
     $ ccm node2 status
 
@@ -28,7 +28,7 @@ We will be using `node2` for all the operations (no time to explain now) so let'
     UN  127.0.0.2  46.58 KB   1       66.7%             62377aae-5af5-41b2-b9ec-a4ecd83188a7  rack1
     UN  127.0.0.3  46.58 KB   1       66.7%             42460c04-f753-4766-87dc-0cd649bd045a  rack1
 
-Looks good, time to check we can insert some data. I want to ensure `node2` can talk to all other nodes so will use `ALL` Consistentcy Level. 
+Looks good, time to check we can insert some data. I want to ensure `node2` can talk to all other nodes so I'll use `ALL` Consistentcy Level. 
 
 Connect to the `cqlsh` shell on `node2` using:
 
@@ -86,7 +86,7 @@ The three `ESTABLISHED` incoming connections we have are connections to port 700
 * 127.0.0.3:7000->localhost:55856 (ESTABLISHED)
 * 127.0.0.3:7000->localhost:55857 (ESTABLISHED)
 
-With two other nodes to talk you may expect to only have two incoming connections. In fact each node has two outgoing connections to every other node, one called the `ackCon` (Acknowledgement Connection) and one called the `cmdCon` (Command Connection). If a node wants to get another to perform a task such as a mutation it will send a message on the `cmdCon`. When the remote node has completed it will respond on the `ackCon` it established.
+With two other nodes to talk to you may expect to only have two incoming connections. In fact each node has two outgoing connections to every other node, one called the `ackCon` (Acknowledgement Connection) and one called the `cmdCon` (Command Connection). If a node wants to get another to perform a task such as a mutation it will send a message on the `cmdCon`. When the remote node has completed it will respond on the `ackCon` it established.
 
 This code sample from [OutboundTcpConnectionPool](https://github.com/apache/cassandra/blob/trunk/src/java/org/apache/cassandra/net/OutboundTcpConnectionPool.java) shows the process:
 
@@ -211,7 +211,7 @@ This is because the other nodes are continuing to gossip about `node3` to `node2
     WriteTimeout: code=1100 [Coordinator node timed out waiting for replica nodes' responses] message="Operation timed out - received only 2 responses." info={'received_responses': 2, 'required_responses': 3, 'consistency': 'ALL'}
     cqlsh:timeout> 
 
-This is what we wanted to see. From the coordinators point of view there was enough nodes to start the request, so it sent commands to all the available replicas. But after that? _shrug_. Our theory is that `node3` did the work and sent a response to `node2` that was blocked. We can confirm that by enabling tracing and running it again:
+This is what we wanted to see. From the Coordinator's point of view there were enough nodes to start the request, so it sent commands to all the available replicas. But after that? _Shrug_. Our theory is that `node3` did the work and sent a response to `node2` that was blocked. We can confirm that by enabling tracing and running it again:
 
     cqlsh:timeout> tracing on;
     Now Tracing is enabled
@@ -271,7 +271,7 @@ Inspecting the events from `127.0.0.3` we can see it did the `INSERT`, the "Appe
 
 ## Failing At QUORUM
 
-A more common scenario is to fail when using `QUORUM` Consistency Level. To do that we simply need to take one node down and run the process again. When I went through this I had restarted the cluster so needed to setup the rules again. So here are all the steps again, assuming you have the cluster and the schema from above:
+A more common scenario is to fail when using `QUORUM` Consistency Level. To do that we simply need to take one node down and run the process again. When I went through this I had restarted the cluster so I needed to setup the rules again. Here are all the steps again, assuming you have the cluster and the schema from above:
 
 Shutdown `node1`:
 
@@ -318,4 +318,4 @@ Using `cqlsh` on `node2`:
 
 ## Caveat Emptor
 
-Nodes can and do reestablish connections. I've not dived into the code to understand the how's and the why's and the do you mind if I dont's. The thing to remember that the source port is not guaranteed to be stable. 
+Nodes can and do reestablish connections. I've not dived into the code to understand the how's and the why's and the do-you-mind-if-I-dont's. The thing to remember is that the source port is not guaranteed to be stable. 
