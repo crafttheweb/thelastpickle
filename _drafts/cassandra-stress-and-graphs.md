@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Graphing cassandra-stress
-date: 2015-10-02 08:00:00+00:00
+date: 2015-10-23 08:00:00+00:00
 category: blog
 tags: cassandra, performance, stress, graphs
 author: Mick Semb Wever
@@ -63,11 +63,11 @@ Once the patch from [CASSANDRA-7918](https://issues.apache.org/jira/browse/CASSA
     cassandra-stress write n=100000 -rate threads=10 -graph file=example-benchmark.html title=example revision=benchmark-0
     cassandra-stress mixed n=100000 -rate threads=10 -graph file=example-benchmark.html title=example revision=benchmark-0
 
-Now in the current directory you'll find an example-benchmark.html file. 
-Opening this shows the pretty graphs with both write and read benchmarks for the "benchmark-0" revision. In the following images the revision is named "cassandra-2.0.16-lenovo-x1-carbon" and the number of requests was increased to ten million.
+Now in the current directory you'll find an example-benchmark.html file.
+Opening this shows the pretty graphs with both write and read benchmarks for the "benchmark-0" revision. In the following images the benchmar was against a specific version of C* and so the revision is named just "cassandra-A" and the number of requests was increased to ten million.
 
 
-![cassandra-2.0 in write mode](/images/stress-and-graphs-0.png) 
+![cassandra-2.0 in write mode](/images/stress-and-graphs-0.png)
 
 ![cassandra-2.0 in mixed mode](/images/stress-and-graphs-1.png)
 
@@ -78,10 +78,10 @@ For example let's run a new benchmark revision
     cassandra-stress write n=100000 -rate threads=10 -graph file=example-benchmark.html title=example revision=benchmark-1
     cassandra-stress mixed n=100000 -rate threads=10 -graph file=example-benchmark.html title=example revision=benchmark-1
 
-Refresh the graph and you see the comparison clearly between the two revisions now. In the following image I added three new revisions "cassandra-2.1.5-lenovo-x1-carbon", "cassandra-2.2.1-lenovo-x1-carbon", and "cassandra-3.0.0-rc1-lenovo-x1-carbon". But take these graphs with a pince of salt, they've been run on my laptop.
+Refresh the graph and you see the comparison clearly between the two revisions now. In the following image I added three new revisions "cassandra-B", "cassandra-C", and "cassandra-D". Take these graphs with a pinch of salt, they were run on my dual-core laptop, but they show just how just valuable a little visualisation can be.
 
 
-![all versions in write mode](/images/stress-and-graphs-2.png) 
+![all versions in write mode](/images/stress-and-graphs-2.png)
 
 ![all versions in mixed mode](/images/stress-and-graphs-3.png)
 
