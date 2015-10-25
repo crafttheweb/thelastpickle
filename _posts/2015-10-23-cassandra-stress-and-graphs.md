@@ -61,10 +61,11 @@ The lack of graphing ability to cassandra-stress was [raised](https://issues.apa
 Once the patch from [CASSANDRA-7918](https://issues.apache.org/jira/browse/CASSANDRA-7918) hits trunk, or if you're willing to checkout [engima curry's cassandra fork](https://github.com/EnigmaCurry/cassandra/tree/7918-stress-graph) and build it yourself, to generate pretty graphs with cassandra-stress is as simple as…
 
     cassandra-stress write n=100000 -rate threads=10 -graph file=example-benchmark.html title=example revision=benchmark-0
+    
     cassandra-stress mixed n=100000 -rate threads=10 -graph file=example-benchmark.html title=example revision=benchmark-0
 
 Now in the current directory you'll find an example-benchmark.html file.
-Opening this shows the pretty graphs with both write and read benchmarks for the "benchmark-0" revision. In the following images the benchmar was against a specific version of C* and so the revision is named just "cassandra-A" and the number of requests was increased to ten million.
+Opening this shows the pretty graphs with both write and read benchmarks for the "benchmark-0" revision. In the following graphs the benchmarch was against a specific version of C* and so the revision is named just "cassandra-A" and here the number of requests was increased to ten million.
 
 
 ![cassandra-2.0 in write mode](/images/stress-and-graphs-0.png)
@@ -72,13 +73,14 @@ Opening this shows the pretty graphs with both write and read benchmarks for the
 ![cassandra-2.0 in mixed mode](/images/stress-and-graphs-1.png)
 
 
-The nice thing about this html file is that it's completely standalone so sharing it and posting it to jira issues is a practical thing to do. On top of that you just keep running further benchmarks with new revision names and they'll get added to the existing graph.
+The nice thing about this html file is that it's completely standalone so sharing it and posting it to jira issues is a simple practical thing to do. On top of that you just keep running further benchmarks with new revision names and they'll get added to the existing graph.
 For example let's run a new benchmark revision
 
     cassandra-stress write n=100000 -rate threads=10 -graph file=example-benchmark.html title=example revision=benchmark-1
+    
     cassandra-stress mixed n=100000 -rate threads=10 -graph file=example-benchmark.html title=example revision=benchmark-1
 
-Refresh the graph and you see the comparison clearly between the two revisions now. In the following image I added three new revisions "cassandra-B", "cassandra-C", and "cassandra-D". Take these graphs with a pinch of salt, they were run on my dual-core laptop, but they show just how just valuable a little visualisation can be.
+Refresh the graph and you see the comparison clearly between the two revisions now. In the next graphs I added three new revisions "cassandra-B", "cassandra-C", and "cassandra-D". Take these graphs with a pinch of salt, they were run on my dual-core laptop, but they show just how just valuable a little visualisation can be.
 
 
 ![all versions in write mode](/images/stress-and-graphs-2.png)
