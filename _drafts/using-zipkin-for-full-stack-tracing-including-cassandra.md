@@ -110,36 +110,36 @@ The flow to how the tracing works is like this. The only "annotations" in Cassan
             <--
 
 ## Replacing Cassandra tracing with Zipkin
-By replacing this code with Zipkin tracing there's a lot to gain. The obvious is that the visualisation.XXX But also more detailed timings, and it'll become clearer to see the hierarchy and asynchronisity of calls. It also becomes a tracing solution that has basically zero overhead. Rather that having a massive write amplification for all the trace annotations going back into the same Cassandra it's now possible to offload that entire workload efficiently out onto separate infrastructure.
+By replacing this code with Zipkin tracing there's a lot to gain. The obvious is that the visualisation. XXX But also more detailed timings, and it'll become clearer to see the hierarchy and asynchronisity of calls. It also becomes a tracing solution that has basically zero overhead. Rather that having a massive write amplification for all the trace annotations going back into the same Cassandra XXX it's now possible to offload that entire workload efficiently out onto separate infrastructure.
 
-This work has been done under [CASSANDRA-10392](https://issues.apache.org/jira/browse/CASSANDRA-10392). Here's a screenshot of the results on just one node, and you can see already that for a lot of new developers to Cassandra this is going to explain a lot much faster.
+This work has been done under [CASSANDRA-10392](https://issues.apache.org/jira/browse/CASSANDRA-10392). Here's a screenshot of the results on just one node, and you can see already that for a lot of new developers to Cassandra this is going to explain a lot much XXX faster.
 
 ![Cassandra Zipkin tracing](/images/using-zipkin-single-node.png)
 
-To achieve this only two classes: Tracing and TraceState; needed to be subclass and one chunk of functionality moved into a new method in one of those classes so it could be overridden.
+To achieve this only two classes: Tracing and TraceState; needed to be subclass XXX and one chunk of functionality moved into a new method in one of those classes so it could be overridden.
 
 ## Zipkin Tracing across Cassandra nodes
-Building on this the code needs to do tracing across nodes. This involves the messaging service in Cassandra. The messaging service has an arbitary map, much like http headers, that arbitary key-values can be added to. Adding those Zipkin headers in there, and reading them out again when we're initialising a message and tracing across nodes is solved.
+Building on this, the code needs to do tracing across nodes. This involves the messaging service in Cassandra. The messaging service has an arbitary map, much like http headers, that arbitary key-values can be added to. By adding those Zipkin headers and reading them out again when we're initialising a message, tracing across nodes is solved.
 
 ![CCM Zipkin tracing](/images/using-zipkin-ccm.png)
 
 This is looking really cool, and as a Cassandra consultant this would make life a lot easier in a number of situations.
 
 ## Full-stack Cassandra Zipkin Tracing
-The last thing to do is to complete the idea of Zipkin doing proper distributed tracing through all applications. Somehow the Zipkin trace headers need to be propagated in with Cassandra requests so that the Zipkin trace displayed further above continous seamlessly into the Cassandra coordinator and further in to each of the Cassandra's replica nodes.
+The last thing to do is to complete the idea of Zipkin doing proper distributed tracing through all applications. Somehow the Zipkin trace headers need to be propagated in with Cassandra requests so that the Zipkin trace displayed further above continues seamlessly into the Cassandra coordinator and further into each of Cassandra's replica nodes.
 
-To achieve this it's to take advantage of the work done in [CASSANDRA-855]() that was released in Cassandra 2.2, which allows us to pass in arbitrary headers from client to server behind the scenes to a CQL request. Similar to the example with http headers it's the traceId and the spanId we need to pass over the protocol. Here it's to serialise the traceId and spanId in the one byte buffer and put it into the outgoing payload.
+To achieve this we take advantage of the work done in [CASSANDRA-855](), XXX released in Cassandra 2.2, which allows us to pass in arbitrary headers from client to server behind the scenes to a CQL request. Similar to the example with http headers it's the traceId and the spanId we need to pass over the protocol. Here it's to serialise the traceId and spanId in the one byte buffer and put it into the outgoing payload.
 
 ![Full stack Zipkin tracing](/images/using-zipkin-cs-cr-with-payload-cassandra.png)
 
-By connecting together our client applications and the Cassandra database we're going to 1) solve faster a lot of bugs that are immediately known if they're client-side or server-side, and 2) give more intuitive feedback to the platform developers on how Cassandra works internally.
+By connecting together our client applications and the Cassandra database we're going to 1) solve a lot of bugs faster as we immediately known if they're client-side or server-side, and 2) give more intuitive feedback to the platform developers on how Cassandra works internally.
 
 ![Full stack Zipkin tracing](/images/using-zipkin-full-stack-trace.png)
 
-This shows a whole new world of distributed tracing, across one's platform and into distributed technologies like Cassandra. And it can be taken further… for example tracing could be visualised for anti-entropy repairs and compactions, helping to solve such problems as bad disks or cross-dc issues.
+This shows a whole new world of distributed tracing, across one's platform and into distributed technologies like Cassandra. And it can be taken further… for example tracing could be visualised for anti-entropy repairs and compactions, helping to solve such problems as bad disks or cross-DC issues.
 
 ## Summary
-While monitoring provides information on system performance, tracing is necessary to understand individual request performance. Detailed query tracing has been provided by Cassandra since version 1.2 and is invaluable when diagnosing problems, although knowing what queries to trace and why the application makes them still requires deep technical knowledge. By merging application tracing via Zipkin and Cassandra query tracing we automate the process and make it easier to identify and resolve problems. Going further and proposing an extension that allows clients to pass a trace identifier through to Cassandra, and a way to integrate Zipkin tracing into Cassandra, creates one tracing view across the entire system. 
+While monitoring provides information on system performance, tracing is necessary to understand individual request performance. Detailed query tracing has been provided by Cassandra since version 1.2 and is invaluable when diagnosing problems, although knowing which queries to trace and why the application makes them still requires deep technical knowledge. By merging application tracing via Zipkin and Cassandra query tracing we automate the process and make it easier to identify and resolve problems. Going further and proposing an extension that allows clients to pass a trace identifier through to Cassandra, and a way to integrate Zipkin tracing into Cassandra, creates one tracing view across the entire system. 
 
 The video for this talk presented at Santa Clara's Cassandra Summit in 2015 is available [here](https://vimeopro.com/user35188327/cassandra-summit-2015/video/144237635).
 
