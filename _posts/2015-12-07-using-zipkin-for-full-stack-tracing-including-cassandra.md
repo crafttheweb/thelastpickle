@@ -7,7 +7,7 @@ category: blog
 tags: cassandra, zipkin, tracing
 ---
 
-Integrating Zipkin tracing into Cassandra, it's possible to create one tracing view across an entire platform.  The article is a write-up of the [Distributed Tracing from Application to Database](http://cassandrasummit-datastax.com/agenda/distributed-tracing-from-application-to-database/) presentation at Cassandra Summit 2015, Santa Clara.
+Integrating Zipkin tracing into Cassandra, it's possible to create one tracing view across an entire platform.  The article is a write-up of the [Distributed Tracing from Application to Database](http://thelastpickle.com/files/2015-09-24-using-zipkin-for-full-stack-tracing-including-cassandra/presentation/tlp-reveal.js/tlp-cassandra-zipkin.html#/) presentation at Cassandra Summit 2015, Santa Clara.
 
 
 ## Introduction
