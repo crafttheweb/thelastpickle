@@ -20,22 +20,22 @@ We're constantly seeing the need to scale data. It has been formalised with big 
 
 And it isn't just about scaling data – often solutions that need to scale data due to their success also face the more difficult problem of having to scale programmers and teams. We see this reality in how Microservices, which is really just a fresh revival of Service-orientated Architectures, and DevOps deals with how to create postive cohesive cultures in our companies where teams are decentralised and automonous, taking advantage of [Conway's Law] (https://en.wikipedia.org/wiki/Conway%27s_law) rather than fighting against it.
 
-So with a combined need to scale both data and people, we're seeing how important it is that companies have modern monitoring tools in place. Two of these tools [Kibana](https://www.elastic.co/webinars/introduction-elk-stack) and Grafana are becoming more popular and their usefulness is quickly becoming self-evident. Adding to this there's a need for a third tool to compliment the aggregation of logs and metrics. This third tool tackles the problem of distributed tracing.
+So with a combined need to scale both data and people, we're seeing how important it is that companies have modern monitoring tools in place. Two of these tools [Kibana](https://www.elastic.co/webinars/introduction-elk-stack) and [Grafana](http://grafana.org/) are becoming more popular and their usefulness is quickly becoming self-evident. Adding to this there's a need for a third tool to compliment the aggregation of logs and metrics. This third tool tackles the problem of distributed tracing.
 
 
 ![The Magic Three](/images/using-zipkin-kibana-grafana-zipkin.png)
 
-Zipkin is the tool that solves the distributed tracing problem. It helps you fix high 99th percentile latencies by quickly identifying the culprits for platform latencies, provides a correlation ID useful to connect logs together, helps visualise hierarchy and asynchronicity of calls, and gives a greater level of transparency into your platform for the whole company.
+[Zipkin](http://zipkin.io/) is the tool that solves the distributed tracing problem. It helps you fix high 99th percentile latencies by quickly identifying the culprits for platform latencies, provides a correlation ID useful to connect logs together, helps visualise hierarchy and asynchronicity of calls, and gives a greater level of transparency into your platform for the whole company.
 
-Bringing these three tools together is crucial in making distributed decentralised teams fully capable of solving the "architectural safety" challenges of microservices. With the correct development methodologies and supporting DevOps tools, teams quickly find themselves in a high quality 'stable master' development cadence where production exceptions are rare and short-lived occurances. The core infrastructure code doesn't fester and expand with half-thought through bug fixes from a culture of someone-elses-problem and inadequite tools to fully see into the faults. Instead a product is built where no user is left out. A positive cohesive culture is established where teams deploying new features and improvements become aware of bugs and collateral damage they cause to other teams, well before those teams see the problems themselves. Such a level of quality assurance implicit within development practices of continuous delivery in turn makes other aspects of incremental development easier, like [dark launching ]() where whole microservice implementations can seamlessly switched out without any platform coordination. 
+Bringing these three tools together is crucial in making distributed decentralised teams fully capable of solving the "architectural safety" challenges of microservices. With the correct development methodologies and supporting DevOps tools, teams quickly find themselves in a high quality 'stable master' development cadence where production exceptions are rare and short-lived occurances. The core infrastructure code doesn't fester and expand with half-thought through bug fixes from a culture of someone-elses-problem and inadequite tools to fully see into the faults. Instead a product is built where no user is left out. A positive cohesive culture is established where teams deploying new features and improvements become aware of bugs and collateral damage they cause to other teams, well before those teams see the problems themselves. Such a level of quality assurance implicit within development practices of continuous delivery in turn makes other aspects of incremental development easier, like [dark launching ](http://tech.finn.no/2013/06/20/dark-launching-and-feature-toggles/) where whole microservice implementations can seamlessly switched out without any platform coordination. 
 
 The cultural benefits of having these modern DevOp tools in place is interesting as it's not just about building more positive collaborative relationships between teams but building a more productive and responsible relationship between teams and middle management. Microservices is about decentralising teams and giving them autonomy, and the role of Architects and middle management changes once these things are in place and functional, as they become more facilators and communicators.
 
-From my own experience, tackling the cultural challenges in a company is not only the most important work but always the hardest. When such challenges can be solved with simple hacks like putting in place the correct tools which change people's behaviour without having to ask anyone to change their behaviour it's nothing to scoff at, and that's our introduction to installing Zipkin, along with Grafana and Kibana. 
+From my own experience, tackling the cultural challenges in a company is not only the most important work but almost always the hardest. When solutions to such challenges manifest in hacks as simple as putting in place the new tools that change people's behaviour without them realising, it's really nothing to scoff at. Knowing in advance which tools create such positive cultural shifts is basically impossible to foretell, but I've seen it with Git and its practice of pull requests and stable master branches, and I've seen it with Grafana, Kibana, and Zipkin.
 
 ## Zipkin
 
-Zipkin is an implementation of Google's Dapper paper from 2010. Google took a relatively simple approach by instrumenting running applications to send simple messages or annotations marking when a call to another service has been made and received. By having a separate service responsible solely for collecting these instrumentation messages, the problem of distributed tracing could be solved. The paper does say that the hardest part of distributing tracing is not the supporting software but the instrumentation that's required across all the codebases in the platform.
+Zipkin is an implementation of Google's [Dapper paper](http://research.google.com/pubs/pub36356.html) from 2010. Google took a relatively simple approach by instrumenting running applications to send simple messages or annotations marking when a call to another service has been made and received. By having a separate service responsible solely for collecting these instrumentation messages, the problem of distributed tracing could be solved. The paper does say that the hardest part of distributing tracing is not the supporting software but the instrumentation that's required across all the codebases in the platform.
 
 ### Zipkin Web UI
 
@@ -69,7 +69,7 @@ These instrumentation annotations can be sent to the Zipkin server individually 
 
 Take for example some code from a client making a request to a server that we want to trace. For example some code that's making a rest call, might even be using Apache's httpclient.
 
-To put that tracing in, using the Zipkin brave java library [XXX]? and its clientTracer class, is just a matter of wrapping a few lines of code around that call. This makes the CS and CR annotations which is enough to visualise the span in Zipkin.
+To put that tracing in, using the [Zipkin Brave](https://github.com/openzipkin/brave) java library and its clientTracer class, is just a matter of wrapping a few lines of code around that call. This makes the CS and CR annotations which is enough to visualise the span in Zipkin.
 
 ![Zipkin simple instrumentation](/images/using-zipkin-simple-cs-cr.png)
 
@@ -97,17 +97,18 @@ The code that does the tracing in Cassandra is found in the tracing package and 
 The flow to how the tracing works is like this. The only "annotations" in Cassandra are the trace(..) calls which emit trace messages at fixed points of time relative to when the request started.
 
             CO-ORDINATOR NODE                    REPLICA NODE
-            -->
+          --> ...
             beginSession(..)
                 trace(..)
                 trace(..)
-                                            --> initialiseMessage(..)
+                                            --> ...
+                                                initialiseMessage(..)
                                                     trace(..)
                                                     trace(..)
-                                            <--
+                                            <-- ...
                 trace(..)
             endSession(..)
-            <--
+          <-- ...
 
 ## Replacing Cassandra tracing with Zipkin
 By replacing this code with Zipkin tracing there's a lot to gain. The obvious is the visualisation. In addition we can see more detailed timings, and it'll become clearer to see the hierarchy and asynchronisity of calls. It also becomes a tracing solution that has basically zero overhead. Rather that having a massive write amplification for all the trace annotations going back into the same Cassandra instance it's now possible to offload that entire workload efficiently out onto separate infrastructure.
@@ -128,7 +129,7 @@ This is looking really cool, and as a Cassandra consultant this would make life 
 ## Full-stack Cassandra Zipkin Tracing
 The last thing to do is to complete the idea of Zipkin doing proper distributed tracing through all applications. Somehow the Zipkin trace headers need to be propagated in with Cassandra requests so that the Zipkin trace displayed further above continues seamlessly into the Cassandra coordinator and further into each of Cassandra's replica nodes.
 
-To achieve this we take advantage of the work done in [CASSANDRA-855](), released in Cassandra 2.2, which allows us to pass in arbitrary headers from client to server behind the scenes to a CQL request. Similar to the example with http headers it's the traceId and the spanId we need to pass over the protocol. Here it's to serialise the traceId and spanId in the one byte buffer and put it into the outgoing payload.
+To achieve this we take advantage of the work done in [CASSANDRA-8553](https://issues.apache.org/jira/browse/CASSANDRA-8553), released in Cassandra 2.2, which allows us to pass in arbitrary headers from client to server behind the scenes to a CQL request. Similar to the example with http headers it's the traceId and the spanId we need to pass over the protocol. Here it's to serialise the traceId and spanId in the one byte buffer and put it into the outgoing payload.
 
 ![Full stack Zipkin tracing](/images/using-zipkin-cs-cr-with-payload-cassandra.png)
 
