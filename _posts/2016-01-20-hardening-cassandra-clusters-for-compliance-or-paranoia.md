@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Seattle Area Cassandra Meetup January 2015
+title: Seattle Area Cassandra Meetup January 2016
 author: Nate McCall
 category: speaking
 tags: cassandra, meetup
