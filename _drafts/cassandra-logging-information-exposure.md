@@ -10,7 +10,7 @@ tags: cassandra, security, configuration, information exposure, logging
 
 Since versions of Cassandra dating back to `0.4`, the ability to set logging levels dynamically has been available. Before I go any further, I want to make it clear that dynamic log level adjustment is A Very Good Thing. Unfortunately for security conscious installations, this can cause issues with information exposure. For many, this may seem trivial, but it is minor issues like this that can put an enterprise in violation of industry regulations, potentially creating serious liability concerns.
 
-In this post, i'll detail the different ways of adjusting the logging levels. Then we'll see what happens when we turn up the level to TRACE. We'll then demonstrate how to disable dynamic logging in both the Logback configuration and via JMX.
+In this post, i'll detail the three different ways of adjusting the logging levels. Then we'll see what happens when we turn up the level to `TRACE`. We'll then demonstrate how to disable dynamic logging in both the Logback configuration and via JMX.
 
 ## Methods of Runtime Adjustment
 
@@ -21,9 +21,9 @@ Listed below are the three different mechanisms which can be used to adjust logg
 
 2. Using JMX to invoke `setLoggingLevel` on `org.apache.cassandra.db.StorageServiceMBean`
 
-![Using JConsole to set log levels](/images/cassandra-logging-jmx.png)
+  ![Using JConsole to set log levels](/images/cassandra-logging-jmx.png)
 
-3. Updating the `logback.xml` configuration file and having it dynamically reload by adding this at the bottom, just above the closing `</configuration>` element.
+3. Update the `logback.xml` configuration file and having it dynamically reload by adding this at the bottom, just above the closing `</configuration>` element.
 
     <logger name="org.apache.cassandra.transport" level="TRACE"/>
 
@@ -31,25 +31,25 @@ Regardless of the method used, a quick check of the `$CASSANDRA_HOME/logs/system
 
     INFO  [RMI TCP Connection(22)-127.0.0.1] 2016-02-05 19:43:57,440 StorageService.java:3321 - set log level to TRACE for classes under 'org.apache.cassandra.transport' (if the level doesn't look like 'TRACE' then the logger couldn't parse 'TRACE')
 
-Unfortunately, we won't know if we have typed everything correctly until it starts printing messages. Each method will happily accept typos in either the class/package name or logging level.     
+Unfortunately, we won't know if we have typed everything correctly until it starts printing messages. Each of the three approaches detailed above will happily accept typos in either the class/package name or logging level.     
 
 ### Looking at What Happens
 
 Now that we are in trace mode, let's go over to `cqlsh`. We'll create a simple users table for our example:
 
-CREATE KEYSPACE tlp_example WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
-USE tlp_example;
-CREATE TABLE user_data (
-    user_id uuid,
-    email TEXT,
-    tax_id TEXT,
-    PRIMARY KEY (user_id)
-);
+    CREATE KEYSPACE tlp_example WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+    USE tlp_example;
+    CREATE TABLE user_data (
+        user_id uuid,
+        email TEXT,
+        tax_id TEXT,
+        PRIMARY KEY (user_id)
+    );
 
 With this table created, let's insert a row, then select it back out:
 
-INSERT INTO user_data (user_id, email, tax_id) VALUES (now(), 'nate+logex@thelastpickle.com','abc123');
-SELECT * FROM user_data;
+    INSERT INTO user_data (user_id, email, tax_id) VALUES (now(), 'nate+logex@thelastpickle.com','abc123');
+    SELECT * FROM user_data;
 
 Now, let's go have a look at the log output (note that as of version 2.2, DEBUG and higher will [by default](https://github.com/apache/cassandra/blob/trunk/conf/logback.xml#L51-L64) be located in `$CASSANDRA_HOME/logs/debug.log`):
 
@@ -82,34 +82,6 @@ Though the logging levels can be explicitly controlled via `logback.xml`, by def
 
 For both cases, this functionality can be removed by removing the `<jmxConfigurator />` [element](https://github.com/apache/cassandra/blob/trunk/conf/logback.xml#L26) present in `logback.xml`. This disables the JMX logging endpoint, making either invocation a no-op.
 
+## Summary
 
-## MISC:  
-
-Let's first look at what happens when we enable TRACE level logging via nodetool (and thus JMX):
-
-```
-nodetool setlogginglevel org.apache.cassandra TRACE
-```
-What was initially a configuration file verified as sound by an audit has just been completely subverted.
-
-notes:
-go through lastest 3 for trace
-
-PasswordAuthenticator.authenticate: what are the contents of the RequestExcecutionException?
-BatchlogManager.finish prints contents getMessage of writeTimeoutEx or WriteFailureEx
-org/apache/cassandra/batchlog/LegacyBatchlogMigrator#handleLegacyMutation prints contents of PartitionUpdate
-org/apache/cassandra/io/sstable/format/big/BigTableWriter.java leaks keys
-
-## Exposure at TRACE
-
-A brief investigation of the current Cassandra source tree found the following classes included `TRACE` logging statements which will expose information (the `org.apache.cassandra.` prefix has been removed for legibility)
-
-- `cql3.QueryProcessor`: leaks query parameters names and values
-- `db.Keyspace`: will leak keys on an index rebuild
-- `commitlog.CommitLogReplayer`: dumps mutations
-- `batchlog.LegacyBatchlogMigrator`: dumps mutations
-- `io.sstable.format.big.BigTableWriter:` leaks keys
-- `db.filter.SliceQueryFilter`: dumps contents of query results (2.2 and below)
-- `db.index.AbstractSimplePerColumnSecondaryIndex`: dumps keys (2.2 and below)
-- `db.index.composites.CompositesSearcher`: prints cell names on misses (2.2 and below)
-- `db.index.keys.KeysSearcher`: dumps row keys (2.2 and below)
+Dynamically adjusting the logging levels of Apache Cassandra at runtime is a useful feature. However, some operators might be surprised at the amount of information that can leak into logs when `TRACE` logging is enabled on certain classes. Knowing how to disable dynamic log adjustment by using the approaches described above can provide security conscious environments the control they need to keep this from happening. 
