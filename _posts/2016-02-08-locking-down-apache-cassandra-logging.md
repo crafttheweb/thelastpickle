@@ -12,28 +12,37 @@ Since versions of Cassandra dating back to `0.4`, the ability to set logging lev
 
 In this post, i'll detail the three different ways of adjusting the logging levels. Then we'll see what happens when we turn up the level to `TRACE`. We'll then demonstrate how to disable dynamic logging in both the Logback configuration and via JMX.
 
+**Note:** that the Logback API was introduced in Apache Cassandra `2.1`. Though the same functionality is available in Log4J in prior versions, covering such outside the scope of this post as the `2.0.x` is now EOL.
+
 ## Methods of Runtime Adjustment
 
-Listed below are the three different mechanisms which can be used to adjust logging levels at runtime in Apache Cassandra. In each example, we are setting the logging level of the `org.apache.cassandra.transport` package to TRACE.
+Listed below are the three different mechanisms which can be used to adjust logging levels at runtime in Apache Cassandra. In each example, we are setting the logging level of the `org.apache.cassandra.transport` package to `TRACE`.
+
 1. Using the `nodetool` utility
 
+    ```
     nodetool setlogginglevel org.apache.cassandra.transport TRACE
+    ```
 
-2. Using JMX to invoke `setLoggingLevel` on `org.apache.cassandra.db.StorageServiceMBean`
+2. Using JConsole to invoked `setLoggingLevel` on `org.apache.cassandra.db.StorageServiceMBean` via JMX (for more information on configuring and securing JMX access, see [this page](https://docs.datastax.com/en/cassandra/2.1/cassandra/security/secureJmxAuthentication.html)):
 
-  ![Using JConsole to set log levels](/images/cassandra-logging-jmx.png)
+    ![Using JConsole to set log levels](/images/cassandra-logging-jmx.png)
 
-3. Update the `logback.xml` configuration file and having it dynamically reload by adding this at the bottom, just above the closing `</configuration>` element.
 
-    <logger name="org.apache.cassandra.transport" level="TRACE"/>
+3. Update the `logback.xml` configuration file and having it dynamically reload by adding this at the bottom, just above the closing `</configuration>` element:
 
+
+    `<logger name="org.apache.cassandra.transport" level="TRACE"/>`
+
+
+### Verifying Adjustment
 Regardless of the method used, a quick check of the `$CASSANDRA_HOME/logs/system.log` file will show something similar to the following:
 
     INFO  [RMI TCP Connection(22)-127.0.0.1] 2016-02-05 19:43:57,440 StorageService.java:3321 - set log level to TRACE for classes under 'org.apache.cassandra.transport' (if the level doesn't look like 'TRACE' then the logger couldn't parse 'TRACE')
 
-Unfortunately, we won't know if we have typed everything correctly until it starts printing messages. Each of the three approaches detailed above will happily accept typos in either the class/package name or logging level.     
+**Warning:** Unfortunately, we won't know if we have typed everything correctly until it starts printing messages. Each of the three approaches detailed above will happily accept typos in either the class/package name or logging level.     
 
-### Looking at What Happens
+## Exploring Log Output
 
 Now that we are in trace mode, let's go over to `cqlsh`. We'll create a simple users table for our example:
 
@@ -70,13 +79,13 @@ So, are these information exposure bugs? No. These are useful outputs for debugg
 
 Regardless of what your requirements are around exposure, the following two sections detail how to disable runtime modification of logging levels.
 
-#### Configuration Reloading
+### Configuration Reloading
 
 As detailed above, Cassandra makes use of the built-in Logback API's configuration file reloading feature [detailed here](http://logback.qos.ch/manual/configuration.html#autoScan). By default, Cassandra (via Logback) will scan `logback.xml` for changes once per minute, applying any modifications found.
 
 This reloading mechanism can be disabled by setting the `scan` attribute from the top-level `configuration` [element](https://github.com/apache/cassandra/blob/trunk/conf/logback.xml#L25) to `false`. When not present, `scan` is considered to be `false`, but as with any security-sensitive default configuration change, you should set it explicitly to make the intention clear.
 
-#### Dynamic Adjustment
+### Dynamic Adjustment
 
 Though the logging levels can be explicitly controlled via `logback.xml`, by default the `StorageSeriviceMBean` exposes a `setLoggingLevel` method which will dynamically adjust the logging level of an arbitrary class or package qualifier to any level, including `TRACE`. This functionality can be accessed via JMX at both the MBean level and via `nodetool setlogginglevel` command (which itself invokes the MBean) as we saw in the example above.
 
@@ -84,4 +93,4 @@ For both cases, this functionality can be removed by removing the `<jmxConfigura
 
 ## Summary
 
-Dynamically adjusting the logging levels of Apache Cassandra at runtime is a useful feature. However, some operators might be surprised at the amount of information that can leak into logs when `TRACE` logging is enabled on certain classes. Knowing how to disable dynamic log adjustment by using the approaches described above can provide security conscious environments the control they need to keep this from happening. 
+Dynamically adjusting the logging levels of Apache Cassandra at runtime is a useful feature. However, some operators might be surprised at the amount of information that can leak into logs when `TRACE` logging is enabled on certain classes. Knowing how to disable dynamic log adjustment by using the approaches described above can provide security conscious environments the control they need to keep this from happening.
