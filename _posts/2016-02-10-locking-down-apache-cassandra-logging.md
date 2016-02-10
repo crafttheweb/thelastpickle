@@ -6,8 +6,6 @@ category: blog
 tags: cassandra, security, configuration, information exposure, logging
 ---
 
-# Background
-
 Since versions of Cassandra dating back to `0.4`, the ability to set logging levels dynamically has been available. Before I go any further, I want to make it clear that dynamic log level adjustment is A Very Good Thing. Unfortunately for security conscious installations, this can cause issues with information exposure. For many, this may seem trivial, but it is minor issues like this that can put an enterprise in violation of industry regulations, potentially creating serious liability concerns.
 
 In this post, i'll detail the three different ways of adjusting the logging levels. Then we'll see what happens when we turn up the level to `TRACE`. We'll then demonstrate how to disable dynamic logging in both the Logback configuration and via JMX.
