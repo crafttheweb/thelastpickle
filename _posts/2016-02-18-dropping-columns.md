@@ -3,7 +3,7 @@ layout: post
 title: Dropping columns in Apache Cassandra 3.0
 author: Aaron Morton
 category: blog
-tags: cassandra
+tags: cassandra, storageengine
 ---
 
 Someone recently asked me: What happens when I drop a column in CQL? With all the recent changes in the [storage engine](http://www.datastax.com/2015/12/storage-engine-30) I took the opportunity to explore the new code. In short, we will continue to read the dropped column from disk until the files are rewritten by compaction or you force Cassandra to rewrite the files.
