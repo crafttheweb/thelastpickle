@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Taking the pain out of repairs – The Last Pickle</title>
+
+		<meta name="description" content="Incremental Repairs, added in Cassandra 2.1, are designed to take the pain out of repairing your cluster."/>
+
+		<meta name="author" content="Mick Semb Wever"/>
+		<meta name="license" content="Creative Commons Attribution-NonCommercial 3.0"/>
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/tlp.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <section>
+                    <section >
+                        <br/>
+                        <h3 style="text-align: left;">Taking the pain</h3><h3>out of repairs</h3>
+                        <img data-src="tlp/TLP_mick.png" width='75%'/>
+                    </section>
+                    <section >
+                        <br/>
+                        <h6 style="text-align: left;">About The Last Pickle</h6>
+                        <h4><br/><br/>
+                            <strong>Work with clients<br/>
+                                to deliver and improve<br/></strong></h4>
+                            <h5>Apache Cassandra based solutions<br/><br/></h5><br/>
+                            <p>Based in<br/> USA, New Zealand, Australia, France</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <p>Repair </p>
+                        <p>Pain </p>
+                        <p>Strategies </p>
+                        <p>Incremental Repair</p>
+                        <aside class="notes">Why, What, When    </aside>
+                    </section>
+                </section>
+
+                <section>
+				    <section>
+                        <br/><br/><br/><br/><br/><br/>
+					    <p>
+    					    <img data-src="finnno-300x247.png" />
+                        </p>
+				    </section>
+				    <section>
+                        <br/><br/><br/>
+					    <p>
+    					    <img data-src="wordle.png" />
+                        </p>
+				    </section>
+                </section>
+
+                <section>
+				    <section>
+                        <br/>
+                        <p>
+                            Repairs is the way to ensure <br/>consistent data on disk</p>
+				    </section>
+				    <section >
+                        <br/><br/><br/>
+					    <p>
+    					   <img data-src="Cassandra_Request.png"/>
+                        </p>
+				    </section>
+				    <section >
+                        <br/><br/><br/>
+					    <p>
+    					   <img data-src="read_access.png"/>
+                        </p>
+				    </section>
+				    <section>
+                        <br/><br/><br/>
+                        <ul>
+                            <li>Hinted Hand-off</li>
+                            <li>Read Repairs</li>
+                            <li>Digest Mismatches</li>
+                            <li>Tombstones</li>
+                        </ul>
+                        <aside class="notes">
+                            How often should i scheduled repairs?<br/>
+                        </aside>
+				    </section>
+                </section>
+
+                <section>
+				    <section>
+					    <h6 style="text-align: left;">Repair Internals</h6>
+                        <br/><br/>
+                        <p> anti-entropy &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --> validation compaction<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--> merkle tree<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--> streaming </p>
+
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Repair Internals</h6>
+                        <br/><br/>
+					    <p>
+    					   <img data-src="Cassandra_Request.png"/>
+                        </p>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Repair Internals</h6>
+                        <br/>
+					    <p>
+    					   <img data-src="merkletree.png"/>
+                        </p>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Repair Internals</h6>
+                        <br/>
+                        <p>RepairJob </p>
+                        <p class="fragment current-visible">(Merkle Tree)</p>
+                        <p>RepairSession</p>
+                        <p>Differencer </p>
+                        <p>StreamingRepairTask</p>
+                        <p>RepairSession </p>
+                        <p>StorageService</p>
+				    </section>
+                </section>
+
+                <section>
+				    <section>
+					    <h6 style="text-align: left;">the pain</h6>
+                        <br/>
+                        <ul class="fragment">
+                            <li>
+                            merkle tree
+                            <ul>
+                                <li>CPU & IO intensive</li>
+                                <li>Memory intensive</li>
+                                <li>Busts fs cache</li>
+                        </ul></li><br/>
+                        <li>parallel replica load</li>
+                        <li>over streaming</li>
+                        </ul>
+                        <aside class="notes">
+                            How often should i scheduled repairs?<br/>
+                            Did the nightly repairs actually work? Crash? Hung? Slow and Overlapped?<br/>
+                            Monitoring and log analysis?
+                        </aside>
+				    </section>
+                </section>
+
+                <section>
+				    <section>
+					    <h6 style="text-align: left;">take the pain away</h6>
+                        <ul>
+                            <li>Don't Repair</li>
+                            <li>Break It Down</li>
+                            <li>Incremental Repairs</li>
+                        </ul>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">take the pain away</h6>
+					    <p>Don't Repair</p>
+                        <aside class="notes">
+                            `nodetool netstats` to watch digest mismatches.
+                        </aside>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">take the pain away</h6>
+					    <p>Break It Down</p>
+                        <br/>
+                        <pre><code>$ bin/nodetool repair -pr</code></pre>
+                        <pre><code>$ bin/nodetool repair -in-local-dc</code></pre>
+                        <pre><code>$ bin/nodetool repair -st 3074457345618258602 -et -9223372036854775808</code></pre>
+                        <br/><br/><p style="font-size:75%;">For automatic range repairs <br/>see https://github.com/BrianGallew/cassandra_range_repair</p>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">take the pain away</h6>
+					    <p>Incremental Repairs</p>
+				    </section>
+                </section>
+
+                <section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        <ul>
+                            <li>Concept</li>
+                            <li>Complexities</li>
+                            <li>Migration</li>
+                            <li>Problems</li>
+                        </ul>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        SSTables are immutable, <br/>so
+                        repair was processing data<br/>
+                        that had not changed
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        Repairing less data, more
+                        frequently, <br/>reduces the impact
+                        on the cluster
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        Track repaired timestamp per
+                        SSTable<br/>
+                        Ignore SSTables that have been
+                        repaired
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        <pre><code>$ tools/bin/sstablemetadata keyspace1-standard1-ka-5-Data.db
+SSTable:
+...
+Repaired at: 0
+
+$ bin/nodetool repair --incremental
+$ tools/bin/sstablemetadata keyspace1-standard1-ka-5-Data.db
+SSTable:
+...
+Repaired at: 1454500502306</code></pre>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        Splits partially repaired
+                        SSTables<br/> into <br/>Repaired and
+                        Un-repaired SSTables
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        <pre><code>$ ls -lah keyspace1/standard1
+keyspace1-standard1-ka-9-Data.db
+keyspace1-standard1-ka-10-Data.db
+
+$ bin/nodetool repair --incremental
+           -st 3074457345618258602 -et -9223372036854775808
+
+$ ls -lah keyspace1/standard1
+keyspace1-standard1-ka-11-Data.db
+keyspace1-standard1-ka-12-Data.db
+keyspace1-standard1-ka-13-Data.db
+keyspace1-standard1-ka-14-Data.db</code></pre>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        <pre><code>$ tools/bin/sstablemetadata keyspace1-standard1-ka-11-Data.db
+...
+Repaired at: 1454504607623
+
+$ tools/bin/sstablemetadata keyspace1-standard1-ka-12-Data.db
+...
+Repaired at: 0
+
+$ tools/bin/sstablemetadata keyspace1-standard1-ka-13-Data.db
+...
+Repaired at: 1454504607623
+
+$ tools/bin/sstablemetadata keyspace1-standard1-ka-14-Data.db
+...
+Repaired at: 0</code></pre>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Incremental Repairs</h6>
+                        <br/>
+                        Two sets of SSTables are
+                        maintained: <br/>Repaired and Un-repaired
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Proper Migration</h6>
+                        <br/>
+                        <ol type="1">
+                            <li> Disable compaction</li>
+                            <li> Run a classic full repair</li>
+                            <li> Stop the node</li>
+                            <li> <code>stablerepairedset</code> all SSTables</li>
+                            <li> Start the node</li>
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Simple Migration</h6>
+                        <br/>
+                        the other way
+				    </section>
+				    <section>
+					    <h6 style="text-align: left;">Problems</h6>
+                        <br/><ul>
+                            <li>2x compactions</li>
+                            <li>Slow? Use:  >2.1.12, >2.2.4, >3.0.1, or 3.1</li>
+                            <li>Try first with STCS tables</li>
+                        </ul>
+				    </section>
+                </section>
+
+                <section>
+                    <h6 style="text-align: left;">Nerdy Stuff</h6>
+                    <br/><ul>
+                        <li>Consistency Level: REPAIRED_QUORUM</li>
+                        <li>Aggregate Functions</li>
+                        <li>Repair Aware gc_grace_seconds (3.0)</li>
+                        <li>Automatic Repair Scheduling? (CASSANDRA-10070)</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section >
+                        <img data-src="tlp/TLP_mick.png" />
+                    </section>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
