@@ -132,7 +132,7 @@ Finally the script unmount the disk and remove the old-dir.
 
 So the 'Natural' way (stop node, move, start node) in our example takes:
 
-        10h * 30 = 300h.
+    10h * 30 = 300h.
 
 Plus each node is down for 10 hours, so nodes need to be repaired as 10 hours is higher than hinted handoff limit of 3 hours (default).
 
@@ -140,6 +140,6 @@ Plus each node is down for 10 hours, so nodes need to be repaired as 10 hours is
 
 The full 'Efficient' operation, allowing transferring the data in parallel, takes:
 
-        10h + 3.5h + 0.5h + (30 * 0.1h) = 17h
+    10h + 3.5h + 0.5h + (30 * 0.1h) = 17h
 
 Nodes are down for about 5-10 min each. No further operation needed.
