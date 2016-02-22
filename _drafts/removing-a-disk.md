@@ -126,16 +126,20 @@ The second `rsync` in the script is a 'useless' one. I just like to control thin
 
 Next step in the script is to move all the files from tmp-dir to new-dir (the proper data dir remaining after the operation). This is an instant operation as files are not really moved as they already are on the disk as mentioned earlier.
 
-Finally the script unmount and remove the old-dir.
+Finally the script unmount the disk and remove the old-dir.
 
 ## Conclusions
 
 So the 'Natural' way (stop node, move, start node) in our example takes:
+
         10h * 30 = 300h.
+
 Plus each node is down for 10 hours, so nodes need to be repaired as 10 hours is higher than hinted handoff limit of 3 hours (default).
 
 **VS**
 
 The full 'Efficient' operation, allowing transferring the data in parallel, takes:
+
         10h + 3.5h + 0.5h + (30 * 0.1h) = 17h
-Nodes are down for about 5-10 min.
+
+Nodes are down for about 5-10 min each. No further operation needed.
