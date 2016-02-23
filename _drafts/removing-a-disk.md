@@ -6,30 +6,30 @@ category: blog
 tags: cassandra, configuration
 ---
 
-I recently had to remove a disk from all the Apache Cassandra instances of a production cluster. This post purpose is to share the full process, optimizing the overall operation time and reducing the down time for each node, thanks to a few tips.
+I recently had to remove a disk from all the Apache Cassandra instances of a production cluster. This post purpose is to share the full process, optimizing the overall operation time and reducing the down time for each node.
 
 ## Considerations
 
-### Post use case
+This post is about removing **one** disk by transferring its data to **one** other disk, the process will need to be modified to remove more than one disk or to move data to multiple disks. All the following operations can be run in parallel, except the last step which is running the script, as it involve restarting the node.
 
-This post is about removing **one** disk by transferring its data to **one** other disk. Otherwise this will need to be adapted. All the following operations can be run in parallel, except the last step which is running the script, as it restarts the node.
-
-### Naming in this post
-
-`old-dir` refers to the folder mounted on the disk we want to remove, `tmp-dir` to the folder we will temporary use for the operation needs and new-dir to the existing data folder on the disk we want to keep.
+There are three directories we need to consider:
+* `old-dir` refers to the folder mounted on the disk we want to remove.
+* `tmp-dir` is a folder we will temporary use for the operation needs.
+* `new-dir` is the existing data folder on the disk we want to keep.
 
 ## The 'natural' way
 
 The rough and natural way of doing this is:
 
-* stop one node
-* move files
-* change the configuration to mirror disk changes
-* restart node and finally go to the next node.
+1. Stop one node.
+2. Move the SSTables from the `old-dir` to the `new-dir`.
+3. Change the `data_file_directories` in *cassandra.yaml* to mirror disk changes.
+4. Restart the node.
+5. Go to the next node and repeat the same steps.
 
 Very simple, isn't it?
 
-Well it is as simple as it is inefficient. Lets consider we have 10 files of 100GB on the disk to remove, on each node of a 30 nodes cluster, under a data folder called `old-dir`. Let's also consider it takes 10 hours to move the 10 files.
+Well it is as simple as it is inefficient. Lets consider we have 10 files of 100GB each on the disk to remove, on each node of a 30 nodes cluster, under a data folder called `old-dir`. Let's also consider it takes 10 hours to move the 10 files.
 
 Then using the rough way of processing, nodes will be down for 10 hours each, and the operation will take very long:
 
@@ -37,35 +37,53 @@ Then using the rough way of processing, nodes will be down for 10 hours each, an
 
 This is a very long time on a running production cluster, with probably more operations waiting in the TODO list. It will increase linearly if there is more data or more nodes. Also, if you might not be there after 10h and do the work on the day after, making this twice as long as it could theoretically be. This is clearly not the best way to go, even if it 'works'.
 
-Plus, as nodes will be down for more than 3 hours (default max_hint_window_in_ms), a full repair of the node will be needed when they come back, increasing substantially the overall operation time.
+Plus, as nodes will be down for more than 3 hours (default `max_hint_window_in_ms`), hints will no longer be stored for the node, meaning a full node repair will be needed every time a node comes back online, increasing substantially the overall operation time.
 
 Let's not do that.
 
 ## The (most?) efficient way
 
-The main idea behind the process I will describe is that the `mv` command is an **instant command** if it is run from the **same physical disk**. The `mv` command will indeed **not** move the [inode](https://en.wikipedia.org/wiki/Inode) representing the file but just links pointing to it. This way moving PB of data takes less than a second.
+The main idea behind the process I will describe is that the `mv` command is an **instant command** if it is run from the **same physical disk**. The `mv` command will indeed **not** move the [inode](https://en.wikipedia.org/wiki/Inode) representing the file but just links pointing to it. This way moving Petabytes of data takes less than a second.
 
-The problem at this point is that data is not in the same disk! So `mv` command will have to physically move the data. That's why it is relevant to first `rsync` data from `old-dir` to `tmp-dir` (`tmp-dir` being in the same disk as `new-dir`).
+The problem is the `mv` command will need to physically copy the data between disk as our source and destination directories are on different disks. That's why it is relevant to first `rsync` data from `old-dir` to `tmp-dir` (`tmp-dir` being in the same disk as `new-dir`).
 
-Copying (not moving) data to a temporary folder outside from Cassandra data files allows us to run the the copy in parallel in all the nodes.
+Copying (not moving) data to a temporary folder outside from Cassandra data files allows us to run the the copy in parallel in all the nodes, without shutting them down.
 
 ### Way to go
 
-1. Make sure node is eligible for the removal (enough disk space left on the remaining disk)
+Make sure to run this procedure, at least every `rsync`, using a [screen](http://aperiodic.net/screen/quick_reference). This is a best practice while running operations to avoid any unexpected network hiccup to interfere with the procedure. It also allows teammates to take over easily.
 
-        grep "data_fi" /etc/cassandra/conf/cassandra.yaml -A3
-        df -h | grep cassandra # Or whatever the data directories are called or have in their path
+1. Make sure there is enough disk space on the target disk for all the data on the `old-dir`.
 
 2. 1st `rsync`
 
-        screen -S rsync
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
-3. When first sync finishes, disable compaction and stop compaction to avoid files to be compacted and so transferring the same data again and again. See below for more details
+    **Explanations**
+    First `rsync` to `tmp-dir` from `old-dir`. This can be run in parallel in all the nodes though.
+    Options in use are
+    * `-a`: Preserves permissions, owner, group...
+    * `-z`: Compress data for transfer.
+    * `-v`: Gives detailed informations (Verbose)
+    * `-p`: Shows progress.
+    * `--delete-before`: Removes any existing file in the destination folder that is not present in the source folder.
+    Bandwidth used by `rsync` is tunable using the `--bwlimit` options, see the [man page](http://linux.die.net/man/1/rsync) for more information. A good starting value could be the `stream_throughput_outbound_megabits_per_sec` value. Depending on the network, the bandwidth available and the needs, it is possible to stop the command, tune the `--bwlimit` and restart `rsync`.
+
+    **Example**
+    This takes about 10 hours in our example as we are moving the same dataset as in the 'natural' way of doing this described above. The difference is we can run this in parallel on all the nodes as we can control bandwidth and there is no need for any node to be down.
+
+3. When first sync finishes, disable compaction and stop compaction to avoid files to be compacted and so transferring the same data again and again.
 
         nodetool disableautocompaction
         nodetool stop compaction
         nodetool compactionstats
+
+    **Explanations**
+    At this point we disable compactions, stop the compactions already running.  The purpose of this is to make the `old-dir` file totally immutable so we just have to copy the new data.
+    *Warning*: Keep in mind Cassandra won't compact anything in the period between this step and the restart of the node. This will impact the read performances after some time. So I do not recommend doing it before the first `rsync` as we don't want the cluster to stop compacting for too long in most cases. If the dataset is small, it should be fine to disable/stop compactions before the first `rsync`. On the other hand, if the dataset is big and very active it might be a good idea to perform multiple rsync before disabling compaction, to mitigate this, until size of `tmp-dir` is close enough to `old-dir` size. This basically makes the operation longer, but safer.
+
+    **Example**
+    In our example, let's say one compaction triggered during the first rsync, before we disabled it. So we now have 6 files of 100 GB and 1 of 350 GB. The problem is there is now a new file of 350 GB and `rsync` does not know this is the same data as in the 4 100 GB files already present in `tmp-dir`. Disabling compaction will avoid this behavior after the next `rsync`.
 
 4. Place the script on the node, make it executable and configure variables (https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh#L2-L4)
 
@@ -75,15 +93,27 @@ Copying (not moving) data to a temporary folder outside from Cassandra data file
 
 5. 2nd `rsync`
 
-        screen -r rsync
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
-6. 3rd `rsync` (if needed, see the diff)
+    **Explanations**
+    The second `rsync` has to remove the files that were compacted during the first `rsync` from `tmp-dir` (as compaction was not disabled by then). It is good to use the '--delete-before' option, avoiding Cassandra to compact more than needed once we will give it the data back. As `tmp-dir` needs to be mirroring `old-dir`, using this option is fine. This second `rsync`is also runnable in parallel across the cluster.
+
+    **Example**
+    This new operation takes 3.5 hours in our example.
+    At this point we have 950 GB in `tmp-dir`, but meanwhile clients continued to write on the disk.
+
+6. 3rd `rsync` to copy the new files.
 
         sudo du -sh <old-dir> && sudo du -sh <tmp-dir>
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
-7. Change the configuration to mirror that a disk is not used anymore.
+    **Explanations**
+    As existing files are now 100% immutable (because never compacted), we just need to copy new files that were flushed in `old-dir` as Cassandra is still running. This is runnable in parallel again.
+
+    **Example**
+    Let's say we have 50 GB of new files. It takes 0.5 hours to copy them in our case.
+
+7. Remove `old-dir` from the `data_file_directories` list in *cassandra.yaml*.
 
         sudo vim /etc/cassandra/conf/cassandra.yaml
 
@@ -93,49 +123,25 @@ Copying (not moving) data to a temporary folder outside from Cassandra data file
         sudo tail -100f /var/log/cassandra/system.log
         ...
 
-### Some explanations
+    **Explanations**
+    * The script stops the node, so should be run *sequentially*.
+    * It performs 2 more rsync:
+        * The first one to take the diff between the end of 3rd `rsync` and the moment you stop the node, it should be a few seconds, maybe minutes, depending how fast the script was run after 3rd `rsync` ended and on the throughput.
+        * The second `rsync` in the script is a 'control' one. I just like to control things. Running it, we expect to see that there is no diff. It is just a way to stop the script if for some reason data is still being appended to `old-dir` (Cassandra not stopped correctly or some other weird behavior). I guess this could be replaced/completed with a check on Cassandra service making sure it is down.
+    * Next step in the script is to move all the files from `tmp-dir` to `new-dir` (the proper data folder remaining after the operation). This is an instant operation as files are not really moved as they already are on the disk as mentioned earlier.
+    * Finally the script unmount the disk and remove the `old-dir`.
 
-Let's describe the process using the same example than in the 'Natural' way of doing it.
-
-#### About step 2
-
-First `rsync` to `tmp-dir` from `old-dir`. Let's say this takes about 10 hours. This can be run in parallel in all the nodes though. Bandwidth used by `rsync` is tunable.
-
-But meanwhile one compaction triggered and I now have 6 files of 100 GB and 1 of 350 GB.
-
-#### About step 3
-
-At this point we disable compactions, stop the compactions already running.  The purpose of this is to make the old-dir file totally immutable so we just have to copy the new data.
-
-#### About step 5
-
-The second `rsync` has to remove the 4 files that were compacted from `tmp-dir` during the first `rsync` (as compaction was not disabled by then), so that's why it is good to use the '--delete-before' option, avoiding Cassandra to compact more than we need once we will give back the data to cassandra. As this tmp-dir needs to be mirroring old-dir, using this option is fine. This new operation takes 3.5 hours, also runnable in parallel (Keep in mind C* won't compact anything for 3.5 hours)
-
-I do not recommend doing step 3 (stop compaction) before the first `rsync` as we don't want the cluster to stop compacting for too long in most cases (10 hours in this example). If the dataset is small, it should be fine to do this before first `rsync` and only do 2 rsync.
-
-At this point we have 950 GB in `tmp-dir`, but meanwhile clients continued to write on the disk. Let's say 50 GB more. Yet data on old-dir is now completely immutable so previous files are already synced, we copy the new data (since the last rsync).
-
-#### About step 6
-
-3rd `rsync` will take 0.5 hour, no compaction has run since the 2nd rsync, so `rsync` will only copy new data to `tmp-dir` this time. Still runnable in parallel.
-
-#### About step 8
-
-Then the script stop the node, so should be run sequentially, and perform 2 more rsync, the first one to take the diff between the end of 3rd `rsync` and the moment you stop the node, it should be a few seconds, maybe minutes, depending how fast the script was run after 3rd `rsync` ended and on the throughput.
-
-The second `rsync` in the script is a 'useless' one. I just like to control things. Running it, we expect to see that there is no diff. It is just a way to stop the script if for some reason data is still being appended to old-dir (Cassandra not stopped correctly or some weird behaviour). I guess this could be replaced by a check on Cassandra service being down.
-
-Next step in the script is to move all the files from `tmp-dir` to `new-dir` (the proper data dir remaining after the operation). This is an instant operation as files are not really moved as they already are on the disk as mentioned earlier.
-
-Finally the script unmount the disk and remove the `old-dir`.
+    **Example**
+    This will take a few minutes depending on how fast the script was run after the last `rsync`, the write throughput of the cluster and the data size (as it will impact Cassandra starting time).
+    Let's consider it takes 6 minutes (0.1 hours).
 
 ## Conclusions
 
-So the 'Natural' way (stop node, move, start node) in our example takes:
+So the 'natural' way (stop node, move, start node) in our example takes:
 
     10h * 30 = 300h.
 
-Plus each node is down for 10 hours, so nodes need to be repaired as 10 hours is higher than hinted handoff limit of 3 hours (default).
+Plus, each node is down for 10 hours, so nodes need to be repaired as 10 hours is higher than hinted handoff limit of 3 hours (default).
 
 The full 'Efficient' operation, allowing transferring the data in parallel, takes:
 
