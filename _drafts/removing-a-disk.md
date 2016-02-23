@@ -55,22 +55,20 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
 
 1. Make sure there is enough disk space on the target disk for all the data on the `old-dir`.
 
-2. 1st `rsync`
+2. First `rsync`
 
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
-    **Explanations**
-    First `rsync` to `tmp-dir` from `old-dir`. This can be run in parallel in all the nodes though.
+    **Explanations**: First `rsync` to `tmp-dir` from `old-dir`. This can be run in parallel in all the nodes though.
     Options in use are
     * `-a`: Preserves permissions, owner, group...
     * `-z`: Compress data for transfer.
     * `-v`: Gives detailed informations (Verbose)
     * `-p`: Shows progress.
     * `--delete-before`: Removes any existing file in the destination folder that is not present in the source folder.
-    Bandwidth used by `rsync` is tunable using the `--bwlimit` options, see the [man page](http://linux.die.net/man/1/rsync) for more information. A good starting value could be the `stream_throughput_outbound_megabits_per_sec` value. Depending on the network, the bandwidth available and the needs, it is possible to stop the command, tune the `--bwlimit` and restart `rsync`.
+    * Bandwidth used by `rsync` is tunable using the `--bwlimit` options, see the [man page](http://linux.die.net/man/1/rsync) for more information. A good starting value could be the `stream_throughput_outbound_megabits_per_sec` value. Depending on the network, the bandwidth available and the needs, it is possible to stop the command, tune the `--bwlimit` and restart `rsync`.
 
-    **Example**
-    This takes about 10 hours in our example as we are moving the same dataset as in the 'natural' way of doing this described above. The difference is we can run this in parallel on all the nodes as we can control bandwidth and there is no need for any node to be down.
+    **Example**: This takes about 10 hours in our example as we are moving the same dataset as in the 'natural' way of doing this described above. The difference is we can run this in parallel on all the nodes as we can control bandwidth and there is no need for any node to be down.
 
 3. When first sync finishes, disable compaction and stop compaction to avoid files to be compacted and so transferring the same data again and again.
 
@@ -78,12 +76,11 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
         nodetool stop compaction
         nodetool compactionstats
 
-    **Explanations**
-    At this point we disable compactions, stop the compactions already running.  The purpose of this is to make the `old-dir` file totally immutable so we just have to copy the new data.
+    **Explanations**: At this point we disable compactions, stop the compactions already running.  The purpose of this is to make the `old-dir` file totally immutable so we just have to copy the new data.
+
     *Warning*: Keep in mind Cassandra won't compact anything in the period between this step and the restart of the node. This will impact the read performances after some time. So I do not recommend doing it before the first `rsync` as we don't want the cluster to stop compacting for too long in most cases. If the dataset is small, it should be fine to disable/stop compactions before the first `rsync`. On the other hand, if the dataset is big and very active it might be a good idea to perform multiple rsync before disabling compaction, to mitigate this, until size of `tmp-dir` is close enough to `old-dir` size. This basically makes the operation longer, but safer.
 
-    **Example**
-    In our example, let's say one compaction triggered during the first rsync, before we disabled it. So we now have 6 files of 100 GB and 1 of 350 GB. The problem is there is now a new file of 350 GB and `rsync` does not know this is the same data as in the 4 100 GB files already present in `tmp-dir`. Disabling compaction will avoid this behavior after the next `rsync`.
+    **Example**: In our example, let's say one compaction triggered during the first rsync, before we disabled it. So we now have 6 files of 100 GB and 1 of 350 GB. The problem is there is now a new file of 350 GB and `rsync` does not know this is the same data as in the 4 100 GB files already present in `tmp-dir`. Disabling compaction will avoid this behavior after the next `rsync`.
 
 4. Place the script on the node, make it executable and configure variables (https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh#L2-L4)
 
@@ -91,27 +88,23 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
         chmod u+x remove_extra_disk.sh
         vim remove_extra_disk.sh # Set 'User defined variables'
 
-5. 2nd `rsync`
+5. Second `rsync`
 
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
-    **Explanations**
-    The second `rsync` has to remove the files that were compacted during the first `rsync` from `tmp-dir` (as compaction was not disabled by then). It is good to use the '--delete-before' option, avoiding Cassandra to compact more than needed once we will give it the data back. As `tmp-dir` needs to be mirroring `old-dir`, using this option is fine. This second `rsync`is also runnable in parallel across the cluster.
+    **Explanations**: The second `rsync` has to remove the files that were compacted during the first `rsync` from `tmp-dir` (as compaction was not disabled by then). It is good to use the '--delete-before' option, avoiding Cassandra to compact more than needed once we will give it the data back. As `tmp-dir` needs to be mirroring `old-dir`, using this option is fine. This second `rsync`is also runnable in parallel across the cluster.
 
-    **Example**
-    This new operation takes 3.5 hours in our example.
+    **Example**: This new operation takes 3.5 hours in our example.
     At this point we have 950 GB in `tmp-dir`, but meanwhile clients continued to write on the disk.
 
-6. 3rd `rsync` to copy the new files.
+6. Third `rsync` to copy the new files.
 
         sudo du -sh <old-dir> && sudo du -sh <tmp-dir>
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
-    **Explanations**
-    As existing files are now 100% immutable (because never compacted), we just need to copy new files that were flushed in `old-dir` as Cassandra is still running. This is runnable in parallel again.
+    **Explanations**: As existing files are now 100% immutable (because never compacted), we just need to copy new files that were flushed in `old-dir` as Cassandra is still running. This is runnable in parallel again.
 
-    **Example**
-    Let's say we have 50 GB of new files. It takes 0.5 hours to copy them in our case.
+    **Example**: Let's say we have 50 GB of new files. It takes 0.5 hours to copy them in our case.
 
 7. Remove `old-dir` from the `data_file_directories` list in *cassandra.yaml*.
 
@@ -131,19 +124,18 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
     * Next step in the script is to move all the files from `tmp-dir` to `new-dir` (the proper data folder remaining after the operation). This is an instant operation as files are not really moved as they already are on the disk as mentioned earlier.
     * Finally the script unmount the disk and remove the `old-dir`.
 
-    **Example**
-    This will take a few minutes depending on how fast the script was run after the last `rsync`, the write throughput of the cluster and the data size (as it will impact Cassandra starting time).
+    **Example**: This will take a few minutes depending on how fast the script was run after the last `rsync`, the write throughput of the cluster and the data size (as it will impact Cassandra starting time).
     Let's consider it takes 6 minutes (0.1 hours).
 
 ## Conclusions
 
 So the 'natural' way (stop node, move, start node) in our example takes:
 
-    10h * 30 = 300h.
+    10h * 30 = 300h
 
 Plus, each node is down for 10 hours, so nodes need to be repaired as 10 hours is higher than hinted handoff limit of 3 hours (default).
 
-The full 'Efficient' operation, allowing transferring the data in parallel, takes:
+The full 'efficient' operation, allowing transferring the data in parallel, takes:
 
     10h + 3.5h + 0.5h + (30 * 0.1h) = 17h
 
