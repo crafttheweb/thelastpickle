@@ -76,7 +76,7 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
         nodetool stop compaction
         nodetool compactionstats
 
-    **Explanations**: At this point we disable compactions, stop the compactions already running.  The purpose of this is to make the `old-dir` file totally immutable so we just have to copy the new data.
+    **Explanations**: These commands disable any additional compactions from starting then stop the compactions which are already running.  The purpose of this is to make the `old-dir` file totally immutable so we just have to copy the new data.
 
     *Warning*: Keep in mind Cassandra won't compact anything in the period between this step and the restart of the node. This will impact the read performances after some time. So I do not recommend doing it before the first `rsync` as we don't want the cluster to stop compacting for too long in most cases. If the dataset is small, it should be fine to disable/stop compactions before the first `rsync`. On the other hand, if the dataset is big and very active it might be a good idea to perform multiple rsync before disabling compaction, to mitigate this, until size of `tmp-dir` is close enough to `old-dir` size. This basically makes the operation longer, but safer.
 
@@ -92,7 +92,7 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
 
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
-    **Explanations**: The second `rsync` has to remove the files that were compacted during the first `rsync` from `tmp-dir` (as compaction was not disabled by then). It is good to use the '--delete-before' option, avoiding Cassandra to compact more than needed once we will give it the data back. As `tmp-dir` needs to be mirroring `old-dir`, using this option is fine. This second `rsync`is also runnable in parallel across the cluster.
+    **Explanations**: The second `rsync` has to remove the files that were compacted during the first `rsync` from `tmp-dir` as compactions were not yet disabled. It is good to use the '--delete-before' option, which keeps Cassandra from compacting more than is needed once we will give it the data back. As `tmp-dir` needs to be mirroring `old-dir`, using this option is fine. This second `rsync`is also runnable in parallel across the cluster.
 
     **Example**: This new operation takes 3.5 hours in our example.
     At this point we have 950 GB in `tmp-dir`, but meanwhile clients continued to write on the disk.
@@ -102,7 +102,7 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
         sudo du -sh <old-dir> && sudo du -sh <tmp-dir>
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
-    **Explanations**: As existing files are now 100% immutable (because never compacted), we just need to copy new files that were flushed in `old-dir` as Cassandra is still running. This is runnable in parallel again.
+    **Explanations**: Existing files are now 100% immutable as they have never compacted. Now, we just need to copy new files that were flushed in `old-dir` as Cassandra is still running. Again, this is runnable in parallel.
 
     **Example**: Let's say we have 50 GB of new files. It takes 0.5 hours to copy them in our case.
 
