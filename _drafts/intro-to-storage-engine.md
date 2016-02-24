@@ -28,11 +28,29 @@ At a broad level the layout of a Partition in the `-Data.db` file has three comp
 
 ## Partition Header
 
-The partition header has a simple layout
+The partition header has a simple layout, contining the Partition Key and deletion information. 
+
+TODO: IMAGE
 
 Breaking this down:
 
 * The Partition Key is the concatenated Columns of the Partition Key defined in your Table. 
     * The length of the Partition Key is encoded using a short, giving it a max length of 65,535 bytes. 
-    * The Byte Buffer for the key is then written out. 
-* The [DeletionTime](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/DeletionTime.java) for the  
+    * The format of the Partition Key depends on the types used. There is a more information on this below when we look at the Row encoding.
+* The [DeletionTime](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/DeletionTime.java) for the partition contains deletion information for partition tombstones.
+    * Local Deletion Time is the server time in seconds when the deletion occurred, which is compared to `gc_grace_seconds` to decide when it can be purged.
+    * Marked For Deletion At is the timestamp of the deletion, data with a timestamp before this value is considered deleted.
+
+## Static Row
+
+If present the Static Row for the Partition is written next. It's important to remember that as we are flushing from the Memtable we are dealing with a _fragment_ of the Partition. That is a summary of the recent inserts into the table; if no recent inserts wrote to the static columns the Partition in the Memtable will not contain a Static Row. Things get a little more complicated now, [UnfilteredSerializer.serializeStaticRow()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/UnfilteredSerializer.java#L112) is called, but ultimatelt all the work is done in [UnfilteredSerializer.serialize()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/UnfilteredSerializer.java#L119). The format of the Static Row is a subset of a normal Row, to keep the discussion simple I'll only talk about the components included in the Static Row for now. 
+
+TODO IMAGE 
+
+Breaking this down:
+
+* Flags is a single byte bitmask whose values are defined at the top of the [UnfilteredSerializer](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/UnfilteredSerializer.java#L77) class. 
+* Extended Flags is a single byte included if the `EXTENSION_FLAG` is set in the Flags. This is always set for a Static Row, so will be included for this row. It is also set if there is a "SHADOWABLE" Deletion, let me get back to you on that one :). 
+* The size of the row is calculated by `UnfilteredSerializer.serializedRowBodySize()` and encoded as a variable sized integer using [VIntCoding.writeUnsignedVInt()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/utils/vint/VIntCoding.java#L115). If possible it will be a single byte.
+* Next the size of the previous row is encoded, agains as a variable sized integer. My guess is this is encoded to enable reverse scanning on the data, but I've not looked into it yet. 
+* The [LivenessInfo](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/LivenessInfo.java) for the row is included if it is not empty. Liveness is used to determine if a row is alive yet empty or dead. The best explanation I've found is the comment for [Row.primaryKeyLivenessInfo()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/Row.java#L87). If it is not empty the delta from [EncodingStats.minTimestamp](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L69) is stored as a variable sized integer. The `EncodingStats` are maintained by [Memtable.put()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/Memtable.java#L247) to contain aggregate stats such as the minimum timestamp for all information in the Memtable. Features such as this are how the 3.0 storage format keeps disk size to a minimum.  
