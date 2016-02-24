@@ -6,7 +6,7 @@ category: blog
 tags: cassandra, configuration
 ---
 
-I recently had to remove a disk from all the Apache Cassandra instances of a production cluster. This post purpose is to share the full process, optimizing the overall operation time and reducing the down time for each node.
+I recently had to remove a disk from all the Apache Cassandra instances of a production cluster. This post purpose is to share the full process, optimising the overall operation time and reducing the down time for each node.
 
 ## Considerations
 
