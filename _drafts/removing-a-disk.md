@@ -84,9 +84,12 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
 
     **Example**: In our example, let's say one compaction triggered during the first rsync, before we disabled it. So we now have 6 files of 100 GB and 1 of 350 GB. The problem is there is now a new file of 350 GB and `rsync` does not know this is the same data as in the 4 100 GB files already present in `tmp-dir`. Disabling compaction will avoid this behavior after the next `rsync`.
 
-4. Place the script on the node, make it executable and configure variables (https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh#L2-L4)
+4. Place a [script](https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh) we will later use on the node:
 
         curl -Os https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh
+    
+    The script will need to be executable, and there are two [user variables](https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh#L2-L4) to configure:
+    
         chmod u+x remove_extra_disk.sh
         vim remove_extra_disk.sh # Set 'User defined variables'
 
@@ -119,6 +122,7 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
         ...
 
     **Explanations**
+    
     * The script stops the node, so should be run *sequentially*.
     * It performs 2 more rsync:
         * The first one to take the diff between the end of 3rd `rsync` and the moment you stop the node, it should be a few seconds, maybe minutes, depending how fast the script was run after 3rd `rsync` ended and on the throughput.
