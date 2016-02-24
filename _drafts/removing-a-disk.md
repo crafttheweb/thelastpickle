@@ -46,7 +46,7 @@ Let's not do that.
 
 The main idea behind the process I will describe is that the `mv` command is an **instant command** if it is run from the **same physical disk**. The `mv` command will indeed **not** move the [inode](https://en.wikipedia.org/wiki/Inode) representing the file but just links pointing to it. This way moving Petabytes of data takes less than a second.
 
-The problem is the `mv` command will need to physically copy the data between disk as our source and destination directories are on different disks. That's why it is relevant to first `rsync` data from `old-dir` to `tmp-dir` (`tmp-dir` being in the same disk as `new-dir`).
+The problem is the `mv` command will need to physically copy the data between disk as our source and destination directories are on different disks. That's why it is relevant to first [rsync](https://en.wikipedia.org/wiki/Rsync) data from `old-dir` to `tmp-dir` (`tmp-dir` being in the same disk as `new-dir`).
 
 Copying (not moving) data to a temporary folder outside from Cassandra data files allows us to run the the copy in parallel in all the nodes, without shutting them down.
 
