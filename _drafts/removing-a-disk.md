@@ -13,6 +13,7 @@ I recently had to remove a disk from all the Apache Cassandra instances of a pro
 This post is about removing **one** disk by transferring its data to **one** other disk, the process will need to be modified to remove more than one disk or to move data to multiple disks. All the following operations can be run in parallel, except the last step which is running the script, as it involve restarting the node.
 
 There are three directories we need to consider:
+
 * `old-dir` refers to the folder mounted on the disk we want to remove.
 * `tmp-dir` is a folder we will temporary use for the operation needs.
 * `new-dir` is the existing data folder on the disk we want to keep.
