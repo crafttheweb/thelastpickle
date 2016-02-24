@@ -72,7 +72,7 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
 
     **Example**: This takes about 10 hours in our example as we are moving the same dataset as in the 'natural' way of doing this described above. The difference is we can run this in parallel on all the nodes as we can control bandwidth and there is no need for any node to be down.
 
-3. When first sync finishes, disable compaction and stop compaction to avoid files to be compacted and so transferring the same data again and again.
+3. When first sync finishes, optionally disable compaction and stop compaction to avoid files to be compacted and so transferring the same data again and again. This is an optional step as there is a trade off between the amount of down time required later and keeping compaction up to date. If your cluster is always behind in compaction you may want to skip this step.
 
         nodetool disableautocompaction
         nodetool stop compaction
