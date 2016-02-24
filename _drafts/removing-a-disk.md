@@ -61,13 +61,14 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
         sudo rsync -azvP --delete-before <old-dir>/data/ <tmp-dir>
 
     **Explanations**: First `rsync` to `tmp-dir` from `old-dir`. This can be run in parallel in all the nodes though.
-    Options in use are
+    Options in use are:
+    
     * `-a`: Preserves permissions, owner, group...
     * `-z`: Compress data for transfer.
     * `-v`: Gives detailed informations (Verbose)
     * `-p`: Shows progress.
     * `--delete-before`: Removes any existing file in the destination folder that is not present in the source folder.
-    * Bandwidth used by `rsync` is tunable using the `--bwlimit` options, see the [man page](http://linux.die.net/man/1/rsync) for more information. A good starting value could be the `stream_throughput_outbound_megabits_per_sec` value. Depending on the network, the bandwidth available and the needs, it is possible to stop the command, tune the `--bwlimit` and restart `rsync`.
+    * Bandwidth used by `rsync` is tunable using the `--bwlimit` options, see the [man page](http://linux.die.net/man/1/rsync) for more information. A good starting value could be the `stream_throughput_outbound_megabits_per_sec` value from `cassandra.yaml` which defaults to 200. Depending on the network, the bandwidth available and the needs, it is possible to stop the command, tune the `--bwlimit` and restart `rsync`.
 
     **Example**: This takes about 10 hours in our example as we are moving the same dataset as in the 'natural' way of doing this described above. The difference is we can run this in parallel on all the nodes as we can control bandwidth and there is no need for any node to be down.
 
