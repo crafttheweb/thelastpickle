@@ -62,7 +62,7 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
 
     **Explanations**: First `rsync` to `tmp-dir` from `old-dir`. This can be run in parallel in all the nodes though.
     Options in use are:
-    
+
     * `-a`: Preserves permissions, owner, group...
     * `-z`: Compress data for transfer.
     * `-v`: Gives detailed informations (Verbose)
@@ -87,9 +87,9 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
 4. Place a [script](https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh) we will later use on the node:
 
         curl -Os https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh
-    
-    The script will need to be executable, and there are two [user variables](https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh#L2-L4) to configure:
-    
+
+    The script will need to be executable, and there are two [user variables](https://github.com/arodrime/cassandra-tools/blob/master/remove_disk/remove_extra_disk.sh#L26-L28) to configure:
+
         chmod u+x remove_extra_disk.sh
         vim remove_extra_disk.sh # Set 'User defined variables'
 
@@ -122,7 +122,7 @@ Make sure to run this procedure, at least every `rsync`, using a [screen](http:/
         ...
 
     **Explanations**
-    
+
     * The script stops the node, so should be run *sequentially*.
     * It performs 2 more rsync:
         * The first one to take the diff between the end of 3rd `rsync` and the moment you stop the node, it should be a few seconds, maybe minutes, depending how fast the script was run after 3rd `rsync` ended and on the throughput.
