@@ -60,4 +60,17 @@ Breaking this down:
 * If a Row level deletion has occurred [DeletionTime.isLive()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/DeletionTime.java#L78) will return `false`, meaning there is a Deletion and we should encode it (it kind of makes sense, see the comments). 
     * `DeletionTime.markedForDeleteAt()` is encoded as a variable sized integer delta from [EncodingStats.minTimestamp](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L69).
     * `DeletionTime.localDeletionTime()` is encoded as a variable sized integer delta from the [EncodingStats.minLocalDeletionTime](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L70).
-* The Columns this Row does not include all the Columns included in this Memtable the different is encoded. The Memtable [tracks](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/Memtable.java#L548) which columns have been added to it, and this is the list we are comparing to rather than the Columns in the Table definition. Encoding is handled by [Columns.serializeSubset()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/Columns.java#L443) and encodes which Columns are _missing_ in this Row if there are less than 64 Columns, and a more complicated system for more than 64. In either case we end up with a variable sized integer. 
+* The Columns this Row does not include all the Columns included in this Memtable the different is encoded. The Memtable [tracks](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/Memtable.java#L548) which columns have been added to it, and this is the list we are comparing to rather than the Columns in the Table definition. Encoding is handled by [Columns.serializeSubset()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/Columns.java#L443) and encodes which Columns are _missing_ in this Row if there are less than 64 Columns, and a more complicated system for more than 64. In either case we end up with a variable sized integer.
+
+Lastly the Cells in the row are encoded using one fo three different techniques to encode the value:
+
+TODO IMAGES
+
+All Cells start with the same header information: 
+
+* Flags is a single byte bitmask whose values are defined in [BufferCell.Serializer](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/BufferCell.java#L221).
+* If the Cell Timestamp is different to the Row level `LivenessInfo` (see above) the timestamp is encoded as a variable sized integer delta from the [EncodingStats.minTimestamp](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L69).
+* If the Cell is a Tombstone or an Expiring Cell and both the `localDeletionTime` and `ttl` are the same as the Row level `LivenessInfo` (see above) the `Cell.localDeletionTime()` value is encoded as a variable sized integer delta from  [EncodingStats.minLocalDeletionTime](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L70).
+* If the Cell is an Expiring Cell and both the `localDeletionTime` and `ttl` are the same as the Row level `LivenessInfo` (see above) the `Cell.ttl()` value is encoded as a variable sized integer delta from  [EncodingStats.minTTL](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L71).
+* 
+
