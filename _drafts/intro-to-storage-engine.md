@@ -62,15 +62,27 @@ Breaking this down:
     * `DeletionTime.localDeletionTime()` is encoded as a variable sized integer delta from the [EncodingStats.minLocalDeletionTime](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L70).
 * The Columns this Row does not include all the Columns included in this Memtable the different is encoded. The Memtable [tracks](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/Memtable.java#L548) which columns have been added to it, and this is the list we are comparing to rather than the Columns in the Table definition. Encoding is handled by [Columns.serializeSubset()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/Columns.java#L443) and encodes which Columns are _missing_ in this Row if there are less than 64 Columns, and a more complicated system for more than 64. In either case we end up with a variable sized integer.
 
-Lastly the Cells in the row are encoded using one fo three different techniques to encode the value:
+Lastly the Cells in the row are encoded. I've broken this into Simple and Complex cell encoding, for Simple Cells.
 
 TODO IMAGES
-
-All Cells start with the same header information: 
 
 * Flags is a single byte bitmask whose values are defined in [BufferCell.Serializer](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/BufferCell.java#L221).
 * If the Cell Timestamp is different to the Row level `LivenessInfo` (see above) the timestamp is encoded as a variable sized integer delta from the [EncodingStats.minTimestamp](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L69).
 * If the Cell is a Tombstone or an Expiring Cell and both the `localDeletionTime` and `ttl` are the same as the Row level `LivenessInfo` (see above) the `Cell.localDeletionTime()` value is encoded as a variable sized integer delta from  [EncodingStats.minLocalDeletionTime](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L70).
 * If the Cell is an Expiring Cell and both the `localDeletionTime` and `ttl` are the same as the Row level `LivenessInfo` (see above) the `Cell.ttl()` value is encoded as a variable sized integer delta from  [EncodingStats.minTTL](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L71).
-* 
+* The optional value is then encoded, fixed width data types (such as `boolean` and `int`) simply encode the byte value while variable width types (such as `blob` and `text`) encode both the length (as a variable sized integer) and the byte value.
 
+[ComplexColumnData](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/ComplexColumnData.java) are a "(non-frozen collection or UDT)" (from [CellPath](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/CellPath.java)) and as the name suggests are more complex than Simple Cells. 
+
+TODO IMAGE
+
+Breaking this down:
+
+* If the [Row.hasComplexDeletion()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/Row.java#L161) the [ComplexColumnData.complexDeletion()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/ComplexColumnData.java#L95) for the Column is written first. As the comments say, this is `DeletionTime` for all the Cells in the column:
+    * `DeletionTime.markedForDeleteAt()` is encoded as a variable sized integer delta from [EncodingStats.minTimestamp](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L69).
+    * `DeletionTime.localDeletionTime()` is encoded as a variable sized integer delta from the [EncodingStats.minLocalDeletionTime](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/EncodingStats.java#L70).
+* The number of Cells in the Column is encoded as a variable sized integer.
+* The Cells that make up the column are then encoded, much the same way as a Simple Cell with a few additions:
+    * The Flags, (optional) Cell Timestamp, (optional) Cell Local Deletion Time, and (optional) Cell TTL are then encoded as above.
+    * The [CellPath](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/CellPath.java#L34), which identifies a Cell in a Complex Column such as the key for a map, is encoded by the [CellPath.Serializer](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/rows/CellPath.java#L93) for the complex type. Currently there is only one real implementation of this Interface, the [CollectionType.CollectionPathSerializer](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/marshal/CollectionType.java#L212). So while in theory the CellPath component is an opaque blob dependant on the Column type, in practice we know it's a variable sized integer length followed by the `ByteBuffer` contents. 
+    * The Cell value is encoded using the same process as above. In fact all Cell contents are written using the same method, [AbstractType.writeValue()](https://github.com/apache/cassandra/blob/cassandra-3.0/src/java/org/apache/cassandra/db/marshal/AbstractType.java#L368). 
