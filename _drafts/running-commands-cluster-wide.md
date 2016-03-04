@@ -31,7 +31,7 @@ Then opening all the terminals is as easy as running:
 
 Here is a standard view of using csshx
 
-![Opening remote consoles]({{ site.url }}/images/running-commands-cluster-wide/csshx-presentation.png)
+![Opening remote consoles](/images/running-commands-cluster-wide/csshx-presentation.png)
 
 In this picture, the consoles #1 to #4 are the remote connections opened, the #5 is the 'master' console and the #6 is the original console where I ran the csshx command from.
 
@@ -54,7 +54,7 @@ Having the servers physically displayed, having an open terminal in every node i
 
 csshx also allows to edit configuration files from every node at the same time and then edit them all together or separately. It is also possible to past a config which is nice and removes a lot of repetitive and error prone manual work.
 
-![Opening remote consoles]({{ site.url }}/images/running-commands-cluster-wide/csshx-edit-config.png)
+![Opening remote consoles](/images/running-commands-cluster-wide/csshx-edit-config.png)
 
 Yet, as every node is displayed depending on the screen size, the number of screen and the number of nodes, csshx can quickly become quite tricky to use and far less efficient.
 
