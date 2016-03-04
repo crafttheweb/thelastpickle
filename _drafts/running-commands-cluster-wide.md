@@ -65,9 +65,9 @@ As you might imagine, when the csshx console are too small it becomes very hard 
 The main idea is that if we can't or don't want to manage all the servers using csshx, then we need to centralize all the outputs and run the commands from one node.
 
 To make this easy to use to anyone I quickly scripted a one-liner I use when no better option is available, and
-made it available on [github](https://github.com/arodrime/cassandra-tools/blob/rolling_ssh/rolling-ssh/rolling-cmd.sh).
+made it available on [github](https://github.com/arodrime/cassandra-tools/blob/master/rolling-ssh/rolling-cmd.sh).
 
-See the [readme](https://github.com/arodrime/cassandra-tools/blob/rolling_ssh/rolling-ssh/README.md) file for more information on how to use it.
+See the [readme](https://github.com/arodrime/cassandra-tools/blob/master/rolling-ssh/README.md) file for more information on how to use it.
 
 Those tools allowing to manage a list of servers is very powerful and efficient as it is possible to drop scripts on all the nodes and run them, allowing to perform complex operations as rolling upgrades in a fully automated way. Yet powerful tools are also often more risky. It is important to be careful as any error will be repeated the same way on all the servers. Make sure to write scripts that perform checks the same way you would have manually done. Also, keep an eye during the process, be ready to interrupt it if needed. A last advice to mitigate the risks is to go one rack at the time by selecting nodes from one rack, if using enough racks or Availability Zones.
 
