@@ -18,6 +18,8 @@ So I will expose solutions I ended up using here, to make them available to anyo
 
 I have used [csshx](https://github.com/brockgr/csshx) for a long time. I was managing from 3 to 40 nodes clusters by then. Basically csshx allows you to connect to multiple servers in distinct consoles easily and then to type in multiple console simultaneously.
 
+csshX is for Mac OS X, but the tool exists for linux as well, it is called [cssh](http://linux.die.net/man/1/cssh).
+
 ## Configure and run cssxh
 
 To make using csshx easier it is possible to create a /etc/clusters file and drop some lists of servers there. It is possible to specify the port or the user or both things as in the example below:
@@ -71,4 +73,4 @@ See the [readme](https://github.com/arodrime/cassandra-tools/blob/master/rolling
 
 Those tools allowing to manage a list of servers is very powerful and efficient as it is possible to drop scripts on all the nodes and run them, allowing to perform complex operations as rolling upgrades in a fully automated way. Yet powerful tools are also often more risky. It is important to be careful as any error will be repeated the same way on all the servers. Make sure to write scripts that perform checks the same way you would have manually done. Also, keep an eye during the process, be ready to interrupt it if needed. A last advice to mitigate the risks is to go one rack at the time by selecting nodes from one rack in the script, if using enough racks or Availability Zones.
 
-# A commonly used example: Safe rolling restart
+# Example: Safe rolling restart
