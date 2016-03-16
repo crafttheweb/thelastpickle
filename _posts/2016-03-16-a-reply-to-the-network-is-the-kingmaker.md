@@ -13,7 +13,7 @@ Last week [Sudip Chakrabarti](https://twitter.com/chakrabartis) from Lightspeed 
 
 A common theme in many of my presentations from London to San Francisco is how many companies are running blind while adopting Microservices. On the back of the new discipline of DevOps and a revamped made relevant concept of Service Orientated Architecture; Microservices is stepping in to solve the both the technical problems of distributed computing and the human factors of parallel autonomous teams working on shared products. Behind the need for scaling teams as well as the code Microservices emphasizes the infrastructural importance of distributed code. In fact three of the four categories: Architectural Safety, Monitoring and Deployment; found within Microservices touches as much upon the infrastructure underneath and around your distributed design as it does the design itself.
 
-![Image of Microservices Categories](/images/reply-to-the-network-is-the-kingmaker-microservices_500w.png)
+![Image of Microservices Categories](/files/2016-03-16-a-reply-to-the-network-is-the-kingmaker/reply-to-the-network-is-the-kingmaker-microservices_500w.png)
 
 
 > But as the world adopts Microservices does it have the right infrastructure tools to monitor and manage such distributed applications and architecture. – Sudip Chakrabarti
@@ -32,7 +32,7 @@ Microservices does touch on the relevance of the gaps by recommending the use of
 
 The third infrastructural tool that is missing and steps in to really take advantage of our use of the network is Distributed Tracing. In my presentations it has been [Zipkin](http://zipkin.io/) presented as the scaling solution that provides such Distributed Tracing for your platform.
 
-![Image of Kibana, Grafana, and Zipkin.](/images/reply-to-the-network-is-the-kingmaker-kibana-grafana-zipkin_500w.png)
+![Image of Kibana, Grafana, and Zipkin.](/files/2016-03-16-a-reply-to-the-network-is-the-kingmaker/reply-to-the-network-is-the-kingmaker-kibana-grafana-zipkin_500w.png)
 
 ## Distributed Tracing
 
