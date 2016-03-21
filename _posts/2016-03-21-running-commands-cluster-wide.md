@@ -226,6 +226,7 @@ Let's say we just change something in the configuration for all nodes and now wa
 There are multiple ways of making operator life way easier, even without using an external automation system. Find the tool that works the best depending on what you want to do, what your skills are or what you prefer to use.
 
 General advices:
+
 * When you can't see anything anymore using `csshX` because window are too small, it is probably time to move on. Buying 5 more screens is pointless, as having a visual control on so many machines is error prone and probably slower than automating.
 * Editing a file on all the servers through `csshX` (using vim or anything else) is awesome. You do it once and have it applied everywhere. You can visually control what you are doing. Be careful if files are different due to some node configurations not replicated cluster-wide though!
 * Complex operations can be scripted and then run sequentially on all the nodes using the `rolling-cmd.sh` script.
