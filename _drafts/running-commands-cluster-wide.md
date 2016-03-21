@@ -6,9 +6,7 @@ category: blog
 tags: cassandra, operation, ssh
 ---
 
-Managing Cassandra is actually often managing multiple nodes the exact same way.
-
-As Cassandra is a peer to peer system where all the nodes are equals, there is no master or slaves. This Cassandra property allows us to easily manage any cluster by simply running the same command on all the nodes to have a change applied cluster-wide.
+Managing Cassandra effectively often means managing multiple nodes the exact same way. As Cassandra is a peer to peer system where all the nodes are equals, there is no master or slaves. This Cassandra property allows us to easily manage any cluster by simply running the same command on all the nodes to have a change applied cluster-wide.
 
 Yet, managing multiple nodes efficiently requires the operator to have a good set of tools. Spending some time to write scripts to automate the action the operator is about to repeat on each node will save time, removes frustration and is less error prone. Being able to operate from one node to affect all the nodes in the cluster or datacenter is also very handy. That's why some management tools like [Chef](https://www.chef.io/chef/), [Ansible](https://www.ansible.com/), [Salt](http://saltstack.com/) and many more are used to manage Cassandra clusters.
 
@@ -18,13 +16,13 @@ So I will expose solutions I ended up using here, to make them available to anyo
 
 # Small number of nodes / Using an interface
 
-I have used [csshx](https://github.com/brockgr/csshx) for a long time. I was managing from 3 to 40 nodes clusters by then. Basically csshx allows you to connect to multiple servers in distinct consoles easily and then to type in multiple console simultaneously.
+I have used [csshx](https://github.com/brockgr/csshx) for a long time, managing clusters from 3 to 40 nodes in size. Basically `csshx` allows you to connect to multiple servers in distinct consoles easily and then to type in multiple console simultaneously.
 
-csshX is for Mac OS X, but the tool exists for linux as well, it is called [cssh](http://linux.die.net/man/1/cssh).
+`csshX` is for Mac OS X, but the tool exists for linux as well, it is called [cssh](http://linux.die.net/man/1/cssh).
 
 ## Configure and run cssxh
 
-To make using csshx easier, it is possible to save 'clusters' (actually custom lists of servers) by adding or modifying the configuration file `/etc/clusters`. This file uses the format described in the [documentation](http://linux.die.net/man/1/cssh):
+To make using `csshx` easier, it is possible to save 'clusters' (actually custom lists of servers) by adding or modifying the configuration file `/etc/clusters`. This file uses the format described in the [documentation](http://linux.die.net/man/1/cssh):
 
     <tag> [user@]<server> [user@]<server> [...]
 
@@ -37,11 +35,11 @@ Then opening all the terminals, for the test cluster, is as easy as running:
 
     csshx test
 
-Here is a standard view of using csshx
+Here is a standard view of using `csshx`
 
 ![Opening remote consoles](/images/running-commands-cluster-wide/csshx-presentation.png)
 
-In this picture, the consoles #1 to #4 are the remote connections opened, the #5 is the 'master' console and the #6 is the original console where I ran the csshx command from.
+In this picture, the consoles #1 to #4 are the remote connections opened, the #5 is the 'master' console and the #6 is the original console where I ran the `csshx` command from.
 
 Running any command from the 'master' console (#6) will send it at the same time to all the 'slave' consoles (#1 to #4)
 
@@ -54,19 +52,19 @@ Some options are available, to display console on multiple screen and some other
 
 ## Strengths and  Limits
 
-Having the servers physically displayed, having an open terminal in every node is great since it allows a visual control on everything, you can easily monitor all the nodes, then focus on the bad once just with a click, which is awesome.
+Having the servers physically displayed via an open terminal in every node is great since it allows a visual control on everything. You can then easily monitor all the nodes, focusing on the bad one just with a click, which is awesome.
 
-csshx also allows to edit configuration files from every node at the same time and then edit them all together or separately. It is also possible to past a config which is nice and removes a lot of repetitive and error prone manual work.
+`csshx` also allows to edit configuration files from every node at the same time and then edit them all together or separately. It is also possible to past a config which is nice and removes a lot of repetitive and error prone manual work.
 
 ![Opening remote consoles](/images/running-commands-cluster-wide/csshx-edit-config.png)
 
-Yet, as every node is displayed depending on the screen size, the number of screen and the number of nodes, csshx can quickly become quite tricky to use and far less efficient.
+Yet, as every node is displayed depending on the screen size, the number of screen and the number of nodes, `csshx` can quickly become quite tricky to use and far less efficient.
 
 # Bigger number of nodes / Running scripts
 
-As you might imagine, when the csshx console are too small it becomes very hard to use. If for some reason no automation or management tool (such as [Chef](https://www.chef.io/chef/), [Ansible](https://www.ansible.com/), [Salt](http://saltstack.com/)) is set up, then the following tips might be of some use.
+As you might imagine, when the `csshx` console are too small it becomes very hard to use. If for some reason no automation or management tool (such as [Chef](https://www.chef.io/chef/), [Ansible](https://www.ansible.com/), [Salt](http://saltstack.com/)) is set up, then the following tips might be of some use.
 
-The main idea is that if we can't or don't want to manage all the servers using csshx, then we need to centralize all the outputs and run the commands from one node.
+The main idea is that if we can't or don't want to manage all the servers using `csshx`, then we need to centralize all the outputs and run the commands from one node.
 
 To make this easy to use to anyone I quickly scripted a one-liner I use when no better option is available, and
 made it available on [github](https://github.com/arodrime/cassandra-tools/blob/master/rolling-ssh/rolling-cmd.sh).
@@ -228,7 +226,7 @@ Let's say we just change something in the configuration for all nodes and now wa
 There are multiple ways of making operator life way easier, even without using an external automation system. Find the tool that works the best depending on what you want to do, what your skills are or what you prefer to use.
 
 General advices:
-* When you can't see anything anymore using csshX because window are too small, it is probably time to move on. Buying 5 more screens is pointless, as having a visual control on so many machines is error prone and probably slower than automating.
-* Editing a file on all the servers through csshX (using vim or anything else) is awesome. You do it once and have it applied everywhere. You can visually control what you are doing. Be careful if files are different due to some node configurations not replicated cluster-wide though!
+* When you can't see anything anymore using `csshX` because window are too small, it is probably time to move on. Buying 5 more screens is pointless, as having a visual control on so many machines is error prone and probably slower than automating.
+* Editing a file on all the servers through `csshX` (using vim or anything else) is awesome. You do it once and have it applied everywhere. You can visually control what you are doing. Be careful if files are different due to some node configurations not replicated cluster-wide though!
 * Complex operations can be scripted and then run sequentially on all the nodes using the `rolling-cmd.sh` script.
-* Using the `rolling-cmd.sh` script provide more automation and automated control, csshX is a nice way to 'manually' do things for small clusters.
+* Using the `rolling-cmd.sh` script provide more automation and automated control, `csshX` is a nice way to 'manually' do things for small clusters.
