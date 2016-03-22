@@ -41,7 +41,7 @@ Here is a standard view of using `csshx`
 
 In this picture, the consoles #1 to #4 are the remote connections opened, the #5 is the 'master' console and the #6 is the original console where I ran the `csshx` command from.
 
-Running any command from the 'master' console (#6) will send it at the same time to all the 'slave' consoles (#1 to #4)
+Running any command from the 'master' console (#5) will send it at the same time to all the 'slave' consoles (#1 to #4)
 
 It is possible to use only a 'slave' console by selecting it window. Remember to click back on the 'master' console to start sending to all the 'slave' consoles again.
 
