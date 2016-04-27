@@ -1,0 +1,11 @@
+.page-header {
+    text-align: center;
+    background: url(/assets/img/page-header.png) 50%;
+    border-bottom: 3px solid $black;
+    box-shadow: 0 4px 0 map-get($foundation-palette, dark-green);
+    padding: rem-calc(60 0);
+
+    &.has-overflow {
+        padding-bottom: 0;
+    }
+}

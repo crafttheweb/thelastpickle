@@ -1,0 +1,13 @@
+.page-title {
+    font-size: rem-calc(36);
+    font-weight: bold;
+    margin-bottom: rem-calc(20);
+    line-height: 1.2;
+}
+
+
+@include breakpoint(920px down) {
+    html {
+        font-size: 80%;
+    }
+}

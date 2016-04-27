@@ -1,0 +1,30 @@
+{
+  "name": "thelastpickle.github.io",
+  "version": "1.0.0",
+  "description": "The Last Pickle Frontend Deps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thelastpickle/thelastpickle.github.io.git"
+  },
+  "author": "The Fold",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thelastpickle/thelastpickle.github.io/issues"
+  },
+  "homepage": "https://github.com/thelastpickle/thelastpickle.github.io#readme",
+  "devDependencies": {
+    "foundation-sites": "^6.2.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-connect": "^3.2.3",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.1",
+    "gulp-util": "^3.0.7"
+  }
+}

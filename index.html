@@ -1,14 +1,20 @@
 ---
 comment: Front Matter to trigger Jekyll processing
 ---
+
 {% include pre.html %}
     <!-- Page Header -->
     {% include header.html %}
     <!-- Main Content -->
-    <div id="content" role="main">
-      {% include services-overview.html %}
-    </div>
+    <main role="main">
+        <header class="page-header has-overflow">
+            <div class="wrapper">
+                <h1 class="page-title">Apache Cassandra Consulting &amp; Services</h1>
+                <p class="lead">Our wealth of experience with Apache Cassandra will ensure success at all stages of a your project lifecycle.  <br />Our team enjoy learning and share our knowledge through our open source community involvement.</p>
+                <a class="contact-button"><img class="contact-button__badge" src="/assets/img/svg/site.svg#tpl-badge-mono"> Work with us</a>
+            </div>
+        </header>
+    </main>
     <!-- Page Footer -->
     {% include footer.html %}
 {% include post.html %}
-

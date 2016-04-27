@@ -1,0 +1,54 @@
+.header {
+    height: rem-calc(140);
+    /* Rectangle 1: */
+    background-image: linear-gradient(-180deg, #FAF9F3 0%, #F3EFE4 100%);
+    border-bottom: 4px solid map-get($foundation-palette, dark-green);
+    box-shadow: 0 3px 0 $black;
+    margin-bottom: 3px; // to deal with the 3px box shadow;
+}
+
+.logo {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: rem-calc(30);
+    text-align: center;
+    margin: 0;
+    z-index: 1;
+
+    img {
+        width: 604px;
+        height: 73px;
+    }
+
+}
+
+.logo--small {
+    display: none;
+    top: rem-calc(10);
+    img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@include breakpoint(1170px down) {
+    .header {
+        padding-left: rem-calc(10);
+        padding-right: rem-calc(10);
+    }
+}
+
+
+@include breakpoint(920px down) {
+    .header {
+        height: rem-calc(100);
+    }
+    .logo--large {
+        display: none;
+    }
+    .logo--small {
+        display: block;
+    }
+
+}

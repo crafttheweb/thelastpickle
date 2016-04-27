@@ -1,30 +1,12 @@
-<!-- Navigation -->
-    <header id="masthead">
-      <nav class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container">
-            <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-            <h1 class="brand">
-              <a href="/index.html">
-                <img src="/images/assets/tlp-text-name.png"></img>
-                <!-- <i class="icon-beaker"></i> -->
-              </a>
-            </h1>
-            <div class="nav-collapse collapse">
-              <ul class="nav pull-right">
-                <!-- <li class="{% if page.section == 'services' %} active {% endif %}"><a href="/services.html">Services</a></li> -->
-                <li class="{% if page.section == 'about' %} active {% endif %}"><a href="/about.html">About</a></li>
-                <li class="{% if page.section == 'blog' %} active {% endif %}"><a href="/blog/index.html">Blog</a></li>
-                <li class="{% if page.section == 'speaking' %} active {% endif %}"><a href="/speaking/index.html">Speaking</a></li>
-                <li class="{% if page.section == 'careers' %} active {% endif %}"><a href="/careers.html">Careers</a></li>
-                <li class="{% if page.section == 'contact' %} active {% endif %}"><a href="/contact.html">Contact</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <header role="banner" class="header">
+        <h1 class="logo logo--large"><a href="/"><img src="/assets/img/svg/site.svg#tlp-logo-full" alt="The Last Pickel Logo" width="604" height="73" /></a></h1>
+        <h1 class="logo logo--small"><a href="/"><img src="/assets/img/svg/site.svg#tlp-logo-badge" alt="The Last Pickel Logo" width="604" height="73" /></a></h1>
+        <nav role="navigation">
+            <ul class="list--unstyled menu">
+                <li class="menu__item{% if page.section == 'services' %} is-active {% endif %}"><a href="/services.html" class="menu__link" title="Our services">What we do</a></li>
+                <li class="menu__item{% if page.section == 'about' %} is-active {% endif %}"><a href="/about.html" class="menu__link" title="About us">Who we are</a></li>
+                <li class="menu__item{% if page.section == 'blog' %} is-active {% endif %}"><a href="/blog/" class="menu__link" title="Articles, etc">Our blog</a></li>
+                <li class="menu__item{% if page.section == 'speaking' %} is-active {% endif %}"><a href="/speaking/" class="menu__link" title="Talks, conferences &amp; meetups">Speaking</a></li>
+            </ul>
+        </nav>
     </header>

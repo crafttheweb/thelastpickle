@@ -1,0 +1,52 @@
+.menu {
+    margin: 0 auto;
+    position: relative;
+    top: rem-calc(38);
+    z-index: 2;
+    max-width: $global-width;
+    list-style: none;
+    padding: 0;
+
+    @include breakpoint(920px down) {
+        top: rem-calc(18);
+        padding: 0 rem-calc(5);
+    }
+}
+
+.menu__item {
+    margin-bottom: rem-calc(10);
+    
+    // float first 2 to the left (assumes only 4 elements)
+    &:nth-child(-n+2) {
+        float: left;
+        clear: left;
+    }
+
+    // float last 2 to the right (assumes only 4 elements)
+    &:nth-last-child(-n+2) {
+        position: relative;
+        top: -2.1rem;
+        float: right;
+        clear: right;
+    }
+}
+
+.menu__link {
+    @extend %uppercase;
+    line-height: 1;
+    color: $black;
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: 3px solid rgba(map-get($foundation-palette, primary),0.5);
+    font-weight: bold;
+    font-size: rem-calc(20);
+
+    &:hover,
+    .is-active & {
+        border-bottom-color: map-get($foundation-palette, primary);
+    }
+
+    &:focus {
+        outline: 1px solid rgba(map-get($foundation-palette, primary),0.5);
+    }
+}

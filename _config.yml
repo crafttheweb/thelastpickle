@@ -1,0 +1,5 @@
+ exclude: ["_dev",
+            "gulpfile.js",
+            "node_modules",
+            "package.json",
+            npm-shrinkwrap.json]

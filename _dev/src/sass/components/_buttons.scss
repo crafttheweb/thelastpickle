@@ -1,0 +1,18 @@
+.contact-button {
+    background: url('data:image/svg+xml;utf8,%3Csvg%20viewBox%3D%220%200%20336%20139%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%3E%3Cdefs%3E%3Cpath%20d%3D%22M23.21%2035.836c-7.579%202.465-13.45%206.052-17.612%2010.532-4.148%204.468-5.588%2011.84-5.598%2017.614.01%205.812%201.45%2013.184%205.598%2017.653%204.161%204.479%2010.032%208.068%2016.946%2010.322%2018.704%205.885%20138.456%2031.043%20138.456%2031.043s127.483-27.591%20137.789-30.834c7.581-2.464%2013.454-6.052%2017.612-10.532%204.15-4.469%205.59-11.841%205.6-17.615-.01-5.812-1.45-13.184-5.6-17.652-4.158-4.479-10.031-8.067-16.944-10.321-18.704-5.888-138.458-36.046-138.458-36.046s-127.483%2032.592-137.789%2035.836z%22%20id%3D%22a%22%2F%3E%3Cmask%20id%3D%22b%22%20x%3D%22-7%22%20y%3D%22-7%22%20width%3D%22336%22%20height%3D%22137%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M-7-7h336v137h-336z%22%2F%3E%3Cuse%20xlink%3Ahref%3D%22%23a%22%2F%3E%3C%2Fmask%3E%3Cmask%20id%3D%22c%22%20x%3D%22-3%22%20y%3D%22-3%22%20width%3D%22328%22%20height%3D%22129%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M-3-3h328v129h-328z%22%2F%3E%3Cuse%20xlink%3Ahref%3D%22%23a%22%2F%3E%3C%2Fmask%3E%3C%2Fdefs%3E%3Cg%20transform%3D%22translate%287%208%29%22%20fill%3D%22none%22%3E%3Cmask%3E%3Cuse%20xlink%3Ahref%3D%22%23a%22%2F%3E%3C%2Fmask%3E%3Cg%3E%3Cuse%20fill%3D%22%23fff%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%3Cuse%20stroke%3D%22%23657037%22%20mask%3D%22url%28%23b%29%22%20stroke-width%3D%2214%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%3Cuse%20stroke%3D%22%232E3A33%22%20mask%3D%22url%28%23c%29%22%20stroke-width%3D%226%22%20xlink%3Ahref%3D%22%23a%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E') no-repeat;
+    width: 336px;
+    height: 139px;
+    display: inline-block;
+    text-align: center;
+    line-height:139px;
+    position: relative;
+    margin-bottom: -(139px / 2);
+    @extend %uppercase;
+    font-weight: bold;
+    font-size: rem-calc(20);
+}
+
+.contact-button__badge {
+    width: 43px;
+    height: 42px;
+}
