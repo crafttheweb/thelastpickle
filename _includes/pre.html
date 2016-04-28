@@ -1,7 +1,9 @@
 <!doctype html>
 <html class="no-js" lang="">
 <head>
-  <link rel="stylesheet" href="/assets/css/style.css">
+
+  {{ site.data.assets["css/style"].styles }}
+  <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6218532/7135552/css/fonts.css" />
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
@@ -30,7 +32,7 @@
   <link rel="alternate" type="application/atom+xml" title="The Last Pickle - Atom" href="http://feeds.feedburner.com/thelastpickle" />
 
 </head>
-<body>
+<body {% if page.bodyClass %}class="{{page.bodyClass}}"{% endif %}>
 <!--[if lt IE 8]>
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->

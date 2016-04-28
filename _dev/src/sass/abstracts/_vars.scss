@@ -55,15 +55,16 @@ $foundation-palette: (
   success: #3adb76,
   warning: #ffae00,
   alert: #ec5840,
+  post-bg: #FCFCFC
 );
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
 $dark-gray: #8a8a8a;
 $black: #2E3A33;
 $white: #fefefe;
-$body-background: $white;
+$body-background: #F9F6EF;
 $body-font-color: $black;
-$body-font-family: Gotham, sans-serif;
+$body-font-family: "Gotham SSm A", "Gotham SSm B", sans-serif;
 $body-antialiased: true;
 $global-margin: 1rem;
 $global-padding: 1rem;
@@ -103,27 +104,25 @@ $block-grid-max: 8;
 // 4. Base Typography
 // ------------------
 
-$header-font-family: $body-font-family;
+$header-font-family: "Archer SSm A", "Archer SSm B";
 $header-font-weight: $global-weight-normal;
 $header-font-style: normal;
 $font-family-monospace: Consolas, 'Liberation Mono', Courier, monospace;
 // NOTE: Reducing base HTML font size for mobile, etc
 $header-sizes: (
   small: (
-    'h1': 48,
-    'h2': 40,
-    'h3': 31,
-    'h4': 25,
-    'h5': 20,
-    'h6': 16,
+    'h1': 36,
+    'h2': 24,
+    'h3': 20,
+    'h4': 18,
+    'h5': 16,
   ),
   medium: (
-    'h1': 48,
-    'h2': 40,
-    'h3': 31,
-    'h4': 25,
-    'h5': 20,
-    'h6': 16,
+    'h1': 36,
+    'h2': 24,
+    'h3': 20,
+    'h4': 18,
+    'h5': 16,
   ),
 );
 $header-color: inherit;

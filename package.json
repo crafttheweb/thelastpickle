@@ -17,14 +17,18 @@
   },
   "homepage": "https://github.com/thelastpickle/thelastpickle.github.io#readme",
   "devDependencies": {
+    "del": "^2.2.0",
     "foundation-sites": "^6.2.1",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-bundle-assets": "^2.24.0",
     "gulp-connect": "^3.2.3",
     "gulp-minify-css": "^1.2.4",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.1",
-    "gulp-util": "^3.0.7"
+    "gulp-util": "^3.0.7",
+    "jquery.1": "^1.0.0",
+    "lazypipe": "^1.0.1"
   }
 }

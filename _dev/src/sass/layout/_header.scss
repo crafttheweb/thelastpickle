@@ -17,8 +17,15 @@
     z-index: 1;
 
     img {
+        @extend %trans;
         width: 604px;
         height: 73px;
+    }
+
+    a:focus {
+        img {
+            transform: scale(1.1);
+        }
     }
 
 }

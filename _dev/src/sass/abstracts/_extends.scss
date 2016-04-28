@@ -2,3 +2,13 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+%box {
+    background: map-get($foundation-palette, post-bg);
+    box-shadow: 1px 1px 0px 0px rgba( map-get($foundation-palette, dark-green), 0.2);
+    @include clearfix;
+}
+
+%trans {
+    transition: all 0.3s ease;
+}

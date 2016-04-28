@@ -3,3 +3,19 @@
     margin: auto;
     @include clearfix;
 }
+
+.column-main {
+    width: percentage(690/1170);
+}
+
+.column-main--left {
+    float: left;
+}
+
+.column-sub {
+    width: percentage(330/1170);
+}
+
+.column-sub--right {
+    float: right;
+}

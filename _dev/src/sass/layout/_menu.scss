@@ -47,6 +47,6 @@
     }
 
     &:focus {
-        outline: 1px solid rgba(map-get($foundation-palette, primary),0.5);
+        outline: 2px solid rgba(map-get($foundation-palette, primary),0.5);
     }
 }

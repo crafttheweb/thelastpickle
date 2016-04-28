@@ -1,8 +1,8 @@
 .page-title {
-    font-size: rem-calc(36);
-    font-weight: bold;
+    font-weight: 700;
     margin-bottom: rem-calc(20);
     line-height: 1.2;
+    font-family: $body-font-family;
 }
 
 
@@ -10,4 +10,9 @@
     html {
         font-size: 80%;
     }
+}
+
+a:focus {
+    outline: none;
+    outline: 1px solid rgba(map-get($foundation-palette, primary),0.5);
 }
