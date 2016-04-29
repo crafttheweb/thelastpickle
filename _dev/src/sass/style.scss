@@ -3,10 +3,13 @@
 @import "abstracts/extends";
 @include foundation-global-styles;
 @include foundation-typography;
+@include foundation-media-object;
 
 
 // Base
 @import "base/typography";
+@import "base/images";
+@import "base/page-transitions";
 
 
 // Components

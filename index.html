@@ -8,24 +8,24 @@ bodyClass: home page
     <!-- Page Header -->
     {% include header.html %}
     <!-- Main Content -->
-    <main role="main">
-        <header class="page-header has-overflow">
+    <main role="main" class="m-scene">
+        <header class="page-header has-overflow scene_element scene_element--fadeindown">
             <div class="wrapper">
                 <h1 class="page-title">Apache Cassandra Consulting &amp; Services</h1>
                 <p class="lead">Our wealth of experience with Apache Cassandra will ensure success at all stages of a your project lifecycle.  <br />Our team enjoy learning and share our knowledge through our open source community involvement.</p>
                 <a class="contact-button"><img class="contact-button__badge" src="/assets/img/svg/site.svg#tpl-badge-mono"> Work with us</a>
             </div>
         </header>
-        <section class="page-content wrapper">
-            <div class="column-main column-main--left">
+        <section class="page-content wrapper ">
+            <div class="column-main column-main--left scene_element scene_element--fadeinup scene_element--delay">
                 {% for post in site.categories.blog limit:4 %}
                     {% include the-post.html excerpt=true %}
                 {% endfor %}
-
+                <p><a href="/blog/" class="btn btn--rounded">
             </div>
-            <div class="column-sub column-sub--right">
+            <div class="column-sub column-sub--right scene_element scene_element--fadeinright  scene_element--delay post post--speaking">
                 {% for post in site.categories.speaking limit:4 %}
-                    {% include the-post.html onlyTitle=true %}
+                    {% include the-post.html only_title=true %}
                 {% endfor %}
             </div>
         </section>

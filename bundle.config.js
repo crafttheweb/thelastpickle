@@ -33,7 +33,8 @@ module.exports = {
     },
     'js/vendor': {
       scripts: [
-        './node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js'
+        './node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js',
+        './node_modules/smoothstate/jquery.smoothState.min.js',
       ],
       options: {
         uglify: false // don't minify js since bower already ships with one

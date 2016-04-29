@@ -8,8 +8,25 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
   <title>{{page.title}}</title>
-  <meta content="{{page.title}}" name="description" />
-  
+  {% if page.url == "/" %}
+    <meta name="description" content="Our wealth of experience with Apache Cassandra will ensure success at all stages of a your project.  We enjoy learning and shareing our knowledge." />
+  {% else %}
+    <meta name="description" content="{{ page.content | strip_html | truncate:155}}" />
+  {% endif %}
+
+  <!-- Twitter Card data -->
+  <meta name="twitter:card" value="summary">
+
+  <!-- Open Graph data -->
+  <meta property="og:title" content="{{page.title}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="{{site.url}}{{page.url}}" />
+  <meta property="og:image" content="{{site.url}}/android-chrome-192x192.png" />
+  {% if page.url == "/" %}
+    <meta property="og:description" content="Our wealth of experience with Apache Cassandra will ensure success at all stages of a your project.  We enjoy learning and shareing our knowledge." />  
+  {% else %}
+    <meta property="og:description" content="{{ page.content | strip_html | truncate:155}}" />  
+  {% endif %}
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">

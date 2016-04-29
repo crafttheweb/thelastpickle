@@ -1,0 +1,2 @@
+!function(t){"use strict";var a=t("html, body"),e=t("#site"),o={prefetch:!0,pageCacheSize:4,onStart:{duration:500,render:function(t,o){a.animate({scrollTop:0}),e.addClass("is-exiting"),s.restartCSSAnimations()}},onEnd:{duration:0,render:function(t,o,s){e.removeClass("is-exiting"),e.html(s),a.css("cursor","auto"),a.find("a").css("cursor","auto")}}},s=e.smoothState(o).data("smoothState")}(jQuery);
+//# sourceMappingURL=../maps/js/main-2396ee2cf9.js.map

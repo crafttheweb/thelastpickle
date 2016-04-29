@@ -2,6 +2,13 @@
     @extend %box;
     padding: ($global-padding * 2);
     margin-bottom: ($global-margin * 2);
+
+    // deal with nested (i.e. events on homepage)
+    .post {
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+    }
 }
 
 .post__title {
@@ -38,7 +45,7 @@
     position: relative;
     display: inline-block;
     left: -($global-padding * 2);
-    padding: rem-calc(12) ($global-padding * 2);
+    padding: rem-calc(8) ($global-padding * 2);
     font-family: $header-font-family;
     font-size: rem-calc(11);
     font-weight: bold;
@@ -74,4 +81,9 @@
         right: -25px;
         background-position: 100% 0;
     }
+}
+
+.post__meta__author-avatar {
+    width: 40px;
+    height: 40px;
 }

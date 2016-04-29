@@ -5,6 +5,8 @@
     border-bottom: 4px solid map-get($foundation-palette, dark-green);
     box-shadow: 0 3px 0 $black;
     margin-bottom: 3px; // to deal with the 3px box shadow;
+    position: relative;
+    z-index: 20;
 }
 
 .logo {

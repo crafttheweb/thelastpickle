@@ -1,5 +1,5 @@
- exclude: ["_dev",
-            "gulpfile.js",
-            "node_modules",
-            "package.json",
-            npm-shrinkwrap.json]
+url:
+  http://thelastpickle.com
+
+exclude:
+  ["_dev","gulpfile.js","node_modules","package.json","npm-shrinkwrap.json"]
