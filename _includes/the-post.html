@@ -1,14 +1,15 @@
-<article class="post {% if include.single %} post--single{% endif %}">
+<article class="post {% if include.single %} post--single{% endif %}" itemscope itemtype="http://schema.org/BlogPosting">
     <header class="post__header">
-        <h1 class="post__title"><a href="{{ post.url }}">{{ post.title }}</a></h1>
+        <h1 itemprop="name headline" class="post__title {% if include.only_title %}post__title--compact{% endif %}"><a href="{{ post.url }}" itemprop="url">{{ post.title }}</a></h1>
+        {% if include.only_title %}<time class="post__date" datetime="{{post.date | date_to_xmlschema}}" itemprop="datePublished">{{post.date | date_to_string}}</time>{% endif %}
     </header>
     {% unless include.only_title %}
         {% if include.excerpt %}
-            <div class="post__excerpt">
+            <div class="post__excerpt content" itemprop="description">
                 {{ post.excerpt }}
             </div>
         {% else %}
-            <div class="post__body">
+            <div class="post__body content" itemprop="articleBody">
                 {{post.content }}
             </div>
         {% endif %}
@@ -16,8 +17,8 @@
         {% assign author = site.data.staff[post.author] %}
         <div class="media-object">
             <div class="media-object-section middle">
-                <p><b>Packed on</b> {{post.date | date_to_string}} <b>By</b> {{ post.author }}</p>
-                <p><b>Contains</b> {% for tag in post.tags %}{{ tag }} {% endfor %}</p>
+                <p><b>Packed on</b> <time datetime="{{post.date | date_to_xmlschema}}" itemprop="datePublished">{{post.date | date_to_string}}</time> <b>By</b> <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ post.author }}</span></span></p>
+                <p><b>Contains</b> {% for tag in post.tags %}<span itemprop="keywords">{{ tag }}</span> {% endfor %}</p>
             </div>
             <div class="media-object-section middle">
                 <img src="/assets/img/staff/{{ author.avatar_tn }}" class="post__meta__author-avatar avatar avatar--tn" alt="A small photo of {{ post.author }}" / >

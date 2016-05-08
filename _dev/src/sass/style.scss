@@ -4,6 +4,9 @@
 @include foundation-global-styles;
 @include foundation-typography;
 @include foundation-media-object;
+@include foundation-button;
+@include foundation-float-classes;
+@include foundation-visibility-classes;
 
 
 // Base
@@ -23,3 +26,4 @@
 @import "layout/header";
 @import "layout/page-header";
 @import "layout/page-content";
+@import "layout/footer";

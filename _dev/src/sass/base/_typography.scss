@@ -1,6 +1,6 @@
 .page-title {
     font-weight: 700;
-    margin-bottom: rem-calc(20);
+    margin-bottom: 0;
     line-height: 1.2;
     font-family: $body-font-family;
 }
@@ -8,11 +8,28 @@
 
 @include breakpoint(920px down) {
     html {
-        font-size: 80%;
+        font-size: 95%;
+    }
+}
+@include breakpoint(768px down) {
+    html {
+        font-size: 85%;
     }
 }
 
 a:focus {
     outline: none;
     outline: 1px solid rgba(map-get($foundation-palette, primary),0.5);
+}
+
+// namespacing links
+.content {
+    a:link {
+        border-bottom: 2px solid rgba(map-get($foundation-palette, primary),0.2);
+    }
+
+    a:hover,
+    a:focus {
+        border-bottom: 2px solid rgba(map-get($foundation-palette, primary),0.6);
+    }
 }

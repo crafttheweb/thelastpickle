@@ -1,3 +1,9 @@
+%bg-striped {
+    text-align: center;
+    background: url(/assets/img/bg-striped.png) 50%;
+    padding: ($global-padding * 2) 0;
+}
+
 %uppercase {
     text-transform: uppercase;
     letter-spacing: 1px;

@@ -2,20 +2,35 @@
     max-width: $global-width;
     margin: auto;
     @include clearfix;
+    padding-left: rem-calc(10);
+    padding-right: rem-calc(10);
 }
 
 .column-main {
-    width: percentage(690/1170);
+    width: percentage(760/1170);
+
+    @include breakpoint(768px down) {
+        width: 100%;
+    }
 }
 
 .column-main--left {
     float: left;
+    @include breakpoint(768px down) {
+        float: none;
+    }
 }
 
 .column-sub {
-    width: percentage(330/1170);
+    width: percentage(380/1170);
+    @include breakpoint(768px down) {
+        width: 100%;
+    }
 }
 
 .column-sub--right {
     float: right;
+    @include breakpoint(768px down) {
+        float: none;
+    }
 }

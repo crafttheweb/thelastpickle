@@ -6,8 +6,35 @@
     // deal with nested (i.e. events on homepage)
     .post {
         padding: 0;
-        margin: 0;
         box-shadow: none;
+
+        // the little underline
+        &:after {
+            content: "";
+            display: block;
+            width: 85px;
+            height: 1px;
+            background-color: map-get($foundation-palette, primary);
+            position: relative;
+            top: $global-margin;
+            opacity: 0.3;
+    
+            @include breakpoint(768px down) {
+                top: ($global-margin / 2);
+            }
+        }
+
+        &:last-child {
+            &:after {
+                display: none;
+            }
+        }
+
+    }
+
+    @include breakpoint(768px down) {
+        padding: $global-padding;
+        margin-bottom: $global-margin;
     }
 }
 
@@ -35,6 +62,16 @@
     a:active {color: yellow;}
 }
 
+.post__title--compact {
+    font-size: rem-calc(18);
+    margin-bottom: 0;
+}
+
+.post__date {
+    font-size: rem-calc(15);
+    font-family: $header-font-family;
+}
+
 .post__excerpt {
     margin-bottom: ($global-margin * 2);
 }
@@ -50,6 +87,10 @@
     font-size: rem-calc(11);
     font-weight: bold;
     @extend %uppercase;
+
+    .media-object {
+        margin-bottom: 0 !important
+    }
 
     p {
         margin: 0;
@@ -81,9 +122,32 @@
         right: -25px;
         background-position: 100% 0;
     }
+
+    @include breakpoint(768px down) {
+        padding: rem-calc(8) $global-padding rem-calc(8) ($global-padding * 2);
+        height: auto;
+        left: -$global-padding;
+
+        &:before {
+            background-position: 0 100%;
+            background-color: #EBEDD3;
+        }
+
+        &:after {
+            display: none;
+        }
+
+        .media-object-section {
+            padding-right: 0 !important;
+        }
+    }
 }
 
 .post__meta__author-avatar {
     width: 40px;
     height: 40px;
+
+    @include breakpoint(768px down) {
+        display: none;
+    }
 }
