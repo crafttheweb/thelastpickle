@@ -25,19 +25,24 @@
         }
     });
 
-    // add classes to images that are wider than 800px
-     $("img").each(function() {
-        var $this = $(this);
-        var image = new Image();
-        image.src = $this.attr("src");
-        // console.log('width: ' + image.naturalWidth);
-        if (image.naturalWidth > 970) {
-            $this.addClass("wide");
-            $this.wrap("<a href='"+image.src+"' class='show-modal'></a>");
-        }
-     });
+    $(".content").imagesLoaded( function() {
+          // images have loaded
+         $("img").each(function() {
+            var $this = $(this);
+            var image = new Image();
+            image.src = $this.attr("src");
+            // console.log('width: ' + image.naturalWidth);
+            if (image.naturalWidth > 970) {
+                $this.addClass("wide");
+                $this.wrap("<a href='"+image.src+"' class='show-modal'></a>");
+            }
+             $('.show-modal').modaal({
+                type: 'image'
+             });
+         });
+    });
 
-     $('.show-modal').modaal({
-        type: 'image'
-     });
+        // add classes to images that are wider than 800px
+
+
 })(jQuery);
