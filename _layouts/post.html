@@ -1,54 +1,19 @@
 ---
 comment: Layout for a blog post
 section: blog
+bodyClass: post page
 ---
 
 {% include pre.html %}
 
-<!-- Page Header -->
-{% include header.html %}
-<!-- Main Content -->
-<div id="content" role="main">
-<!-- Main Content -->
-<section class="section">
-  <div class="container">
-    <div class="row-fluid">
-      <div class="span9">
-        <article class="blog-post">
-          <header class="blog-header">
-            <h1>
-              {{ page.title }}
-              <small>
-                by
-                {{ page.author }},
-                {{ page.date | date_to_long_string }}.
-              </small>
-            </h1>
-          </header>
-          {{ content }}
-          <footer class="blog-footer row-fluid">
-            <div class="span4 blog-tags">
-              <i class="icon-tags"></i>
-                {% for tag in page.tags %}
-                  {{ tag }}
-                {% endfor %}
-            </div>
-            <!-- <div class="span4 blog-more">
-              <i class="icon-comments">
-                5 comments
-              </i>
-            </div> -->
-          </footer>
-        </article>
-        {% include post-comments.html %}
-      </div>
+  <!-- Page Header -->
+  {% include header.html compact=true %}
+  <main role="main" class="m-scene post">
+    <section class="page-content wrapper wrapper--compact">
+      {% include the-post.html single=true %}
+    </section>
 
-    </div>
-  </div>
-</section>
-
-</div>
-<!-- Page Footer -->
-{% include footer.html %}
+  </main>
+  {% include footer.html %}
     
 {% include post.html %}

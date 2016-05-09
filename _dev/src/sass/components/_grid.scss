@@ -4,6 +4,11 @@
     @include clearfix;
     padding-left: rem-calc(10);
     padding-right: rem-calc(10);
+
+    &.wrapper--compact {
+        max-width: rem-calc(690);
+        margin-top: rem-calc(30);
+    }
 }
 
 .column-main {

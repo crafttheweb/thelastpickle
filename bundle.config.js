@@ -35,6 +35,7 @@ module.exports = {
       scripts: [
         './node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js',
         './node_modules/smoothstate/jquery.smoothState.min.js',
+        './node_modules/prismjs/prismjs.js'
       ],
       options: {
         uglify: false // don't minify js since bower already ships with one

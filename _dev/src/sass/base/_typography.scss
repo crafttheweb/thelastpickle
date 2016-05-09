@@ -32,4 +32,25 @@ a:focus {
     a:focus {
         border-bottom: 2px solid rgba(map-get($foundation-palette, primary),0.6);
     }
+
+    h1,h2,h3 {
+        font-weight: 800;
+        color: map-get($foundation-palette, dark-green);
+        margin-top: ($global-margin * 2)
+    }
+
+    h1 {
+        font-size: rem-calc(map-deep-get($header-sizes, small, h2));
+    }
+    h2 {
+        font-size: rem-calc(map-deep-get($header-sizes, small, h3));
+    }
+    h3 {
+        font-size: rem-calc(map-deep-get($header-sizes, small, h4));
+    }
+
+    code {
+        border-radius: $global-radius;
+        font-size: 95%;
+    }
 }

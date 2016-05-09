@@ -59,7 +59,13 @@
     a:focus {
         outline: 2px solid rgba(map-get($foundation-palette, primary),0.5);
     }
-    a:active {color: yellow;}
+    a:active {color: map-get($foundation-palette, primary);}
+
+    .post--single & {
+        font-size: rem-calc(42);
+        color: map-get($foundation-palette, dark-green);
+        margin-bottom: ($global-margin * 2);
+    }
 }
 
 .post__title--compact {
@@ -70,6 +76,12 @@
 .post__date {
     font-size: rem-calc(15);
     font-family: $header-font-family;
+}
+
+.post__header {
+     .post--single & {
+        margin-bottom: ($global-margin * 2);
+    }
 }
 
 .post__excerpt {
@@ -141,6 +153,7 @@
             padding-right: 0 !important;
         }
     }
+
 }
 
 .post__meta__author-avatar {
@@ -149,5 +162,35 @@
 
     @include breakpoint(768px down) {
         display: none;
+    }
+}
+
+// Used when meta data appears in the header of the posts page
+.post__meta--header {
+    background: none;
+    margin-bottom: $global-margin;
+    height: auto;
+    left: 0;
+
+    &:before,
+    &:after {
+        display: none;
+    }
+
+    .post__meta__author-avatar {
+        width: 60px;
+        height: 60px;
+        display: inline-block;
+        margin-bottom: rem-calc(10);
+    }
+
+}
+
+.post__body {
+    img {
+        max-width: 160%;
+        margin-left: -30%;
+        margin-top: ($global-margin * 3);
+        margin-bottom: ($global-margin * 3)
     }
 }

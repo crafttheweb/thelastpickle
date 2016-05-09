@@ -1,7 +1,27 @@
-<article class="post {% if include.single %} post--single{% endif %}" itemscope itemtype="http://schema.org/BlogPosting">
-    <header class="post__header">
-        <h1 itemprop="name headline" class="post__title {% if include.only_title %}post__title--compact{% endif %}"><a href="{{ post.url }}" itemprop="url">{{ post.title }}</a></h1>
-        {% if include.only_title %}<time class="post__date" datetime="{{post.date | date_to_xmlschema}}" itemprop="datePublished">{{post.date | date_to_string}}</time>{% endif %}
+{% comment %}
+Renaming the page variable to post for single post entries.
+Doing this so we can use `post` for excerpts and pages.
+{% endcomment %}
+{% if include.single %}
+    {% assign post = page %}
+{% endif %}
+
+{% comment %}
+Attaching more data to the `author` variable by assigning it site data 
+See: `_data/staff.yml`
+{% endcomment %}
+{% assign author = site.data.staff[post.author] %}
+
+<article class="post {% if include.single %} post--single language-apache{% endif %}" itemscope itemtype="http://schema.org/BlogPosting">
+    <header class="post__header{% if include.single %} text-center{% endif %}">
+        {% if include.single %}
+        <div class="post__meta post__meta--header">
+            <p><img src="/assets/img/staff/{{ author.avatar_tn }}" class="post__meta__author-avatar avatar avatar--tn" alt="A small photo of {{ post.author }}" / ></p>
+            <p itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ post.author }}</span></p>
+        </div>
+        {% endif %}
+        <h1 itemprop="name headline" class="post__title {% if include.only_title %}post__title--compact{% endif %}">{% unless include.single %}<a href="{{ post.url }}" itemprop="url">{% endunless %}{{ post.title }}{% unless include.single %}</a>{% endunless %}</h1>
+        {% if include.only_title or include.single %}<p><time class="post__date" datetime="{{post.date | date_to_xmlschema}}" itemprop="datePublished">{{post.date | date_to_string}}</time></p>{% endif %}
     </header>
     {% unless include.only_title %}
         {% if include.excerpt %}
@@ -14,7 +34,6 @@
             </div>
         {% endif %}
     <footer class="post__meta">
-        {% assign author = site.data.staff[post.author] %}
         <div class="media-object">
             <div class="media-object-section middle">
                 <p><b>Packed on</b> <time datetime="{{post.date | date_to_xmlschema}}" itemprop="datePublished">{{post.date | date_to_string}}</time> <b>By</b> <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ post.author }}</span></span></p>
