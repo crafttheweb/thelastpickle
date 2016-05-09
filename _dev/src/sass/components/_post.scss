@@ -32,6 +32,10 @@
 
     }
 
+    &.post--single {
+        box-shadow: none;
+    }
+
     @include breakpoint(768px down) {
         padding: $global-padding;
         margin-bottom: $global-margin;
@@ -172,6 +176,10 @@
     height: auto;
     left: 0;
 
+    p {
+        color: $body-font-color;
+    }
+
     &:before,
     &:after {
         display: none;
@@ -187,7 +195,7 @@
 }
 
 .post__body {
-    img {
+    img.wide {
         max-width: 160%;
         margin-left: -30%;
         margin-top: ($global-margin * 3);

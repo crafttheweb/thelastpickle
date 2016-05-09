@@ -1,5 +1,8 @@
+html {
+    overflow-x: hidden;
+}
 body {
-    &.post {
-        background-color: $white;
+    &.blog {
+        background: map-get($foundation-palette, post-bg);
     }
 }

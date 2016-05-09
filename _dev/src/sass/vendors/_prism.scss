@@ -1,173 +1,317 @@
-/* http://prismjs.com/download.html?themes=prism&languages=markup+clike+apacheconf+bash&plugins=command-line */
-/**
- * prism.js default theme for JavaScript, CSS and HTML
- * Based on dabblet (http://dabblet.com)
- * @author Lea Verou
- */
+//colors
+$white: rgba($white, 0.8);
+$black: #000;
+$background: #2E3731;
+$color_fuscous_gray_approx: #545454;
+$color_shark_approx: #27292a;
+$color_gallery_15_approx: rgba(237, 237, 237, 0.15);
+$color_tapa_approx: #777;
+$color_red_damask_approx: #ce6849;
+// $secondary-color: #f9ed99;
+// $warning-color: #909e6a;
+$color_bermuda_gray_approx: #7385a5;
+$color_equator_approx: #e8c062;
+$color_muesli_approx: #ac885c;
+$color_fuscous_gray_25_approx: rgba(84, 84, 84, 0.25);
+$color_fuscous_gray_10_approx: rgba(84, 84, 84, .1);
+$color_regent_gray_approx: #8693a6;
+$color_pampas_approx: #f4f1ef;
 
-code[class*="language-"],
+//@extend-elements
+//original selectors
+//code[class*="language-"], pre[class*="language-"]
+%lang {
+    color: $white;
+    background: none;
+    font-family: $font-family-monospace;
+    font-size: scut-rem(13);
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+    tab-size: 4;
+    hyphens: none;
+    border: 0;
+}
+
+//original selectors
+//.line-highlight:before, .line-highlight[data-end]:after
+%line-heightlight {
+    background-color: $color_regent_gray_approx;
+    color: $color_pampas_approx;
+    content: attr(data-start);
+    font: bold 65%/1.5 sans-serif;
+    left: .6em;
+    min-width: 1em;
+    padding: 0 .5em;
+    position: absolute;
+    text-align: center;
+    text-shadow: none;
+    top: .4em;
+    vertical-align: .3em;
+}
+
+
+.highlighter-rouge code[class*="language-"] {
+    display: block;
+    @extend %lang;
+    ::-moz-selection {
+        text-shadow: none;
+        background: $color_gallery_15_approx;
+    }
+    ::selection {
+        text-shadow: none;
+        background: $color_gallery_15_approx;
+    }
+}
 pre[class*="language-"] {
-	color: black;
-	background: none;
-	text-shadow: 0 1px white;
-	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-	text-align: left;
-	white-space: pre;
-	word-spacing: normal;
-	word-break: normal;
-	word-wrap: normal;
-	line-height: 1.5;
+    @extend %lang;
+    background: $background;
+    padding: 0 0 ($global-padding *4) 0;
+    position: relative;
 
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
+    &.is-overflow {
+        bottom: -15px;
+    }
 
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
+    ::-moz-selection {
+        text-shadow: none;
+        background: $color_gallery_15_approx;
+    }
+    ::selection {
+        text-shadow: none;
+        background: $color_gallery_15_approx;
+    }
+
+    @include breakpoint(990px down) {
+        padding: 0 60px 0 0;
+    }
 }
-
-pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
-code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
-	text-shadow: none;
-	background: #b3d4fc;
+pre[class*="language-"]::-moz-selection {
+    background: $color_shark_approx;
+    text-shadow: none;
+    background: $color_gallery_15_approx;
 }
-
-pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
-code[class*="language-"]::selection, code[class*="language-"] ::selection {
-	text-shadow: none;
-	background: #b3d4fc;
+pre[class*="language-"]::selection {
+    background: $color_shark_approx;
+    text-shadow: none;
+    background: $color_gallery_15_approx;
 }
-
-@media print {
-	code[class*="language-"],
-	pre[class*="language-"] {
-		text-shadow: none;
-	}
+code[class*="language-"]::-moz-selection {
+    text-shadow: none;
+    background: $color_gallery_15_approx;
 }
-
-/* Code blocks */
-pre[class*="language-"] {
-	padding: 1em;
-	margin: .5em 0;
-	overflow: auto;
+code[class*="language-"]::selection {
+    text-shadow: none;
+    background: $color_gallery_15_approx;
 }
-
-:not(pre) > code[class*="language-"],
-pre[class*="language-"] {
-	background: #f5f2f0;
+.token {
+    position: relative;
+    z-index: 1;
+    &.comment {
+        color: $color_tapa_approx;
+    }
+    &.prolog {
+        color: $color_tapa_approx;
+    }
+    &.doctype {
+        color: $color_tapa_approx;
+    }
+    &.cdata {
+        color: $color_tapa_approx;
+    }
+    &.punctuation {
+        opacity: .7;
+    }
+    &.tag {
+        color: mix($white, $primary-color, 30);
+    }
+    &.boolean {
+        color: $color_red_damask_approx;
+    }
+    &.number {
+        color: $color_red_damask_approx;
+    }
+    &.deleted {
+        color: $color_red_damask_approx;
+    }
+    &.keyword {
+        color: $primary-color;
+    }
+    &.property {
+        color: $light-gray;
+    }
+    &.selector {
+        color: $secondary-color;
+    }
+    &.constant {
+        color: $secondary-color;
+    }
+    &.symbol {
+        color: $secondary-color;
+    }
+    &.builtin {
+        color: $secondary-color;
+    }
+    &.attr-name {
+        color: $warning-color;
+    }
+    &.attr-value {
+        color: $warning-color;
+    }
+    &.string {
+        color: $white;
+    }
+    &.char {
+        color: $warning-color;
+    }
+    &.operator {
+        color: $warning-color;
+    }
+    &.entity {
+        color: $warning-color;
+        cursor: help;
+    }
+    &.url {
+        color: $warning-color;
+    }
+    &.variable {
+        color: $warning-color;
+    }
+    &.inserted {
+        color: $warning-color;
+    }
+    &.atrule {
+        color: $color_bermuda_gray_approx;
+    }
+    &.regex {
+        color: $color_equator_approx;
+    }
+    &.function {
+        color: #00C79B;
+    }
+    &.important {
+        color: $color_equator_approx;
+        font-weight: bold;
+    }
+    &.bold {
+        font-weight: bold;
+    }
+    &.italic {
+        font-style: italic;
+    }
 }
-
-/* Inline code */
-:not(pre) > code[class*="language-"] {
-	padding: .1em;
-	border-radius: .3em;
-	white-space: normal;
-}
-
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-	color: slategray;
-}
-
-.token.punctuation {
-	color: #999;
-}
-
 .namespace {
-	opacity: .7;
+    opacity: .7;
 }
-
-.token.property,
-.token.tag,
-.token.boolean,
-.token.number,
-.token.constant,
-.token.symbol,
-.token.deleted {
-	color: #905;
+pre[data-line] {
+    padding: 1em 0 1em 3em;
+    position: relative;
 }
-
-.token.selector,
-.token.attr-name,
-.token.string,
-.token.char,
-.token.builtin,
-.token.inserted {
-	color: #690;
+.line-highlight {
+    background: $color_fuscous_gray_25_approx;
+    background: linear-gradient(to right, $color_fuscous_gray_10_approx 70%, hsla(0, 0, 33%, 0));
+    border-bottom: 1px dashed $color_fuscous_gray_approx;
+    border-top: 1px dashed $color_fuscous_gray_approx;
+    left: 0;
+    line-height: inherit;
+    margin-top: 0.75em;
+    padding: inherit 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    white-space: pre;
+    z-index: 0;
+    &:before {
+        @extend %line-heightlight;
+    }
 }
-
-.token.operator,
-.token.entity,
-.token.url,
-.language-css .token.string,
+// :not(pre) > code[class*="language-"] {
+//     background: $background;
+//     border-radius: .3em;
+//     border: .13em solid $color_fuscous_gray_approx;
+//     box-shadow: 1px 1px .3em -.1em $black inset;
+//     padding: .15em .2em .05em;
+//     white-space: normal;
+// }
+.language-css .token.string {
+    color: $warning-color;
+}
 .style .token.string {
-	color: #a67f59;
-	background: hsla(0, 0%, 100%, .5);
+    color: $warning-color;
+}
+.language-markup .token {
+    &.tag {
+        color: $color_muesli_approx;
+    }
+    &.attr-name {
+        color: $color_muesli_approx;
+    }
+    &.punctuation {
+        color: $color_muesli_approx;
+    }
+}
+.line-highlight[data-end]:after {
+    @extend %line-heightlight;
+    bottom: .4em;
+    content: attr(data-end);
+    top: auto;
 }
 
-.token.atrule,
-.token.attr-value,
-.token.keyword {
-	color: #07a;
+
+
+div.highlighter-rouge {
+    padding: ($global-padding *4) 0 0 0;
+    margin: ($global-margin *4) 0;
+    background: $background;
+    
+    position: relative;
+    width: 100%;
+
+    &:before,
+    &:after {
+        content: "";
+        display: block;
+        position: absolute;
+        background: inherit;
+        top: 0;
+        bottom: 0;
+    }
+
+    &:before {
+        left: -100%;
+        right: 0;
+    }
+
+    &:after {
+        left: 100%;
+        right: -100%;
+        @include breakpoint(720px down) {
+            right: -4%;
+        }
+    }
+
+
+    @include breakpoint(990px down) {
+        margin-left: 0;
+        margin-right: 0;
+        padding-bottom: ($global-padding *4);
+        padding-left: ($global-padding *2);
+        padding-right: ($global-padding *2);
+    }
+
+
+    
+
 }
 
-.token.function {
-	color: #DD4A68;
+/* way the hell off screen */
+.scrollbar-measure {
+    width: 100px;
+    height: 100px;
+    overflow: scroll;
+    position: absolute;
+    top: -9999px;
 }
-
-.token.regex,
-.token.important,
-.token.variable {
-	color: #e90;
-}
-
-.token.important,
-.token.bold {
-	font-weight: bold;
-}
-.token.italic {
-	font-style: italic;
-}
-
-.token.entity {
-	cursor: help;
-}
-
-.command-line-prompt {
-	border-right: 1px solid #999;
-	display: block;
-	float: left;
-	font-size: 100%;
-	letter-spacing: -1px;
-	margin-right: 1em;
-	pointer-events: none;
-
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.command-line-prompt > span:before {
-	color: #999;
-	content: ' ';
-	display: block;
-	padding-right: 0.8em;
-}
-
-.command-line-prompt > span[data-user]:before {
-	content: "[" attr(data-user) "@" attr(data-host) "] $";
-}
-
-.command-line-prompt > span[data-user="root"]:before {
-	content: "[" attr(data-user) "@" attr(data-host) "] #";
-}
-
-.command-line-prompt > span[data-prompt]:before {
-	content: attr(data-prompt);
-}
-

@@ -34,8 +34,8 @@ module.exports = {
     'js/vendor': {
       scripts: [
         './node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js',
-        './node_modules/smoothstate/jquery.smoothState.min.js',
-        './node_modules/prismjs/prismjs.js'
+        './_dev/src/js/modaal.min.js',
+        './_dev/src/js/prismjs.js'
       ],
       options: {
         uglify: false // don't minify js since bower already ships with one

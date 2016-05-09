@@ -8,8 +8,8 @@ bodyClass: home page
     <!-- Page Header -->
     {% include header.html %}
     <!-- Main Content -->
-    <main role="main" class="m-scene">
-        <header class="page-header has-overflow scene_element scene_element--fadeindown">
+    <main role="main">
+        <header class="page-header has-overflow">
             <div class="wrapper">
                 <h1 class="page-title">Apache Cassandra Consulting &amp; Services</h1>
                 <p class="lead hide-for-small-only">Our wealth of experience with Apache Cassandra will ensure success at all stages of a your project lifecycle.  Our team enjoy learning and share our knowledge through our open source community&nbsp;involvement.</p>
@@ -17,13 +17,13 @@ bodyClass: home page
             </div>
         </header>
         <section class="page-content wrapper ">
-            <div class="column-main column-main--left scene_element scene_element--fadeinup scene_element--delay">
-                {% for post in site.categories.blog limit:4 %}
+            <div class="column-main column-main--left">
+                {% for post in site.categories.blog limit:10 %}
                     {% include the-post.html excerpt=true %}
                 {% endfor %}
                 <p class="text-center"><a href="/blog/" class="button hollow">All blog posts</a>
             </div>
-            <div class="column-sub column-sub--right scene_element scene_element--fadeinright  scene_element--delay post post--speaking">
+            <div class="column-sub column-sub--right post post--speaking">
                 {% for post in site.categories.speaking limit:4 %}
                     {% include the-post.html only_title=true %}
                 {% endfor %}
