@@ -45,6 +45,10 @@ See: `_data/staff.yml`
                 </div>
             </div>
         </footer>
+        {% else %}
+        <div class="tags">
+            {% for tag in post.tags %}<span itemprop="keywords">{{ tag }}</span> {% endfor %}
+        </div>
         {% endunless %}
     {% endunless %}
 </article>

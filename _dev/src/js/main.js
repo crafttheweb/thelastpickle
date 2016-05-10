@@ -25,24 +25,28 @@
         }
     });
 
+    // wrap larger images in modal code
+    // clock to show larger versions
     $(".content").imagesLoaded( function() {
           // images have loaded
          $("img").each(function() {
             var $this = $(this);
             var image = new Image();
             image.src = $this.attr("src");
-            // console.log('width: ' + image.naturalWidth);
+            // 970 is as images at max-width: 160%;
             if (image.naturalWidth > 970) {
+                // add wide class
                 $this.addClass("wide");
+                // wrap in link
                 $this.wrap("<a href='"+image.src+"' class='show-modal'></a>");
             }
-             $('.show-modal').modaal({
+            // init modaal code
+            $('.show-modal').modaal({
                 type: 'image'
-             });
+            });
          });
     });
 
-        // add classes to images that are wider than 800px
 
 
 })(jQuery);

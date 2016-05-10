@@ -84,7 +84,9 @@
 
 .post__header {
      .post--single & {
-        margin-bottom: ($global-margin * 2);
+        margin-bottom: ($global-margin * 2.5);
+        padding-bottom: ($global-padding * 2);
+        background: url(/assets/img/svg/swish.svg) no-repeat 50% 100%;
     }
 }
 

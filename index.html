@@ -18,7 +18,7 @@ bodyClass: home page
         </header>
         <section class="page-content wrapper ">
             <div class="column-main column-main--left">
-                {% for post in site.categories.blog limit:20 %}
+                {% for post in site.categories.blog limit:4 %}
                     {% include the-post.html excerpt=true %}
                 {% endfor %}
                 <p class="text-center"><a href="/blog/" class="button hollow">All blog posts</a>
