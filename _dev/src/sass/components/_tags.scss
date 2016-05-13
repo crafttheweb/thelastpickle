@@ -1,0 +1,14 @@
+.tags {
+    margin-top: ($global-margin * 3.5);
+    margin-bottom: ($global-margin * 3.5);
+    padding-top: ($global-padding * 3);
+    background: url(/assets/img/svg/swish.svg) no-repeat 50% 0;
+    text-align: center;
+}
+
+.tag {
+    @include label;
+    color: $label-color;
+    background: $label-background;
+    border: $label-border;
+}

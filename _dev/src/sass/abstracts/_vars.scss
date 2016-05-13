@@ -71,7 +71,7 @@ $global-margin: 1rem;
 $global-padding: 1rem;
 $global-weight-normal: normal;
 $global-weight-bold: bold;
-$global-radius: 0;
+$global-radius: 3px;
 $global-text-direction: ltr;
 $global-flexbox: false;
 $print-transparent-backgrounds: true;
@@ -157,11 +157,11 @@ $list-nested-side-margin: 1.25rem;
 $defnlist-margin-bottom: 1rem;
 $defnlist-term-weight: $global-weight-bold;
 $defnlist-term-margin-bottom: 0.3rem;
-$blockquote-color: $dark-gray;
-$blockquote-padding: rem-calc(9 20 0 19);
-$blockquote-border: 1px solid $medium-gray;
-$cite-font-size: rem-calc(13);
-$cite-color: $dark-gray;
+$blockquote-color: $black;
+$blockquote-padding: rem-calc(40 20);
+$blockquote-border: 0;
+$cite-font-size: rem-calc(16);
+$cite-color: #000;
 $keystroke-font: $font-family-monospace;
 $keystroke-color: $black;
 $keystroke-background: $light-gray;
@@ -362,11 +362,15 @@ $input-radius: $global-radius;
 // 20. Label
 // ---------
 
-$label-background: $primary-color;
-$label-color: foreground($label-background);
-$label-font-size: 0.8rem;
-$label-padding: 0.33333rem 0.5rem;
+$label-background: #F0EEE9;
+$label-color: map-get($foundation-palette, dark-green);
+$label-font-size: rem-calc(14);
+$label-padding: rem-calc(5 10);
 $label-radius: $global-radius;
+$label-border: 1px solid #E8E5DF;
+
+
+
 
 // 21. Media Object
 // ----------------

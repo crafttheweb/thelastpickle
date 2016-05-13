@@ -47,8 +47,9 @@ See: `_data/staff.yml`
         </footer>
         {% else %}
         <div class="tags">
-            {% for tag in post.tags %}<span itemprop="keywords">{{ tag }}</span> {% endfor %}
+            {% for tag in post.tags %}<span itemprop="keywords" class="tag">{{ tag | replace: ',','' }}</span> {% endfor %}
         </div>
+        {% include post-comments.html %}
         {% endunless %}
     {% endunless %}
 </article>

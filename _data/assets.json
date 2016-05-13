@@ -1,11 +1,11 @@
 {
   "js/main": {
-    "scripts": "<script src='/assets/js/main-8353f50c6e.js' type='text/javascript'></script>"
+    "scripts": "<script src='/assets/js/main-c4bf4ed8ba.js' type='text/javascript'></script>"
   },
   "js/vendor": {
-    "scripts": "<script src='/assets/js/vendor-404129963d.js' type='text/javascript'></script>"
+    "scripts": "<script src='/assets/js/vendor-e1820e1bce.js' type='text/javascript'></script>"
   },
   "css/style": {
-    "styles": "<link href='/assets/css/style-cbe62cc752.css' media='all' rel='stylesheet' type='text/css'/>"
+    "styles": "<link href='/assets/css/style-a2d6824959.css' media='all' rel='stylesheet' type='text/css'/>"
   }
 }

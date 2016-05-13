@@ -36,6 +36,7 @@ module.exports = {
         './node_modules/jquery.1/node_modules/jquery/dist/jquery.min.js',
         './node_modules/imagesloaded/imagesloaded.pkgd.min.js',
         './_dev/src/js/modaal.min.js',
+        './_dev/src/js/jquery.replacetext.min.js',
         './_dev/src/js/prismjs.js'
       ],
       options: {

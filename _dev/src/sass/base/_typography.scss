@@ -53,4 +53,17 @@ a:focus {
         border-radius: $global-radius;
         font-size: 95%;
     }
+
+    blockquote {
+        font-family: $header-font-family;
+        font-size: rem-calc(20);
+        text-align: center;
+        font-style: italic;
+
+        cite {
+            margin-top: $global-margin;
+            font-style: normal;
+            font-weight: 800;
+        }
+    }
 }

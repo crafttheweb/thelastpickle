@@ -197,6 +197,10 @@
 }
 
 .post__body {
+    img {
+        margin: auto;
+        display: block;
+    }
     img.wide {
         max-width: 160%;
         margin-left: -30%;
