@@ -205,6 +205,12 @@
         max-width: 160%;
         margin-left: -30%;
         margin-top: ($global-margin * 3);
-        margin-bottom: ($global-margin * 3)
+        margin-bottom: ($global-margin * 3);
+    
+        @include breakpoint(768px down) {
+            margin-left: 0;
+            max-width: 100%;
+        }
     }
+
 }
