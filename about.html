@@ -7,39 +7,27 @@ title: The Last Pickle
 {% include pre.html %}
 
 <!-- Page Header -->
-{% include header.html %}
-<!-- Main Content -->
-<div id="content" role="main">
+{% include header.html compact=true %}
+    <main role="main">
+        <header class="page-header">
+            <div class="wrapper">
+              <h1 class="page-title">Who We Are</h1>
+              <p class="lead">We work with clients to deliver and improve Apache Cassandra based solutions.</p>
 
-  <section class="section alt" id="promo">
-    <div class="container">
-      <div class="hero-unit">
-        <h1>Who We Are.</h1>
+              <p class="lead">To do that we employ active members of the Cassandra community. People who spend their time understanding how Cassandra works and how others are using it. People who see the Cassandra ecosystem and community around it as an opportunity for professional and personal growth. We feel these are the sort of people who can best communicate their knowledge and enthusiasm to clients.
+              </p>
 
-<p>We work with clients to deliver and improve Apache Cassandra based solutions.</p>
-
-<p>To do that we employ active members of the Cassandra community. People who spend their time understanding how Cassandra works and how others are using it. People who see the Cassandra ecosystem and community around it as an opportunity for professional and personal growth. We feel these are the sort of people who can best communicate their knowledge and enthusiasm to clients.
-</p>
-
-<p>If this sounds like you then we'd love to <a href="/careers.html">hear from you.</a></p>
-
-      </div>
-    </div>
-  </section>
-
-<section class="section" role="main">
-  <div class="container">
-    <ul class="thumbnails bordered thumbnail-list">
-      {% include team-aaron.html %}
-      {% include team-nate.html %}
-      {% include team-mick.html %}
-      {% include team-alain.html %}
-    </ul>
-  </div>
-</section>
-
-</div>
-    <!-- Page Footer bump-->
+              <p class="lead">If this sounds like you then we'd love to <a href="/careers.html">hear from you.</a></p>
+            </div>
+        </header>
+        <section class="page-content wrapper wrapper--compact">
+        {% for staff in site.data.staff %}
+          {% assign member = staff[1] %} 
+          {% include staff.html member=member %}
+        {% endfor %}
+        </section>
+    </main>
+    <!-- Page Footer -->
     {% include footer.html %}
 
 {% include post.html %}

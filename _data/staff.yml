@@ -1,4 +1,11 @@
 "Aaron Morton":
+  name: "Aaron Morton"
+  role: "Principal Consultant"
+  bio: !xml >
+    <p>Aaron Morton has been working with software for over 17 years. In 2011 he left a position at the VFX company Weta Digital in Wellington to pursue his interests in Cassandra. Since then he's been helping clients around the world get the best out of Cassandra. While contributing to the project and the community through involvement in the user list and IRC channels, and code contributions.</p>
+    <p>At Weta Digital he piloted the use of Cassandra to provide database services that could stand up to the render farm of 35,000 cores. The key concern at Weta was how to design a scalable persistence layer they could maintain availability in the face of hardware failure and errant clients.</p>
+    <p>Prior to Weta he worked on large E-Commerce projects in London and created a Content Management System for the National BBC Radio stations.</p>
+    <p>Aaron frequently <a href="/speaking">speaks</a> at meetups and conferences such as the DataStax Cassandra Summits and the Apache Software Foundation's ApacheCon. He runs the <a href="http://www.meetup.com/Data-Driven-Wellington/">Data Driven Wellington</a> meetup group to encourage local engineers to explore new technology. Aaron is also a committer for Apache Cassandra and was voted a DataStax MVP for Apache Cassandra by the community.</p>
   github: aaronmorton
   twitter: aaronmorton
   linkedin: http://www.linkedin.com/in/aaronmortonnz
@@ -7,14 +14,26 @@
   avatar: aaron-morton.jpg # post.author | slugify
 
 "Nate McCall":
+  name: "Nate McCall"
+  role: "Senior Technical Consultant"
+  bio: !xml >
+    <p>Nate McCall has over 15 years of server side systems and software development experience. Most recently, he was development lead for the AppServices platform at Apigee. As well as coding and team management on the core product, he worked directly with Fortune 500 clients on deploying and tuning multi-datacenter Cassandra clusters.</p>
+    <p>He is a frequent speaker at meetups and conferences including Oracle’s JavaOne, Apache’s ApacheCon and O’Reilly’s Strata and OSCON. Nate is the co-founder of the Cassandra-Austin & Austin Hadoop Users meetup groups.</p>
+    <p>Nate’s involvement in the Cassandra community started in 2009 when he became one of the original developers on the Hector Java client. Nathan has contributed a number of patches to the Apache Cassandra code base and continues to be actively involved. He has been a DataStax MVP every year since the inception of the program</p>
   github: zznate
   twitter: zznate
   linkedin: http://www.linkedin.com/in/zznate
   email: nate@thelastpickle.com
   avatar_tn: nate-mccall-tn.jpg # post.author | slugify
-  avatar: aaron-morton.jpg # post.author | slugify
+  avatar: nate-mccall.jpg # post.author | slugify
 
 "Mick Semb Wever":
+  name: "Mick Semb Wever"
+  role: Consultant
+  bio: !xml >
+    <p>Mick designs, builds, and is an evangelist for distributed systems, from data-driven backends using Cassandra, Hadoop, Spark, to enterprise Microservices platforms.</p>
+    <p>Prior to TLP he spent seven years at FINN.no building a microservices platform, along with introducing data-driven solutions and architecture based on Cassandra. Mick has become an advocate for change towards microservices built upon modern data-driven practices that introduce eventually consistent highly available solutions using Apache technologies like Cassandra, Hadoop, Spark, and Kafka.</p>
+    <p>Mick has always had a keen involvement in open source code, contributing to codebases along the way. He is a PMC Chair for Apache Tiles and a DataStax MVP for Apache Cassandra.</p>
   github: mck_sw
   twitter: mck_sw
   linkedin: https://www.linkedin.com/pub/mick-semb-wever/20/487/917
@@ -23,6 +42,12 @@
   avatar: mick-semb-wever.jpg # post.author | slugify
 
 "Alain Rodriguez":
+  name: "Alain Rodriguez"
+  role: Consultant
+  bio: !xml >
+    <p>Alain has been working with Apache Cassandra since version 0.8. He was the first Engineer at teads.tv which had grown to 400+ employees by the time he left.</p>
+    <p>During his time at Teads Alain managed and scaled Cassandra clusters across multiple AWS Regions. His experience with Cassandra from the early days has included upgrading hardware, growing capacity, upgrading, and tuning all the time maintaining Availability. He also evolved data models to take advantage of the latest features and performance as Cassandra improved.</p>
+    <p>Alain frequently contributes to the Apache Cassandra users mailing list.</p>
   github: arodream
   twitter: arodream
   linkedin: https://fr.linkedin.com/in/arodrime/en

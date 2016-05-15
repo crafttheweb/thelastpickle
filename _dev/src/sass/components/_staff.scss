@@ -1,0 +1,58 @@
+.staff {
+    @extend %box;
+    @include clearfix;
+    position: relative;
+    padding: ($global-padding * 2) $global-padding;
+    padding-left: rem-calc(120);
+    margin-bottom: $global-margin;
+    margin-top: ($global-margin * 3);
+
+    @include breakpoint(768px down) {
+        padding: $global-padding;
+    }
+}
+
+.staff__photo {
+    position: absolute;
+    width: rem-calc(120);
+    height: rem-calc(120);
+    top: rem-calc(-30);
+    left: rem-calc(-8);
+    border-radius: 100%;
+    border: 8px solid $body-background;
+
+    @include breakpoint(768px down) {
+        position: static;
+        border: 0;
+    }
+}
+
+.staff__info {
+    margin-bottom: $global-margin;
+}
+
+.staff__name {
+    color: map-get($foundation-palette, dark-green);
+    font-weight: 800;
+    margin-bottom: 0;
+}
+
+.staff__role {
+    @extend %uppercase;
+    font-size: 1rem;
+}
+
+.staff__meta {
+    @extend %meta;
+    left: rem-calc(-122);
+    padding-left: $global-padding;
+    padding-right: $global-padding;
+
+    @include breakpoint(768px down) {
+        left: -1rem;
+        &:after {
+            display: block;
+        }
+    }
+
+}

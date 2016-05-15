@@ -3,6 +3,18 @@
     border-bottom: 3px solid $black;
     box-shadow: 0 4px 0 map-get($foundation-palette, dark-green);
 
+    a {
+        color: $black;
+    }
+    a:link {
+        border-bottom: 2px solid rgba($black,0.2);
+    }
+
+    a:hover,
+    a:focus {
+        border-bottom: 2px solid rgba($black,0.6);
+    }
+
     &.has-overflow {
         padding-bottom: 0;
     }

@@ -16,7 +16,7 @@ const base_path = './',
           scss: [ src +'/sass/*.scss', 
                   src +'/sass/**/*.scss', 
                   src +'/sass/**/**/*.scss'],
-          jekyll: ['index.html', '_posts/*', '_layouts/*', '_includes/*' , 'assets/*', 'assets/**/*'],
+          jekyll: ['index.html', 'about.html', 'careers.html', 'contact.html', '_posts/*', '_layouts/*', '_includes/*' , 'assets/*', 'assets/**/*'],
           sass_includes: ['node_modules/foundation-sites/scss/']
       };
 

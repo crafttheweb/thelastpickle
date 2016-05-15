@@ -95,16 +95,12 @@
 }
 
 .post__meta {
-    height: 56px;
-    background: #EBEDD3;
-    position: relative;
-    display: inline-block;
+    @extend %uppercase, %meta;
     left: -($global-padding * 2);
     padding: rem-calc(8) ($global-padding * 2);
     font-family: $header-font-family;
     font-size: rem-calc(11);
     font-weight: bold;
-    @extend %uppercase;
 
     .media-object {
         margin-bottom: 0 !important
@@ -119,41 +115,10 @@
         color: $body-font-color;
     }
 
-    &:before,
-    &:after {
-        content: "";
-        background: url('data:image/svg+xml;utf8,%3Csvg%20width%3D%2230%22%20height%3D%2261%22%20viewBox%3D%220%200%2030%2061%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%200h30s-25%2018.5-25%2025.5%2025%2030.5%2025%2030.5h-30v-56z%22%20fill%3D%22%23EBEDD3%22%2F%3E%3Cpath%20fill%3D%22%23D4D0C3%22%20d%3D%22M0%2056h5v5z%22%2F%3E%3C%2Fsvg%3E') no-repeat;
-        display: block;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-    }
-
-    &:before {
-        width: 5px;
-        bottom: -5px;
-        left: -5px;
-    }
-
-    &:after {
-        width: 25px;
-        right: -25px;
-        background-position: 100% 0;
-    }
 
     @include breakpoint(768px down) {
         padding: rem-calc(8) $global-padding rem-calc(8) ($global-padding * 2);
-        height: auto;
         left: -$global-padding;
-
-        &:before {
-            background-position: 0 100%;
-            background-color: #EBEDD3;
-        }
-
-        &:after {
-            display: none;
-        }
 
         .media-object-section {
             padding-right: 0 !important;

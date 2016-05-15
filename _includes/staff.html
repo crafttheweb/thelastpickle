@@ -1,0 +1,18 @@
+<div class="staff" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <div class="staff__photo">
+    <img src="/assets/img/staff/{{ member.avatar }}" itemprop="image" class="avatar" alt="A photo of {{ member.name }}" / >
+  </div>
+  <header class="staff__info">
+    <h1 class="staff__name" itemprop="name">{{member.name}}</h1>
+    <h2 class="staff__role" itemprop="jobTitle">{{member.role}}</h2>
+  </header>
+  <div class="staff__bio" itemprop="description">
+    {{member.bio}}
+  </div>
+  <footer class="staff__meta">
+    <a href="http://github.com/{{member.github}}"><svg class="icon icon-github" aria-labelledby="icon-github-name"><use xlink:href="#icon-github"></use></svg></a>
+    <a href="http://twitter.com/{{member.twitter}}"><svg class="icon icon-twitter" aria-labelledby="icon-twitter-name"><use xlink:href="#icon-twitter"></use></svg></a>
+    <a href="{{member.linkedin}}"><svg class="icon icon-linkedin" aria-labelledby="icon-twitter-linkedin"><use xlink:href="#icon-linkedin"></use></svg></a>
+    <a href="mailto:{{member.email}}"><svg class="icon icon-email" aria-labelledby="icon-twitter-email"><use xlink:href="#icon-email"></use></svg></a>
+  </footer>
+</div>
