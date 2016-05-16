@@ -1,38 +1,45 @@
 ---
-comment: Index for Speaking category blog posts
-section: speaking
-title: The Last Pickle - Speaking
+comment: Index for speaking posts
+title: See &amp; hear, our speaking engagements &bull; The Last Pickle
+bodyClass: speaking page
 ---
 
 {% include pre.html %}
-
-<!-- Page Header -->
-{% include header.html %}
-<!-- Main Content -->
-<div id="content" role="main">
-
-  <section class="section alt" id="promo">
-    <div class="container">
-      <div class="hero-unit">
-        <h1>See & hear.</h1>
-        <p>We are always looking to for opportunities to spread the Cassandra word. Get in <a href="/contact.html">touch</a> if you'd like to arrange a talk.</p>
-      </div>
-    </div>
-  </section>
-  
-  <section class="section">
-    <div class="container">
-      <div class="row-fluid">
-        <div class="span9">
-          {% include speaking-list.html category="speaking" %}
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-</div>
-<!-- Page Footer -->
-{% include footer.html %}
-    
+    <!-- Page Header -->
+    {% include header.html compact=true %}
+    <!-- Main Content -->
+    <main role="main">
+        <header class="page-header">
+            <div class="wrapper">
+                <h1 class="page-title">See &amp; hear</h1>
+                <p class="lead hide-for-small-only">We are always looking to for opportunities to spread the Cassandra word. Get in touch if you'd like to arrange a talk.</p>
+            </div>
+        </header>
+        <section class="page-content wrapper wrapper--compact ">
+            {% for post in site.categories.speaking %}
+                {% include the-post.html excerpt=true %}
+            {% endfor %}
+          <ul class="pager">
+            {% if paginator.previous_page %}
+              <li class="previous">
+                
+                <a href="{% if paginator.previous_page ==1 %}/blog/index.html{% else %}/blog/page{{ paginator.previous_page }} {% endif %}">
+                  <i class="icon-chevron-left"></i>
+                  Newer
+                </a>
+              </li>
+            {% endif %}
+            {% if paginator.next_page %}
+              <li class="next">
+                <a href="/blog/page{{ paginator.next_page }}">
+                  Older
+                  <i class="icon-chevron-right"></i>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </section>
+    </main>
+    <!-- Page Footer -->
+    {% include footer.html %}
 {% include post.html %}
