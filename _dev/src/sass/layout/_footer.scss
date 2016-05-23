@@ -55,7 +55,7 @@
     left: -25px;
 }
 
-@include breakpoint(920px down) {
+@include breakpoint(980px down) {
     .footer__logo {
         display: none;
     }

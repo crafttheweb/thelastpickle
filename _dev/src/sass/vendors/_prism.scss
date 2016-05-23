@@ -1,7 +1,7 @@
 //colors
 $white: rgba($white, 0.8);
-$black: #000;
-$background: #2E3731;
+// $black: #000;
+$background: $code-background;
 $color_fuscous_gray_approx: #545454;
 $color_shark_approx: #27292a;
 $color_gallery_15_approx: rgba(237, 237, 237, 0.15);
@@ -21,12 +21,12 @@ $color_pampas_approx: #f4f1ef;
 //original selectors
 //code[class*="language-"], pre[class*="language-"]
 %lang {
-    color: $white;
+    color: $black;
     background: none;
     font-family: $font-family-monospace;
     font-size: scut-rem(13);
     text-align: left;
-    white-space: pre;
+    white-space: pre-wrap;
     word-spacing: normal;
     word-break: normal;
     word-wrap: normal;
@@ -69,7 +69,7 @@ $color_pampas_approx: #f4f1ef;
 pre[class*="language-"] {
     @extend %lang;
     background: $background;
-    padding: 0 0 ($global-padding *4) 0;
+    padding: 0;
     position: relative;
 
     &.is-overflow {
@@ -210,32 +210,7 @@ pre[data-line] {
     padding: 1em 0 1em 3em;
     position: relative;
 }
-.line-highlight {
-    background: $color_fuscous_gray_25_approx;
-    background: linear-gradient(to right, $color_fuscous_gray_10_approx 70%, hsla(0, 0, 33%, 0));
-    border-bottom: 1px dashed $color_fuscous_gray_approx;
-    border-top: 1px dashed $color_fuscous_gray_approx;
-    left: 0;
-    line-height: inherit;
-    margin-top: 0.75em;
-    padding: inherit 0;
-    pointer-events: none;
-    position: absolute;
-    right: 0;
-    white-space: pre;
-    z-index: 0;
-    &:before {
-        @extend %line-heightlight;
-    }
-}
-// :not(pre) > code[class*="language-"] {
-//     background: $background;
-//     border-radius: .3em;
-//     border: .13em solid $color_fuscous_gray_approx;
-//     box-shadow: 1px 1px .3em -.1em $black inset;
-//     padding: .15em .2em .05em;
-//     white-space: normal;
-// }
+
 .language-css .token.string {
     color: $warning-color;
 }
@@ -263,47 +238,29 @@ pre[data-line] {
 
 
 div.highlighter-rouge {
-    padding: ($global-padding *4) 0 0 0;
-    margin: ($global-margin *4) 0;
+    padding: ($global-padding *3);
     background: $background;
+    border: $code-border;
+    border-radius: $global-radius;
     
     position: relative;
-    width: 100%;
-
-    &:before,
-    &:after {
-        content: "";
-        display: block;
-        position: absolute;
-        background: inherit;
-        top: 0;
-        bottom: 0;
-    }
-
-    &:before {
-        left: -100%;
-        right: 0;
-    }
-
-    &:after {
-        left: 100%;
-        right: -100%;
-        @include breakpoint(720px down) {
-            right: -10%;
-        }
-    }
+    width: 160%;
+    margin-left: -30%;
+    margin-top: ($global-margin * 3);
+    margin-bottom: ($global-margin * 3);
 
 
     @include breakpoint(990px down) {
         margin-left: 0;
         margin-right: 0;
-        padding-bottom: ($global-padding *4);
         padding-left: 0;
         padding-right: 0;
     }
 
-
-    
+    @include breakpoint(768px down) {
+        margin-left: 0;
+        max-width: 100%;
+    }
 
 }
 

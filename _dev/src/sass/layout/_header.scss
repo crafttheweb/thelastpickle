@@ -67,7 +67,7 @@
     }
 }
 
-@include breakpoint(920px down) {
+@include breakpoint(980px down) {
     .header {
         height: rem-calc(100);
     }

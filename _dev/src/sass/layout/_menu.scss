@@ -7,7 +7,7 @@
     list-style: none;
     padding: 0;
 
-    @include breakpoint(920px down) {
+    @include breakpoint(980px down) {
         top: rem-calc(18);
         padding: 0 rem-calc(5);
     }

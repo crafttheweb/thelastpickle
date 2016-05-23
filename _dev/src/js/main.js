@@ -82,7 +82,7 @@
     TLP.citations.init();
 
     // get those code blocks looking nice
-    TLP.codeBlocks.init();
+    // TLP.codeBlocks.init();
 
     // using external JQ plugin to check if images are loaded
     // images are stupid btw.
