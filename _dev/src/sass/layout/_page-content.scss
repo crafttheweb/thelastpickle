@@ -1,3 +1,8 @@
 .page-content {
     margin-top: rem-calc(100);
+
+    .contact.page & {
+        margin-top: rem-calc(100);
+        margin-bottom: rem-calc(100);
+    }
 }
